@@ -1,10 +1,12 @@
 import { Box } from '@mui/material';
-import './App.css';
+import NavBar from './components/nav_bar/NavBar.js';
+import Profile from "./components/profile_page/Profile.js"
 
 function App() {
   return (
     <Box>
-      Hello CS 4278!
+      <NavBar/>
+      <Profile/>
     </Box>
   );
 }
