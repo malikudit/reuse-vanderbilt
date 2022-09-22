@@ -1,13 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material"
 
-function Profile() {
-    return (
-      <Box>
-        
-      </Box>
-    );
-  }
-  
-  export default Profile;
-  
+export default function Profile() {
+  return <div>Profile</div>;
+}
