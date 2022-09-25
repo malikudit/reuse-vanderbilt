@@ -25,6 +25,7 @@
   "dependencies": {
     "dotenv": "^16.0.2",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.23.0"
+    "sequelize": "^6.23.0",
+    "validator": "^13.7.0"
   }
 }
