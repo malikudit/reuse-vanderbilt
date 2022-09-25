@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./database');
+const Bid = require('./bid');
 
 class Product extends Model {
     
@@ -152,5 +153,8 @@ Product.init({
         }
     }
 }, { sequelize });
+
+Product.hasMany(Bid);
+Bid.belongsTo(Product);
 
 module.exports = Product;
