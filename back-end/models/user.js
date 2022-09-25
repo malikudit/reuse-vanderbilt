@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./database');
+const Product = require('./product');
 
 class User extends Model {
     
@@ -97,6 +98,11 @@ User.init({
         }
     }
 }, { sequelize });
+
+User.hasMany(Product, { as: 'productsSold', sourceKey: 'userName', foreignKey: 'sellerUsername' });
+User.hasMany(Product, { as: 'productsPurchased', sourceKey: 'userName', foreignKey: 'buyerUsername' });
+Product.belongsTo(User, { as: 'Seller', sourceKey: 'sellerUsername', foreignKey: 'userName' });
+Product.belongsTo(User, { as: 'Buyer', sourceKey: 'buyerUsername', foreignKey: 'userName' });
 
 (async () => {
     if (process.env.NODE_ENV === 'production') {
