@@ -66,7 +66,7 @@ User.init({
                 msg: 'Email address is a required field'
             },
             validateEmailAddress(value) {
-                if (!validator.isEmail(value)) {
+                if (!validator.isEmail(value + '')) {
                     throw new Error('Email address is not well formed');
                 }
             },
@@ -101,42 +101,29 @@ User.init({
             },
             notNull: {
                 msg: 'Must specify a preferred mode of communication'
+            },
+            notNullIfPreferred(value) {
+                if (value === 'Phone' && !this.phoneNumber) {
+                    throw new Error('A phone number is required if Phone is the preferred means of communication');
+                } else if (value === 'GroupMe' && !this.groupMe) {
+                    throw new Error('A GroupMe URL is required if GroupMe is the preferred means of communication');
+                }
             }
         }
     },
     phoneNumber: {
         type: DataTypes.STRING(10),
         validate: {
-            notNullIfPreferred(value) {
-                if (value === null && this.modeOfCommunication === 'Phone') {
-                    throw new Error('A phone number is required if Phone is the preferred means of communication');
-                }
-            },
             validatePhoneNumber(value) {
                 if (value !== null && !validator.isMobilePhone(value + '', 'en-US')) {
                     throw new Error('A valid US phone number is required');
                 }
-            }
-        },
-        set(value) {
-            if (value === null) return;
-
-            const phoneNumber = (value + '').replaceAll(/[+\-()]/g, '');
-            if (phoneNumber[0] === '1') {
-                this.setDataValue('phoneNumber', phoneNumber.substring(1));
-            } else {
-                this.setDataValue('phoneNumber', phoneNumber);
             }
         }
     },
     groupMe: {
         type: DataTypes.STRING,
         validate: {
-            notNullIfPreferred(value) {
-                if (value === null && this.modeOfCommunication === 'GroupMe') {
-                    throw new Error('A GroupMe URL is required if GroupMe is the preferred means of communication');
-                }
-            },
             validateGroupMeURL(value) {
                 if (value !== null && 
                         !validator.isURL(value + '', { host_whitelist: ['groupme.com'] })) {
@@ -145,7 +132,21 @@ User.init({
             }
         }
     }
-}, { sequelize });
+}, { 
+    hooks: {
+        beforeSave: (user) => {
+            if (user.phoneNumber) {
+                const phoneNumber = (user.phoneNumber + '').replaceAll(/[+\-()]/g, '');
+                if (phoneNumber[0] === '1') {
+                    user.setDataValue('phoneNumber', phoneNumber.substring(1));
+                } else {
+                    user.setDataValue('phoneNumber', phoneNumber);
+                }
+            }
+        }
+    },
+    sequelize 
+});
 
 (async () => {
     if (process.env.NODE_ENV === 'production') {
