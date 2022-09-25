@@ -3,7 +3,21 @@ const sequelize = require('./database');
 const validator = require('validator');
 
 class User extends Model {
-    
+    toJSON() {
+        return {
+            firstName: this.firstName,
+            lastName: this.lastName,
+            userName: this.userName,
+            email: this.email,
+            cash: this.cash,
+            zelle: this.zelle,
+            venmo: this.venmo,
+            otherPaymentMethod: this.otherPaymentMethod,
+            modeOfCommunication: this.modeOfCommunication,
+            phoneNumber: this.phoneNumber,
+            groupMe: this.groupMe
+        };
+    }
 }
 
 User.init({
@@ -78,16 +92,59 @@ User.init({
             }
         }
     },
-    paymentMethod: {
-        type: DataTypes.ENUM('Cash', 'Venmo', 'Zelle', 'Other'),
+    cash: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         validate: {
-            isIn: {
-                args: [['Cash', 'Venmo', 'Zelle', 'Other']],
-                msg: 'Payment method should be one of Cash, Venmo, Zelle or Other'
-            },
             notNull: {
-                msg: 'Payment method is a required field'
+                msg: 'You must specify whether Cash is a supported payment type'
+            },
+            validateBoolean(value) {
+                if (!validator.isBoolean(value + '')) {
+                    throw new Error('Cash is not a well formed boolean value');
+                }
+            }
+        }
+    },
+    venmo: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'You must specify whether Venmo is a supported payment type'
+            },
+            validateBoolean(value) {
+                if (!validator.isBoolean(value + '')) {
+                    throw new Error('Venmo is not a well formed boolean value');
+                }
+            }
+        }
+    },
+    zelle: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'You must specify whether Zelle is a supported payment type'
+            },
+            validateBoolean(value) {
+                if (!validator.isBoolean(value + '')) {
+                    throw new Error('Zelle is not a well formed boolean value');
+                }
+            }
+        }       
+    },
+    otherPaymentMethod: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'You must specify whether Other payment methods are supported'
+            },
+            validateBoolean(value) {
+                if (!validator.isBoolean(value + '')) {
+                    throw new Error('Other payment method is not a well formed boolean value');
+                }
             }
         }
     },
@@ -112,7 +169,7 @@ User.init({
         }
     },
     phoneNumber: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.CHAR(10),
         validate: {
             validatePhoneNumber(value) {
                 if (value !== null && !validator.isMobilePhone(value + '', 'en-US')) {
@@ -132,7 +189,7 @@ User.init({
             }
         }
     }
-}, { 
+}, {
     hooks: {
         beforeSave: (user) => {
             if (user.phoneNumber) {
@@ -145,7 +202,7 @@ User.init({
             }
         }
     },
-    sequelize 
+    sequelize
 });
 
 (async () => {
