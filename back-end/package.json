@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/malikudit/cs4278-project#readme",
   "devDependencies": {
+    "eslint": "^8.24.0",
     "nodemon": "^2.0.20"
   },
   "dependencies": {
