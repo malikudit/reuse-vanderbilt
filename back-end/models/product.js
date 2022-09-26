@@ -1,11 +1,16 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('./database');
+const { nanoid } = require('nanoid/async');
 
 class Product extends Model {
     
 }
 
 Product.init({
+    id: {
+        type: DataTypes.CHAR(21),
+        primaryKey: true
+    },
     sellerUsername: {
         type: DataTypes.STRING(32),
         allowNull: false,
@@ -151,6 +156,14 @@ Product.init({
             }
         }
     }
-}, { sequelize });
+}, { 
+    hooks: {
+        beforeCreate: async (product) => {
+            const productId = await nanoid();
+            product.id = productId;
+        }
+    },
+    sequelize 
+});
 
 module.exports = Product;
