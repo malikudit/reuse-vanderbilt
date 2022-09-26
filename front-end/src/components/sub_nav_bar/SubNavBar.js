@@ -9,9 +9,23 @@ import {
   InputBase,
   Box,
   ThemeProvider,
+  Drawer,
+  List,
+  Divider,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import CheckroomIcon from "@mui/icons-material/Checkroom";
+import DevicesIcon from "@mui/icons-material/Devices";
+import ChairIcon from "@mui/icons-material/Chair";
+import KitchenIcon from "@mui/icons-material/Kitchen";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import PedalBikeIcon from "@mui/icons-material/PedalBike";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 const theme = createTheme({
   palette: {
@@ -70,6 +84,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>
@@ -80,6 +104,7 @@ export default function SearchAppBar() {
               edge="start"
               color="inherit"
               aria-label="open drawer"
+              onClick={handleDrawerOpen}
               sx={{ mr: 2 }}
             >
               <MenuIcon />
@@ -88,7 +113,11 @@ export default function SearchAppBar() {
               variant="h6"
               noWrap
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              sx={{
+                flexGrow: 1,
+                marginLeft: 30,
+                display: { xs: "none", sm: "block" },
+              }}
             >
               Welcome to Vanderbilt's Marketplace!
             </Typography>
@@ -101,6 +130,54 @@ export default function SearchAppBar() {
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
+            <Drawer
+              variant="persistent"
+              anchor="left"
+              open={open}
+              PaperProps={{
+                style: { height: "90%", top: "10%" },
+              }}
+            >
+              <IconButton onClick={handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
+              <Divider />
+              <List>
+                <ListItem key={"Clothing"} disablePadding>
+                  <CheckroomIcon />
+                  <ListItemText> Clothing </ListItemText>
+                </ListItem>
+                <ListItem key={"Electronics"} disablePadding>
+                  <DevicesIcon />
+                  <ListItemText> Electronics </ListItemText>
+                </ListItem>
+                <ListItem key={"Furniture"} disablePadding>
+                  <ChairIcon />
+                  <ListItemText> Furniture </ListItemText>
+                </ListItem>
+                <ListItem key={"Kitchen"} disablePadding>
+                  <KitchenIcon />
+                  <ListItemText> Kitchen </ListItemText>
+                </ListItem>
+                <ListItem key={"Textbooks"} disablePadding>
+                  <MenuBookIcon />
+                  <ListItemText> Textbooks </ListItemText>
+                </ListItem>
+                <ListItem key={"Tickets"} disablePadding>
+                  <ConfirmationNumberIcon />
+                  <ListItemText> Tickets </ListItemText>
+                </ListItem>
+                <ListItem key={"Transportation"} disablePadding>
+                  <PedalBikeIcon />
+                  <ListItemText> Transportation </ListItemText>
+                </ListItem>
+                <ListItem key={"Other"} disablePadding>
+                  <QuestionMarkIcon />
+                  <ListItemText> Other </ListItemText>
+                </ListItem>
+              </List>
+              <Divider />
+            </Drawer>{" "}
           </Toolbar>
         </AppBar>
       </Box>
