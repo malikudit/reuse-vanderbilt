@@ -9,7 +9,6 @@ import {
   ThemeProvider,
   Stack,
   Button,
-  Box,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
@@ -59,6 +58,10 @@ const NavBar = () => {
             <Button component={Link} to="/notifications" color="neutral">
               <NotificationsActiveIcon sx={{ padding: 1 }} />
               Notifications
+            </Button>
+            <Button component={Link} to="/listings" color="neutral">
+              <NotificationsActiveIcon sx={{ padding: 1 }} />
+              My Listings
             </Button>
             <Button component={Link} to="/profile" color="neutral">
               <PersonIcon sx={{ padding: 1 }} />
