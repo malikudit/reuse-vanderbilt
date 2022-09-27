@@ -199,9 +199,9 @@ User.init({
     }
 }, {
     hooks: {
-        beforeCreate: async (product) => {
-            const productId = await nanoid();
-            product.id = productId;
+        beforeCreate: async (user) => {
+            const userId = await nanoid();
+            user.setDataValue('id', userId);
         },
         beforeSave: (user) => {
             if (user.phoneNumber) {
