@@ -187,8 +187,12 @@ User.init({
         validate: {
             validateGroupMeURL(value) {
                 if (value !== null && 
-                        !validator.isURL(value + '', { host_whitelist: ['groupme.com', 'www.groupme.com'] })) {
-                    throw new Error('The provided URL must be from groupme.com');
+                        !validator.isURL(value + '', {
+                            protocols: ['https'],
+                            require_protocol: true,
+                            host_whitelist: ['groupme.com', 'www.groupme.com'] 
+                        })) {
+                    throw new Error('The provided URL must be from groupme.com and use https');
                 }
             }
         }
