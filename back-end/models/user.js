@@ -1,14 +1,15 @@
 const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./database');
 const validator = require('validator');
+const { nanoid } = require('nanoid/async');
+
+const sequelize = require('./database');
 
 class User extends Model {
     toJSON() {
         return {
+            id: this.id,
             firstName: this.firstName,
             lastName: this.lastName,
-            userName: this.userName,
-            email: this.email,
             cash: this.cash,
             zelle: this.zelle,
             venmo: this.venmo,
@@ -21,6 +22,10 @@ class User extends Model {
 }
 
 User.init({
+    id: {
+        type: DataTypes.CHAR(21),
+        primaryKey: true
+    },
     firstName: {
         type: DataTypes.STRING(32),
         allowNull: false,
@@ -73,7 +78,6 @@ User.init({
     email: {
         type: DataTypes.STRING(254),
         allowNull: false,
-        primaryKey: true,
         unique: true,
         validate: {
             notNull: {
@@ -191,6 +195,10 @@ User.init({
     }
 }, {
     hooks: {
+        beforeCreate: async (product) => {
+            const productId = await nanoid();
+            product.id = productId;
+        },
         beforeSave: (user) => {
             if (user.phoneNumber) {
                 const phoneNumber = (user.phoneNumber + '').replaceAll(/[+\-()]/g, '');
