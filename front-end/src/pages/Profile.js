@@ -106,8 +106,6 @@ export default function Profile() {
     },
   ];
 
-  // document.body.style.backgroundColor = "#696969";
-
   return (
     <ThemeProvider theme={theme}>
       <Box>

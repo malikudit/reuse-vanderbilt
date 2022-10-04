@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router";
 import NavBar from "./components/NavBar.js";
+import CreateListingsPage from "./pages/CreateListingsPage.js";
 import HomePage from "./pages/HomePage.js";
 import Listings from "./pages/Listings.js";
 import Notifications from "./pages/Notifications.js";
@@ -14,6 +15,7 @@ function App() {
         <Route path="/listings" element={<Listings />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/create_listing" element={<CreateListingsPage />} />
       </Routes>
     </>
   );
