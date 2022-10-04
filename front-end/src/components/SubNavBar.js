@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import {
   AppBar,
@@ -49,7 +50,7 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: "100%",
+  width: "100pt",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
@@ -85,6 +86,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar() {
   const [open, setOpen] = React.useState(false);
+  const [selectClothing, setSelectClothing] = React.useState(false);
+  const [selectElectronics, setSelectElectronics] = React.useState(false);
+  const [selectFurniture, setSelectFurniture] = React.useState(false);
+  const [selectKitchen, setSelectKitchen] = React.useState(false);
+  const [selectTextbooks, setSelectTextbooks] = React.useState(false);
+  const [selectTickets, setSelectTickets] = React.useState(false);
+  const [selectTransportation, setSelectTransportation] = React.useState(false);
+  const [selectOther, setSelectOther] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -93,6 +102,54 @@ export default function SearchAppBar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleDeselectAll = () => {
+    setSelectClothing(false);
+    setSelectElectronics(false);
+    setSelectFurniture(false);
+    setSelectKitchen(false);
+    setSelectTextbooks(false);
+    setSelectTickets(false);
+    setSelectTransportation(false);
+    setSelectOther(false);
+  };
+
+  const handleClothing = () => {
+    handleDeselectAll();
+    setSelectClothing(true);
+  };
+
+  const handleElectronics = () => {
+    handleDeselectAll();
+    setSelectElectronics(true);
+  };
+
+  const handleFurniture = () => {
+    handleDeselectAll();
+    setSelectFurniture(true);
+  };
+
+  const handleKitchen = () => {
+    handleDeselectAll();
+    setSelectKitchen(true);
+  };
+
+  const handleTextbooks = () => {
+    handleDeselectAll();
+    setSelectTextbooks(true);
+  };
+
+  const handleTickets = () => {
+    handleDeselectAll();
+    setSelectTickets(true);
+  };
+
+  const handleTransportation = () => {
+    handleDeselectAll();
+    setSelectTransportation(true);
+  };
+
+  const handleOther = () => {};
 
   return (
     <ThemeProvider theme={theme}>
@@ -113,9 +170,10 @@ export default function SearchAppBar() {
               variant="h6"
               noWrap
               component="div"
+              direction="column"
+              align="center"
               sx={{
                 flexGrow: 1,
-                marginLeft: 30,
                 display: { xs: "none", sm: "block" },
               }}
             >
@@ -126,7 +184,7 @@ export default function SearchAppBar() {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search by product"
+                placeholder="Search by product, category"
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
@@ -143,35 +201,99 @@ export default function SearchAppBar() {
               </IconButton>
               <Divider />
               <List>
-                <ListItem key={"Clothing"} disablePadding>
+                <ListItem
+                  key={"Clothing"}
+                  button
+                  component={Link}
+                  to="/clothing"
+                  onClick={handleClothing}
+                  selected={selectClothing ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <CheckroomIcon />
                   <ListItemText> Clothing </ListItemText>
                 </ListItem>
-                <ListItem key={"Electronics"} disablePadding>
+                <ListItem
+                  key={"Electronics"}
+                  button
+                  component={Link}
+                  to="/electronics"
+                  onClick={handleElectronics}
+                  selected={selectElectronics ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <DevicesIcon />
                   <ListItemText> Electronics </ListItemText>
                 </ListItem>
-                <ListItem key={"Furniture"} disablePadding>
+                <ListItem
+                  key={"Furniture"}
+                  button
+                  component={Link}
+                  to="/furniture"
+                  onClick={handleFurniture}
+                  selected={selectFurniture ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <ChairIcon />
                   <ListItemText> Furniture </ListItemText>
                 </ListItem>
-                <ListItem key={"Kitchen"} disablePadding>
+                <ListItem
+                  key={"Kitchen"}
+                  button
+                  component={Link}
+                  to="/kitchen"
+                  onClick={handleKitchen}
+                  selected={selectKitchen ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <KitchenIcon />
                   <ListItemText> Kitchen </ListItemText>
                 </ListItem>
-                <ListItem key={"Textbooks"} disablePadding>
+                <ListItem
+                  key={"Textbooks"}
+                  button
+                  component={Link}
+                  to="/textbooks"
+                  onClick={handleTextbooks}
+                  selected={selectTextbooks ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <MenuBookIcon />
                   <ListItemText> Textbooks </ListItemText>
                 </ListItem>
-                <ListItem key={"Tickets"} disablePadding>
+                <ListItem
+                  key={"Tickets"}
+                  button
+                  component={Link}
+                  to="/tickets"
+                  onClick={handleTickets}
+                  selected={selectTickets ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <ConfirmationNumberIcon />
                   <ListItemText> Tickets </ListItemText>
                 </ListItem>
-                <ListItem key={"Transportation"} disablePadding>
+                <ListItem
+                  key={"Transportation"}
+                  button
+                  component={Link}
+                  to="/transportation"
+                  onClick={handleTransportation}
+                  selected={selectTransportation ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <PedalBikeIcon />
                   <ListItemText> Transportation </ListItemText>
                 </ListItem>
-                <ListItem key={"Other"} disablePadding>
+                <ListItem
+                  key={"Other"}
+                  button
+                  component={Link}
+                  to="/other"
+                  onClick={handleOther}
+                  selected={selectOther ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
                   <QuestionMarkIcon />
                   <ListItemText> Other </ListItemText>
                 </ListItem>
