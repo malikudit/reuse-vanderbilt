@@ -229,12 +229,12 @@ User.init({
     sequelize
 });
 
-// (async () => {
-//     if (process.env.NODE_ENV === 'production') {
-//         await sequelize.sync();
-//     } else {
-//         await sequelize.sync({ force: true });
-//     }
-// })();
+(async () => {
+    if (process.env.NODE_ENV === 'production') {
+        await sequelize.sync();
+    } else {
+        await sequelize.sync({ force: true });
+    }
+})();
 
 module.exports = User;
