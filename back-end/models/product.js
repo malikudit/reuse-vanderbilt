@@ -1,6 +1,7 @@
 const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./database');
 const { nanoid } = require('nanoid/async');
+
+const sequelize = require('./database');
 
 class Product extends Model {
     
@@ -10,19 +11,6 @@ Product.init({
     id: {
         type: DataTypes.CHAR(21),
         primaryKey: true
-    },
-    sellerUsername: {
-        type: DataTypes.STRING(32),
-        allowNull: false,
-        validate: {
-            isAlphanumeric: {
-                msg: ''
-            },
-            notNull: {
-                msg: ''
-            },
-            len: [4, 32] // Look at this
-        }
     },
     title: {
         type: DataTypes.STRING(32), // Get confirmation
@@ -136,16 +124,6 @@ Product.init({
         type: DataTypes.DATE,
         allowNull: true
     },
-    buyerUsername: {
-        type: DataTypes.STRING(32),
-        allowNull: true,
-        validate: {
-            isAlphanumeric: {
-                msg: ''
-            },
-            len: [4, 32] // Look at this
-        }
-    },
     status: {
         type: DataTypes.ENUM('Active', 'Inactive', 'Deleted', 'Evaluating Offers', 'Booked', 'Sold'),
         allowNull: false,
@@ -160,10 +138,11 @@ Product.init({
     hooks: {
         beforeCreate: async (product) => {
             const productId = await nanoid();
-            product.id = productId;
+            product.setDataValue('id', productId);
         }
     },
-    sequelize 
+    sequelize,
+    paranoid: true
 });
 
 module.exports = Product;
