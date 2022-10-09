@@ -33,6 +33,10 @@ User.init({
             notNull: {
                 msg: 'First name is a required field'
             },
+            notIn: {
+                args: [[true, false, NaN]],
+                msg: 'First name must be alphabetical'
+            },
             isAlpha: {
                 msg: 'First name must be alphabetical'
             },
@@ -48,6 +52,10 @@ User.init({
         validate: {
             notNull: {
                 msg: 'Last name is a required field'
+            },
+            notIn: {
+                args: [[true, false, NaN]],
+                msg: 'Last name must be alphabetical'
             },
             isAlpha: {
                 msg: 'Last name must be alphabetical'
@@ -65,6 +73,10 @@ User.init({
         validate: {
             notNull: {
                 msg: 'Username is a required field'
+            },
+            notIn: {
+                args: [[true, false, NaN]],
+                msg: 'Username must only contain alphabets and numbers'
             },
             isAlphanumeric: {
                 msg: 'Username must only contain alphabets and numbers'
