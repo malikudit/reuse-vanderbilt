@@ -1,9 +1,7 @@
-const _ = require('lodash');
 const Sequelize = require('sequelize');
-require('dotenv').config();
+const _ = require('lodash');
 
-const User = require('../../models/user');
-const sequelize = require('../../models/database');
+const { User, sequelize } = require('../../models');
 
 const defaultUser = {
     'firstName': 'Jake',

@@ -5,7 +5,7 @@ const { nanoid } = require('nanoid/async');
 const sequelize = require('./database');
 
 class User extends Model {
-    toJSON() {
+    displayView() {
         return {
             id: this.id,
             firstName: this.firstName,
@@ -226,15 +226,8 @@ User.init({
             }
         }
     },
-    sequelize
+    sequelize,
+    paranoid: true
 });
-
-(async () => {
-    if (process.env.NODE_ENV === 'production') {
-        await sequelize.sync();
-    } else {
-        await sequelize.sync({ force: true });
-    }
-})();
 
 module.exports = User;
