@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { styled, alpha } from "@mui/material/styles";
 import {
   AppBar,
   Toolbar,
   IconButton,
   Typography,
   createTheme,
-  InputBase,
+  TextField,
   Box,
   ThemeProvider,
   Drawer,
@@ -16,8 +15,9 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
+import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import CheckroomIcon from "@mui/icons-material/Checkroom";
 import DevicesIcon from "@mui/icons-material/Devices";
@@ -27,6 +27,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import PedalBikeIcon from "@mui/icons-material/PedalBike";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import CategoryPage from "../pages/CategoryPage";
 
 const theme = createTheme({
   palette: {
@@ -42,55 +43,14 @@ const theme = createTheme({
   },
 });
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: "100pt",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
-  },
-}));
-
-export default function SearchAppBar() {
+export default function SubNavBar(props) {
   const [open, setOpen] = React.useState(false);
+  const [selectHome, setSelectHome] = React.useState(false);
+  const [selectBooks, setSelectBooks] = React.useState(false);
   const [selectClothing, setSelectClothing] = React.useState(false);
   const [selectElectronics, setSelectElectronics] = React.useState(false);
   const [selectFurniture, setSelectFurniture] = React.useState(false);
   const [selectKitchen, setSelectKitchen] = React.useState(false);
-  const [selectTextbooks, setSelectTextbooks] = React.useState(false);
   const [selectTickets, setSelectTickets] = React.useState(false);
   const [selectTransportation, setSelectTransportation] = React.useState(false);
   const [selectOther, setSelectOther] = React.useState(false);
@@ -104,52 +64,71 @@ export default function SearchAppBar() {
   };
 
   const handleDeselectAll = () => {
+    props.setCategoryProduct("");
+    setSelectHome(false);
+    setSelectBooks(false);
     setSelectClothing(false);
     setSelectElectronics(false);
     setSelectFurniture(false);
     setSelectKitchen(false);
-    setSelectTextbooks(false);
     setSelectTickets(false);
     setSelectTransportation(false);
     setSelectOther(false);
   };
 
+  const handleHome = () => {
+    handleDeselectAll();
+    setSelectHome(true);
+    props.setCategoryProduct("Home");
+  };
+
+  const handleBooks = () => {
+    handleDeselectAll();
+    setSelectBooks(true);
+    props.setCategoryProduct("Books");
+  };
+
   const handleClothing = () => {
     handleDeselectAll();
     setSelectClothing(true);
+    props.setCategoryProduct("Clothing");
   };
 
   const handleElectronics = () => {
     handleDeselectAll();
     setSelectElectronics(true);
+    props.setCategoryProduct("Electronics");
   };
 
   const handleFurniture = () => {
     handleDeselectAll();
     setSelectFurniture(true);
+    props.setCategoryProduct("Furniture");
   };
 
   const handleKitchen = () => {
     handleDeselectAll();
     setSelectKitchen(true);
-  };
-
-  const handleTextbooks = () => {
-    handleDeselectAll();
-    setSelectTextbooks(true);
+    props.setCategoryProduct("Kitchen");
   };
 
   const handleTickets = () => {
     handleDeselectAll();
     setSelectTickets(true);
+    props.setCategoryProduct("Tickets");
   };
 
   const handleTransportation = () => {
     handleDeselectAll();
     setSelectTransportation(true);
+    props.setCategoryProduct("Transportation");
   };
 
-  const handleOther = () => {};
+  const handleOther = () => {
+    handleDeselectAll();
+    setSelectOther(true);
+    props.setCategoryProduct("Other");
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -175,19 +154,26 @@ export default function SearchAppBar() {
               sx={{
                 flexGrow: 1,
                 display: { xs: "none", sm: "block" },
+                fontWeight: "bold",
               }}
             >
-              Welcome to Vanderbilt's Marketplace!
+              Welcome to Reuse Vandy - Vanderbilt's Marketplace!
             </Typography>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search by product, category"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
+            <TextField
+              label="Search by product title, description"
+              variant="outlined"
+              sx={{ minWidth: "450px" }}
+              onChange={(e) => {
+                props.setSearchProduct(e.target.value.toLowerCase());
+              }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                ),
+              }}
+            />
             <Drawer
               variant="persistent"
               anchor="left"
@@ -201,6 +187,32 @@ export default function SearchAppBar() {
               </IconButton>
               <Divider />
               <List>
+                <ListItem
+                  key={"Home"}
+                  button
+                  component={Link}
+                  to="/"
+                  element=<CategoryPage />
+                  onClick={handleHome}
+                  selected={selectHome ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
+                  <HomeIcon />
+                  <ListItemText> Home </ListItemText>
+                </ListItem>
+                <ListItem
+                  key={"Books"}
+                  button
+                  component={Link}
+                  to="/books"
+                  element=<CategoryPage />
+                  onClick={handleBooks}
+                  selected={selectBooks ? true : false}
+                  classes={{ selected: theme.primary }}
+                >
+                  <MenuBookIcon />
+                  <ListItemText> Books </ListItemText>
+                </ListItem>
                 <ListItem
                   key={"Clothing"}
                   button
@@ -248,18 +260,6 @@ export default function SearchAppBar() {
                 >
                   <KitchenIcon />
                   <ListItemText> Kitchen </ListItemText>
-                </ListItem>
-                <ListItem
-                  key={"Textbooks"}
-                  button
-                  component={Link}
-                  to="/textbooks"
-                  onClick={handleTextbooks}
-                  selected={selectTextbooks ? true : false}
-                  classes={{ selected: theme.primary }}
-                >
-                  <MenuBookIcon />
-                  <ListItemText> Textbooks </ListItemText>
                 </ListItem>
                 <ListItem
                   key={"Tickets"}
