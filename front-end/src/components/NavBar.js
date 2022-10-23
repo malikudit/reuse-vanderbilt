@@ -29,6 +29,38 @@ const theme = createTheme({
 });
 
 const NavBar = () => {
+  const [home, setHome] = React.useState(true);
+  const [notifications, setNotifications] = React.useState(false);
+  const [listings, setListings] = React.useState(false);
+  const [profile, setProfile] = React.useState(false);
+
+  const clearAll = () => {
+    setHome(false);
+    setNotifications(false);
+    setListings(false);
+    setProfile(false);
+  };
+
+  const handleHome = () => {
+    clearAll();
+    setHome(true);
+  };
+
+  const handleNotifications = () => {
+    clearAll();
+    setNotifications(true);
+  };
+
+  const handleListings = () => {
+    clearAll();
+    setListings(true);
+  };
+
+  const handleProfile = () => {
+    clearAll();
+    setProfile(true);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
@@ -40,6 +72,7 @@ const NavBar = () => {
             edge="start"
             color="neutral"
             aria-label="logo"
+            onClick={handleHome}
           >
             <Typography variant="h3" color="neutral">
               Reuse
@@ -48,22 +81,41 @@ const NavBar = () => {
               Vandy
             </Typography>
           </IconButton>
-
           <Typography sx={{ flexGrow: 1 }}></Typography>
           <Stack direction="row" spacing={0}>
-            <Button component={Link} to="/" color="neutral">
+            <Button
+              component={Link}
+              to="/"
+              color={home === true ? "secondary" : "neutral"}
+              onClick={handleHome}
+            >
               <HomeIcon sx={{ padding: 1 }} />
               Home
             </Button>
-            <Button component={Link} to="/notifications" color="neutral">
+            <Button
+              component={Link}
+              to="/notifications"
+              color={notifications === true ? "secondary" : "neutral"}
+              onClick={handleNotifications}
+            >
               <NotificationsActiveIcon sx={{ padding: 1 }} />
               Notifications
             </Button>
-            <Button component={Link} to="/listings" color="neutral">
+            <Button
+              component={Link}
+              to="/listings"
+              color={listings === true ? "secondary" : "neutral"}
+              onClick={handleListings}
+            >
               <NotificationsActiveIcon sx={{ padding: 1 }} />
               My Listings
             </Button>
-            <Button component={Link} to="/profile" color="neutral">
+            <Button
+              component={Link}
+              to="/profile"
+              color={profile === true ? "secondary" : "neutral"}
+              onClick={handleProfile}
+            >
               <PersonIcon sx={{ padding: 1 }} />
               Profile
             </Button>

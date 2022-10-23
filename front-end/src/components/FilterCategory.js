@@ -1,9 +1,9 @@
-import { SampleProducts } from "../assets/SampleProducts";
-import CategoryCards from "./ProductCards";
+import { Link } from "react-router-dom";
+import { SampleProducts } from "../content/SampleProducts";
+import ProductCards from "./ProductCards";
 import { Grid } from "@mui/material";
 
 export default function FilterCategory(props) {
-  console.log(props.categoryProduct);
   var filtered;
   if (props.categoryProduct !== "Home") {
     filtered = SampleProducts.filter(function (entry) {
@@ -19,6 +19,7 @@ export default function FilterCategory(props) {
       return entry.itemName.toLowerCase().includes(props.searchProduct);
     });
   }
+
   return (
     <div>
       <Grid
@@ -28,7 +29,7 @@ export default function FilterCategory(props) {
         justifyContent={"center"}
       >
         {filtered.map((searchedCategory) => (
-          <CategoryCards
+          <ProductCards
             {...searchedCategory}
             key={searchedCategory.itemName}
             searchProduct={props.searchProduct}

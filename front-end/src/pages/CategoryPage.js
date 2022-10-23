@@ -1,11 +1,11 @@
 import React from "react";
-import SubNavBar from "../components/SubNavBar";
+import SearchBar from "../components/SearchBar.js";
 import FilterCategory from "../components/FilterCategory.js";
 
 export default function CategoryPage(props) {
   return (
     <div>
-      <SubNavBar
+      <SearchBar
         setSearchProduct={props.setSearchProduct}
         searchProduct={props.searchProduct}
         setCategoryProduct={props.setCategoryProduct}

@@ -43,7 +43,7 @@ const theme = createTheme({
   },
 });
 
-export default function SubNavBar(props) {
+export default function SearchBar(props) {
   const [open, setOpen] = React.useState(false);
   const [selectHome, setSelectHome] = React.useState(false);
   const [selectBooks, setSelectBooks] = React.useState(false);
@@ -157,16 +157,17 @@ export default function SubNavBar(props) {
                 fontWeight: "bold",
               }}
             >
-              Welcome to Reuse Vandy - Vanderbilt's Marketplace!
+              Welcome to Reuse Vandy – Vanderbilt University's Marketplace!
             </Typography>
             <TextField
-              label="Search by product title, description"
-              variant="outlined"
+              label="Search by product title or description"
+              variant="filled"
               sx={{ minWidth: "450px" }}
               onChange={(e) => {
                 props.setSearchProduct(e.target.value.toLowerCase());
               }}
               InputProps={{
+                className: theme.neutral,
                 endAdornment: (
                   <IconButton>
                     <SearchIcon />

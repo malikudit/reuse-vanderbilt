@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React } from "react";
 import {
   Grid,
   InputLabel,
@@ -9,6 +9,8 @@ import {
   TextField,
   createTheme,
   ThemeProvider,
+  Typography,
+  Rating,
 } from "@mui/material";
 import DefaultBanner from "../components/DefaultBanner";
 
@@ -35,37 +37,12 @@ const theme = createTheme({
   },
 });
 
-export default function ProductPage() {
-  const [title, setTitle] = useState("");
-  const [details, setDetails] = useState("");
-  const [bid, setBid] = useState("");
-  const [buy, setBuy] = useState("");
-  const [condition, setCondition] = useState("");
-  const [location, setLocation] = useState("");
-
-  const handleCondition = (event) => {
-    setCondition(event.target.value);
-  };
-
-  const handleLocation = (event) => {
-    setLocation(event.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (title && details && bid && buy) {
-      alert("Thank you for creating this listing");
-    }
-  };
-
+export default function ReviewPage() {
   return (
     <ThemeProvider theme={theme}>
-      <DefaultBanner banner={"Product Page"} />{" "}
-      {
-        // props.ItemName
-      }
+      <DefaultBanner banner={"Review Page"} />{" "}
       <Grid align={"center"} padding={4}>
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <form noValidate autoComplete="off">
           <Grid container spacing={2}>
             <Grid item xs={6} container flex>
               <TextField
@@ -78,21 +55,21 @@ export default function ProductPage() {
               />
             </Grid>
             <Grid xs={6} direction="column" marginTop={2}>
-              <Grid item xs={2} marginBottom={2}>
+              <Grid item marginBottom={2}>
                 <TextField
                   disabled
                   // onChange={(e) => setTitle(e.target.value)}
-                  label="Product Title" // props.ItemName
+                  label="Review Title" // props.reviewTitle
                   variant="outlined"
                   // error={titleError}
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={2} marginBottom={2}>
+              <Grid item marginBottom={2}>
                 <TextField
                   disabled
                   // onChange={(e) => setDetails(e.target.value)}
-                  label="Product Description" // props.description
+                  label="Review Body" // props.description
                   variant="outlined"
                   rows={4}
                   multiline
@@ -111,6 +88,28 @@ export default function ProductPage() {
                     fullWidth
                   />
                 </Grid>
+                <Grid
+                  item
+                  xs={5.9}
+                  marginBottom={2}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography variant="h4">Rating:</Typography>
+                  <Rating
+                    name="read-only"
+                    value={4.5}
+                    precision={0.5}
+                    readOnly
+                    align="center"
+                    size="large"
+                  />
+                </Grid>
+              </Grid>
+              <Grid container justifyContent="space-between">
                 <Grid item xs={5.9} marginBottom={2}>
                   <TextField
                     disabled
@@ -121,8 +120,6 @@ export default function ProductPage() {
                     fullWidth
                   />
                 </Grid>
-              </Grid>
-              <Grid container justifyContent="space-between">
                 <Grid item xs={5.9} marginBottom={2}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
@@ -132,7 +129,6 @@ export default function ProductPage() {
                       disabled
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={condition} // props.condition
                       label="Condition"
                       // error={conditionError ? true : false}
                       // onChange={handleCondition}
@@ -144,6 +140,8 @@ export default function ProductPage() {
                     </Select>
                   </FormControl>
                 </Grid>
+              </Grid>
+              <Grid container justifyContent={"space-between"}>
                 <Grid item xs={5.9} marginBottom={2}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
@@ -154,7 +152,6 @@ export default function ProductPage() {
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       // error={locationError ? true : false}
-                      value={location} // props.location
                       label="Location"
                       // onChange={handleLocation}
                     >
@@ -170,8 +167,6 @@ export default function ProductPage() {
                     </Select>
                   </FormControl>
                 </Grid>
-              </Grid>
-              <Grid container justifyContent={"space-between"}>
                 <Grid item xs={5.9} marginBottom={2}>
                   <TextField
                     disabled
@@ -183,32 +178,20 @@ export default function ProductPage() {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={5.9} marginBottom={2}>
-                  <TextField
-                    disabled
-                    // onChange={(e) => setBuy(e.target.value)}
-                    // value = props.buyNow
-                    label="Current Buy Now Price"
-                    variant="outlined"
-                    required
-                    // error={buyError}
-                    fullWidth
-                  />
-                </Grid>
               </Grid>
               <Grid container justifyContent={"space-around"}>
                 <Button
                   variant="contained"
                   required
-                  color="info"
+                  color="error"
                   type="reset"
                   onClick="this.form.reset()"
                 >
-                  Bid Now
+                  Edit Review
                 </Button>
 
                 <Button variant="contained" color="success" type="submit">
-                  Buy Now
+                  Save Review
                 </Button>
               </Grid>
             </Grid>

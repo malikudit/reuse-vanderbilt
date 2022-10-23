@@ -11,11 +11,14 @@ import {
 } from "@mui/material";
 import DefaultBanner from "../components/DefaultBanner";
 import ReviewCards from "../components/ReviewCards";
-import Parwaz from "../assets/Parwaz.png";
-import Couch from "../assets/Couch.jpg";
-import Bike from "../assets/Bike.jpg";
-import iPad from "../assets/iPad.jpg";
+import { SampleReviews } from "../content/SampleReviews";
 import "./Profile.css";
+import {
+  paymentMethods,
+  meetingLocations,
+  formsOfContact,
+} from "../content/ProfilePreferences";
+import Parwaz from "../assets/Parwaz.png";
 
 const theme = createTheme({
   palette: {
@@ -48,63 +51,6 @@ export default function Profile() {
   const [meetingLocation, setMeetingLocation] = useState();
   const [preferredPayment, setPreferredPayment] = useState();
   const [contact, setContact] = useState();
-
-  const paymentMethods = [
-    {
-      value: "Credit Card",
-      label: "Credit Card",
-    },
-    {
-      value: "Debit Card",
-      label: "Debit Card",
-    },
-    {
-      value: "Venmo",
-      label: "Venmo",
-    },
-    {
-      value: "Cash",
-      label: "Cash",
-    },
-    {
-      value: "Zelle",
-      label: "Zelle",
-    },
-    {
-      value: "Any",
-      label: "Any",
-    },
-  ];
-
-  const meetingLocations = [
-    {
-      value: "On-Campus",
-      label: "On-Campus",
-    },
-    {
-      value: "Off-Campus",
-      label: "Off-Campus",
-    },
-    {
-      value: "Any",
-      label: "Any",
-    },
-  ];
-
-  const formsOfContact = [
-    {
-      value: "Phone",
-      label: "Phone",
-    },
-    {
-      value: "GroupMe",
-      label: "GroupMe",
-    },
-    {
-      value: "Any",
-      label: "Any",
-    },
-  ];
 
   return (
     <ThemeProvider theme={theme}>
@@ -159,7 +105,12 @@ export default function Profile() {
                   <Typography variant="h6">Profile Picture</Typography>
                 </Grid>
                 <Grid xs={6} padding={2}>
-                  <Button variant="contained" color="info" component="label">
+                  <Button
+                    variant="contained"
+                    color="info"
+                    component="label"
+                    disabled={saved}
+                  >
                     Upload File
                     <input type="file" hidden />
                   </Button>
@@ -276,34 +227,12 @@ export default function Profile() {
                   </Typography>
                 </Grid>
                 <Grid container>
-                  <Grid xs={4}>
+                  {SampleReviews.map((searchedCategory) => (
                     <ReviewCards
-                      image={Couch}
-                      alt="Couch"
-                      reviewTitle="Great Couch!"
-                      reviewBody="Couch was in great quality. Seller was very cooperative in terms
-                of timing and price."
-                      rating={4.5}
+                      {...searchedCategory}
+                      key={searchedCategory.itemName}
                     />
-                  </Grid>
-                  <Grid xs={4}>
-                    <ReviewCards
-                      image={Bike}
-                      alt="Bike"
-                      reviewTitle="Mid bike!"
-                      reviewBody="Bike was super mid honestly."
-                      rating={2.5}
-                    />
-                  </Grid>
-                  <Grid xs={4}>
-                    <ReviewCards
-                      image={iPad}
-                      alt="iPad"
-                      reviewTitle="Thanks Parwaz!"
-                      reviewBody="Parwaz gave me a fire iPad!"
-                      rating={5}
-                    />
-                  </Grid>
+                  ))}
                 </Grid>
               </Box>
             </Grid>
