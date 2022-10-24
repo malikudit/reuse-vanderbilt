@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { SampleProducts } from "../content/SampleProducts";
 import ProductCards from "./ProductCards";
 import { Grid } from "@mui/material";

@@ -41,6 +41,8 @@ export default function CreateListings() {
   const [descriptionError, setDescriptionError] = useState(false);
   const [condition, setCondition] = useState("");
   const [conditionError, setConditionError] = useState("");
+  const [category, setCategory] = useState("");
+  const [categoryError, setCategoryError] = useState("");
   const [location, setLocation] = useState("");
   const [locationError, setLocationError] = useState("");
   const [allowBid, setAllowBid] = useState();
@@ -54,6 +56,10 @@ export default function CreateListings() {
 
   const handleCondition = (event) => {
     setCondition(event.target.value);
+  };
+
+  const handleCategory = (event) => {
+    setCategory(event.target.value);
   };
 
   const handleAllowBid = (event) => {
@@ -74,6 +80,7 @@ export default function CreateListings() {
     setTitleError(false);
     setDescriptionError(false);
     setConditionError(false);
+    setCategoryError(false);
     setBidError(false);
     setAllowBidError(false);
     setBuyError(false);
@@ -88,6 +95,9 @@ export default function CreateListings() {
     }
     if (condition === "") {
       setConditionError(true);
+    }
+    if (category === "") {
+      setCategoryError(true);
     }
     if (bid === "") {
       setBidError(true);
@@ -222,10 +232,10 @@ export default function CreateListings() {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     required
-                    error={locationError ? true : false}
-                    value={location}
-                    label="Location"
-                    onChange={handleLocation}
+                    error={categoryError ? true : false}
+                    value={category}
+                    label="Category"
+                    onChange={handleCategory}
                   >
                     <MenuItem value={"Books"}>Books</MenuItem>
                     <MenuItem value={"Clothing"}>Clothing</MenuItem>

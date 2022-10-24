@@ -157,7 +157,8 @@ export default function SearchBar(props) {
                 fontWeight: "bold",
               }}
             >
-              Welcome to Reuse Vandy – Vanderbilt University's Marketplace!
+              Welcome to Reuse Vandy! – Click an Item to Bid, Buy, or View
+              Description
             </Typography>
             <TextField
               label="Search by product title or description"

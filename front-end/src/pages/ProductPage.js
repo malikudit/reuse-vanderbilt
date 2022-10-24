@@ -1,15 +1,13 @@
-import { React, useState } from "react";
+import { React } from "react";
 import {
+  Box,
   Grid,
-  InputLabel,
   Button,
-  MenuItem,
-  Select,
-  FormControl,
-  TextField,
   createTheme,
   ThemeProvider,
+  Typography,
 } from "@mui/material";
+import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
 
 const theme = createTheme({
@@ -36,177 +34,96 @@ const theme = createTheme({
 });
 
 export default function ProductPage() {
-  const [title, setTitle] = useState("");
-  const [details, setDetails] = useState("");
-  const [bid, setBid] = useState("");
-  const [buy, setBuy] = useState("");
-  const [condition, setCondition] = useState("");
-  const [location, setLocation] = useState("");
-
-  const handleCondition = (event) => {
-    setCondition(event.target.value);
-  };
-
-  const handleLocation = (event) => {
-    setLocation(event.target.value);
-  };
+  const locImage = useLocation().state.image;
+  const locItemName = useLocation().state.itemName;
+  const locDescription = useLocation().state.description;
+  const locSeller = useLocation().state.seller;
+  const locCondition = useLocation().state.condition;
+  const locLocation = useLocation().state.location;
+  const locCurrentBid = useLocation().state.currentBid;
+  const locBuyNow = useLocation().state.buyNow;
+  const locTimeLeft = useLocation().state.timeLeft;
+  const locCategory = useLocation().state.category;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title && details && bid && buy) {
-      alert("Thank you for creating this listing");
-    }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <DefaultBanner banner={"Product Page"} />{" "}
-      {
-        // props.ItemName
-      }
+      <DefaultBanner banner={"Product Page"} />
       <Grid align={"center"} padding={4}>
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={6} container flex>
-              <TextField
-                disabled
-                label="Picture Goes Here"
-                variant="outlined"
-                style={{ width: "90%" }}
-                multiline
-                rows={18}
+            <Grid item xs={5}>
+              <Box
+                component="img"
+                sx={{
+                  height: 400,
+                  width: 550,
+                }}
+                src={locImage}
               />
             </Grid>
-            <Grid xs={6} direction="column" marginTop={2}>
-              <Grid item xs={2} marginBottom={2}>
-                <TextField
-                  disabled
-                  // onChange={(e) => setTitle(e.target.value)}
-                  label="Product Title" // props.ItemName
-                  variant="outlined"
-                  // error={titleError}
-                  fullWidth
-                />
+            <Grid item xs={7} direction="column" marginTop={2}>
+              <Grid item xs={2} marginBottom={2} borderBottom={1}>
+                <Typography variant="h4">
+                  {"Product Name: "}
+                  {locItemName}
+                </Typography>
               </Grid>
-              <Grid item xs={2} marginBottom={2}>
-                <TextField
-                  disabled
-                  // onChange={(e) => setDetails(e.target.value)}
-                  label="Product Description" // props.description
-                  variant="outlined"
-                  rows={4}
-                  multiline
-                  // error={detailsError}
-                  fullWidth
-                />
+              <Grid item xs={6} marginBottom={2}>
+                <Typography variant="h6">
+                  {"Product Description: "}
+                  {locDescription}
+                </Typography>
               </Grid>
               <Grid container justifyContent="space-between">
-                <Grid item xs={5.9} marginBottom={2}>
-                  <TextField
-                    disabled
-                    // onChange={(e) => setTitle(e.target.value)}
-                    label="Seller" // props.condition
-                    variant="outlined"
-                    // error={titleError}
-                    fullWidth
-                  />
+                <Grid item xs={6} marginBottom={2}>
+                  <Typography style={{ color: "#4169E1" }}>
+                    {"Seller: "}
+                    {locSeller}
+                  </Typography>
                 </Grid>
                 <Grid item xs={5.9} marginBottom={2}>
-                  <TextField
-                    disabled
-                    // onChange={(e) => setTitle(e.target.value)}
-                    label="Category" // props.condition
-                    variant="outlined"
-                    // error={titleError}
-                    fullWidth
-                  />
+                  <Typography style={{ color: "#4169E1" }}>
+                    {"Category: "}
+                    {locCategory}
+                  </Typography>
                 </Grid>
               </Grid>
               <Grid container justifyContent="space-between">
-                <Grid item xs={5.9} marginBottom={2}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Condition
-                    </InputLabel>
-                    <Select
-                      disabled
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={condition} // props.condition
-                      label="Condition"
-                      // error={conditionError ? true : false}
-                      // onChange={handleCondition}
-                    >
-                      <MenuItem value={"Brand New"}>Brand New</MenuItem>
-                      <MenuItem value={"Like New"}>Like New</MenuItem>
-                      <MenuItem value={"Slightly Used"}>Slightly Used</MenuItem>
-                      <MenuItem value={"Used"}>Used</MenuItem>
-                    </Select>
-                  </FormControl>
+                <Grid item xs={6} marginBottom={2}>
+                  <Typography>
+                    {"Condition: "}
+                    {locCondition}
+                  </Typography>
                 </Grid>
-                <Grid item xs={5.9} marginBottom={2}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Location of Exchange
-                    </InputLabel>
-                    <Select
-                      disabled
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      // error={locationError ? true : false}
-                      value={location} // props.location
-                      label="Location"
-                      // onChange={handleLocation}
-                    >
-                      <MenuItem value={"Seller Will Deliver to Buyer"}>
-                        Seller Will Deliver to Buyer
-                      </MenuItem>
-                      <MenuItem value={"Buyer Will Come to Seller"}>
-                        Buyer Will Come to Seller
-                      </MenuItem>
-                      <MenuItem value={"Buyer and Seller Meet at Common Point"}>
-                        Buyer and Seller Meet at Common Point
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
+                <Grid item xs={6} marginBottom={2}>
+                  <Typography>
+                    {"Location of Exchange: "}
+                    {locLocation}
+                  </Typography>
                 </Grid>
               </Grid>
-              <Grid container justifyContent={"space-between"}>
-                <Grid item xs={5.9} marginBottom={2}>
-                  <TextField
-                    disabled
-                    // onChange={(e) => setBid(e.target.value)}
-                    // value = props.currentBid
-                    label="Current Bidding Price"
-                    variant="outlined"
-                    // error={bidError}
-                    fullWidth
-                  />
+              <Grid container justifyContent={"space-between"} borderBottom={1}>
+                <Grid item xs={6} marginBottom={2}>
+                  <Typography style={{ color: "#FF0000" }}>
+                    {"Current Bid Price: "}
+                    {locCurrentBid}
+                  </Typography>
                 </Grid>
-                <Grid item xs={5.9} marginBottom={2}>
-                  <TextField
-                    disabled
-                    // onChange={(e) => setBuy(e.target.value)}
-                    // value = props.buyNow
-                    label="Current Buy Now Price"
-                    variant="outlined"
-                    required
-                    // error={buyError}
-                    fullWidth
-                  />
+                <Grid item xs={6} marginBottom={2}>
+                  <Typography style={{ color: "#FF0000" }}>
+                    {"Buy Now Price: "}
+                    {locBuyNow}
+                  </Typography>
                 </Grid>
               </Grid>
-              <Grid container justifyContent={"space-around"}>
-                <Button
-                  variant="contained"
-                  required
-                  color="info"
-                  type="reset"
-                  onClick="this.form.reset()"
-                >
-                  Bid Now
+              <Grid container justifyContent={"space-around"} marginTop={4}>
+                <Button variant="contained" required color="info" type="reset">
+                  Place Bid
                 </Button>
-
                 <Button variant="contained" color="success" type="submit">
                   Buy Now
                 </Button>

@@ -8,7 +8,8 @@ export const SampleProducts = [
   {
     image: Couch,
     itemName: "New Couch",
-    description: "New Couch",
+    description: "Couch that I bought from IKEA",
+    seller: "Parwaz Gill",
     condition: "Brand New",
     location: "Seller Delivery",
     currentBid: "$100",
@@ -20,7 +21,8 @@ export const SampleProducts = [
   {
     image: Bike,
     itemName: "Bike",
-    description: "Bike",
+    description: "Slightly used bike I got from Walmart",
+    seller: "Parwaz Gill",
     condition: "Slightly Used",
     location: "Buyer and Seller Meet at Common Point",
     currentBid: "$150",
@@ -32,7 +34,8 @@ export const SampleProducts = [
   {
     image: iPad,
     itemName: "Used iPad",
-    description: "Used iPad",
+    description: "Refurbished iPad",
+    seller: "Parwaz Gill",
     condition: "Used",
     location: "Buyer Will Come to Seller",
     currentBid: "$500",
@@ -44,7 +47,8 @@ export const SampleProducts = [
   {
     image: Skateboard,
     itemName: "Skateboard",
-    description: "Skateboard",
+    description: "I've used this product only once before",
+    seller: "Parwaz Gill",
     condition: "Like New",
     location: "Seller Delivery",
     currentBid: "$120",
@@ -56,7 +60,8 @@ export const SampleProducts = [
   {
     image: Textbook,
     itemName: "Unused Textbook",
-    description: "Unused Textbook",
+    description: "Still in packaging, never read",
+    seller: "Parwaz Gill",
     condition: "Brand New",
     location: "Seller Delivery",
     currentBid: "$50",

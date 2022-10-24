@@ -15,7 +15,23 @@ import {
 
 export default function ReviewCards(props) {
   return (
-    <Link to="/product_review" style={{ textDecoration: "none" }}>
+    <Link
+      to={{
+        pathname: `/product_review/${props.category}/${props.reviewTitle}`,
+      }}
+      state={{
+        image: props.image,
+        reviewTitle: props.reviewTitle,
+        reviewBody: props.reviewBody,
+        seller: props.seller,
+        rating: props.rating,
+        category: props.category,
+        condition: props.condition,
+        location: props.location,
+        salePrice: props.salePrice,
+      }}
+      style={{ textDecoration: "none" }}
+    >
       <Box padding={2}>
         <Grid container alignItems="center" justifyContent={"center"}>
           <Card
