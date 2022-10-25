@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router";
 import CategoryPage from "./pages/CategoryPage.js";
-import Notifications from "./pages/Notifications.js";
+import Notifications from "./pages/NotificationsPage.js";
+import NotificationsSettings from "./pages/NotificationsSettings.js";
 import ListingsPage from "./pages/ListingsPage.js";
 import Profile from "./pages/Profile.js";
 import CreateListings from "./components/CreateListings.js";
@@ -119,6 +120,10 @@ export default function MainRoutes(props) {
       />
       <Route path="/listings" element={<ListingsPage />} />
       <Route path="/notifications" element={<Notifications />} />
+      <Route
+        path="/notifications_settings"
+        element={<NotificationsSettings />}
+      />
       <Route path="/profile" element={<Profile />} />
       <Route path="/create_listing" element={<CreateListings />} />
     </Routes>

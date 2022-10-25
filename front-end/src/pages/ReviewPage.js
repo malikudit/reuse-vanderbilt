@@ -48,35 +48,34 @@ export default function ReviewPage() {
   return (
     <ThemeProvider theme={theme}>
       <DefaultBanner banner={"Review Page"} />{" "}
-      <Grid align={"center"} padding={4}>
+      <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
         <form noValidate autoComplete="off">
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <Box
                 component="img"
                 sx={{
-                  height: 400,
-                  width: 550,
+                  height: "100%",
+                  width: "100%",
                 }}
                 src={locImage}
               />
             </Grid>
             <Grid xs={7} direction="column" marginTop={2}>
               <Grid item marginBottom={2}>
-                <Typography variant="h4" borderBottom={1}>
+                <Typography
+                  variant="h4"
+                  borderBottom={1}
+                  sx={{ fontWeight: "bold" }}
+                >
                   {"Review Title: "}
                   {locReviewTitle}
                 </Typography>
               </Grid>
-              <Grid item marginBottom={2}>
-                <Typography variant="h6">
-                  {"Review Body: "}
-                  {locReviewBody}
-                </Typography>
-              </Grid>
+
               <Grid container justifyContent="space-between">
                 <Grid item xs={6} marginBottom={2}>
-                  <Typography>
+                  <Typography style={{ color: "#4169E1" }}>
                     {"Seller: "}
                     {locSeller}
                   </Typography>
@@ -104,7 +103,7 @@ export default function ReviewPage() {
               </Grid>
               <Grid container justifyContent="space-between">
                 <Grid item xs={6} marginBottom={2}>
-                  <Typography>
+                  <Typography style={{ color: "#4169E1" }}>
                     {"Category: "}
                     {locCategory}
                   </Typography>
@@ -124,11 +123,17 @@ export default function ReviewPage() {
                   </Typography>
                 </Grid>
                 <Grid item xs={6} marginBottom={2}>
-                  <Typography>
+                  <Typography style={{ color: "#228B22" }}>
                     {"Sale Price: "}
                     {locSalePrice}
                   </Typography>
                 </Grid>
+              </Grid>
+              <Grid item marginBottom={5} marginTop={2}>
+                <Typography variant="h6">
+                  {"Review Body: "}
+                  {locReviewBody}
+                </Typography>
               </Grid>
               <Grid container justifyContent={"space-around"} marginTop={4}>
                 <Button
@@ -140,7 +145,6 @@ export default function ReviewPage() {
                 >
                   Edit Review
                 </Button>
-
                 <Button variant="contained" color="success" type="submit">
                   Save Review
                 </Button>

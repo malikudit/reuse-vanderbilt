@@ -51,31 +51,25 @@ export default function ProductPage() {
 
   return (
     <ThemeProvider theme={theme}>
-      <DefaultBanner banner={"Product Page"} />
-      <Grid align={"center"} padding={4}>
+      <DefaultBanner banner={"Product Listing Page"} />
+      <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <Box
                 component="img"
                 sx={{
-                  height: 400,
-                  width: 550,
+                  width: "100%",
+                  height: "100%",
                 }}
                 src={locImage}
               />
             </Grid>
             <Grid item xs={7} direction="column" marginTop={2}>
               <Grid item xs={2} marginBottom={2} borderBottom={1}>
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{ fontWeight: "bold" }}>
                   {"Product Name: "}
                   {locItemName}
-                </Typography>
-              </Grid>
-              <Grid item xs={6} marginBottom={2}>
-                <Typography variant="h6">
-                  {"Product Description: "}
-                  {locDescription}
                 </Typography>
               </Grid>
               <Grid container justifyContent="space-between">
@@ -92,7 +86,7 @@ export default function ProductPage() {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container justifyContent="space-between">
+              <Grid container justifyContent="space-between" borderBottom={1}>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography>
                     {"Condition: "}
@@ -106,25 +100,41 @@ export default function ProductPage() {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container justifyContent={"space-between"} borderBottom={1}>
+              <Grid item xs={6} marginBottom={5} marginTop={2}>
+                <Typography variant="h6">
+                  {"Product Description: "}
+                  {locDescription}
+                </Typography>
+              </Grid>
+              <Grid container justifyContent={"space-between"}>
                 <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#FF0000" }}>
+                  <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
                     {"Current Bid Price: "}
                     {locCurrentBid}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#FF0000" }}>
+                  <Typography style={{ color: "#228B22", fontWeight: "bold" }}>
                     {"Buy Now Price: "}
                     {locBuyNow}
                   </Typography>
                 </Grid>
               </Grid>
               <Grid container justifyContent={"space-around"} marginTop={4}>
-                <Button variant="contained" required color="info" type="reset">
+                <Button
+                  variant="contained"
+                  color="error"
+                  type="reset"
+                  sx={{ fontWeight: "bold" }}
+                >
                   Place Bid
                 </Button>
-                <Button variant="contained" color="success" type="submit">
+                <Button
+                  variant="contained"
+                  color="success"
+                  type="submit"
+                  sx={{ fontWeight: "bold" }}
+                >
                   Buy Now
                 </Button>
               </Grid>

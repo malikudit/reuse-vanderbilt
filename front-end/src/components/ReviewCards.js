@@ -17,7 +17,9 @@ export default function ReviewCards(props) {
   return (
     <Link
       to={{
-        pathname: `/product_review/${props.category}/${props.reviewTitle}`,
+        pathname: `/product_review/${props.category.toLowerCase()}/${
+          props.reviewTitle
+        }`,
       }}
       state={{
         image: props.image,

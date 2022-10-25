@@ -54,7 +54,7 @@ export default function Profile() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box>
+      <Box sx={{ backgroundColor: "#FFFFFF" }}>
         <DefaultBanner banner={"User Profile"} />
         <Grid container paddingRight={4} justifyContent="flex-end">
           {saved ? (
@@ -146,6 +146,7 @@ export default function Profile() {
                     setLastName(event.target.value);
                   }}
                   value={lastName}
+                  required
                 />
               </Grid>
               <Grid xs={6} padding={2}>
@@ -227,11 +228,8 @@ export default function Profile() {
                   </Typography>
                 </Grid>
                 <Grid container>
-                  {SampleReviews.map((searchedCategory) => (
-                    <ReviewCards
-                      {...searchedCategory}
-                      key={searchedCategory.itemName}
-                    />
+                  {SampleReviews.map((review) => (
+                    <ReviewCards {...review} key={review.itemName} />
                   ))}
                 </Grid>
               </Box>

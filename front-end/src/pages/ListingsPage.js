@@ -80,7 +80,7 @@ export default function ListingsPage(props) {
   return (
     <ThemeProvider theme={theme}>
       <DefaultBanner banner={"My Listings"} />
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", backgroundColor: "#FFFFFF" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
             value={value}

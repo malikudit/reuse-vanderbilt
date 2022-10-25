@@ -189,6 +189,9 @@ export default function SearchBar(props) {
               </IconButton>
               <Divider />
               <List>
+                <Typography align="center" sx={{ fontWeight: "bold" }}>
+                  Product Categories
+                </Typography>
                 <ListItem
                   key={"Home"}
                   button

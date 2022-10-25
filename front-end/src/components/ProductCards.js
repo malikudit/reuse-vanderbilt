@@ -24,7 +24,7 @@ const ProductCards = ({
 }) => (
   <Link
     to={{
-      pathname: `/product_listing/${category}/${itemName}`,
+      pathname: `/product_listing/${category.toLowerCase()}/${itemName}`,
     }}
     state={{
       image: image,
@@ -49,10 +49,16 @@ const ProductCards = ({
             height: 375,
             margin: 1,
             borderRadius: "16px",
+            border: "0.5px solid black",
           }}
         >
           <CardActionArea>
-            <CardMedia component="img" height="200" image={image} />
+            <CardMedia
+              component="img"
+              height="200"
+              width="100%"
+              image={image}
+            />
             <CardContent>
               <Typography
                 gutterBottom
