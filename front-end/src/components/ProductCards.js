@@ -9,6 +9,7 @@ import {
   CardActionArea,
   Grid,
 } from "@mui/material";
+import CountdownTimer from "./CountdownTimer";
 
 const ProductCards = ({
   image = "",
@@ -19,7 +20,7 @@ const ProductCards = ({
   location = "",
   currentBid = "$",
   buyNow = "$",
-  timeLeft = "",
+  expirationDate = "",
   category = "",
 }) => (
   <Link
@@ -35,7 +36,7 @@ const ProductCards = ({
       location: location,
       currentBid: currentBid,
       buyNow: buyNow,
-      timeLeft: timeLeft,
+      expirationDate: expirationDate,
       category: category,
     }}
     style={{ textDecoration: "none" }}
@@ -77,8 +78,7 @@ const ProductCards = ({
                 {buyNow}
               </Typography>
               <Typography variant="body2" style={{ color: "#FF0000" }}>
-                {"Time left: "}
-                {timeLeft}
+                <CountdownTimer countDownDate={expirationDate} />
               </Typography>
               <Typography variant="body2" style={{ color: "#4169E1" }}>
                 {"Category: "}
