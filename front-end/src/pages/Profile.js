@@ -45,17 +45,61 @@ const theme = createTheme({
 
 export default function Profile() {
   const [saved, setSaved] = useState(true);
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [userName, setUserName] = useState();
+  const [firstName, setFirstName] = useState("");
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastName, setLastName] = useState("");
+  const [lastNameError, setLastNameError] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userNameError, setUserNameError] = useState(false);
   const [meetingLocation, setMeetingLocation] = useState();
   const [preferredPayment, setPreferredPayment] = useState();
   const [contact, setContact] = useState();
+
+  const [error, setError] = useState(false);
+
+  const regex = /^[a-zA-Z]+$/;
+
+  const checkNameEmpty = (name) => name.length === 0;
+
+  const checkNameLength = (name) => name.length <= 2 || name.length >= 32;
+
+  const checkNameAlpha = (name) => !name.match(regex);
+
+  const checkUserNameLength = (userName) =>
+    userName.length <= 4 || userName.length >= 32;
+
+  const checkUserNameAlnum = (userName) => !userName.match(/^[a-zA-Z0-9]+$/);
+
+  const handleSave = () => {
+
+    setFirstNameError(false);
+    setLastNameError(false);
+    setUserNameError(false);
+    setError(false);
+    
+    if (checkNameEmpty(firstName) || checkNameLength(firstName) || checkNameAlpha(firstName)) {
+      setFirstNameError(true);
+      setError(true);
+    }
+    if (checkNameEmpty(lastName) || checkNameLength(lastName) || checkNameAlpha(lastName)) {
+      setLastNameError(true);
+      setError(true);
+    }
+    if (checkUserNameLength(userName) || checkUserNameAlnum(userName)) {
+      setUserNameError(true);
+      setError(true);
+    }
+    if (firstNameError === false && lastNameError === false && userNameError === false && error === false) {
+      alert("Profile saved!");
+    }
+
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ backgroundColor: "#FFFFFF" }}>
         <DefaultBanner banner={"User Profile"} />
+        <form autoComplete="off" onSubmit={handleSave}>
         <Grid container paddingRight={4} justifyContent="flex-end">
           {saved ? (
             <Grid padding={2}>
@@ -77,7 +121,8 @@ export default function Profile() {
                 component="label"
                 color="success"
                 onClick={() => {
-                  setSaved(true);
+                  handleSave();
+                  error ? setSaved(false) : setSaved(true);
                 }}
               >
                 Save Changes
@@ -130,9 +175,29 @@ export default function Profile() {
                   variant={saved ? "outlined" : "filled"}
                   disabled={saved}
                   onChange={(event) => {
-                    setFirstName(event.target.value);
+                    setFirstName(event.target.value); 
+                    if (checkNameEmpty(event.target.value) || checkNameLength(event.target.value) || checkNameAlpha(event.target.value)) {
+                      setFirstNameError(true);
+                    }
                   }}
                   value={firstName}
+                  error={
+                    (checkNameEmpty(firstName) ||
+                      checkNameLength(firstName) ||
+                      checkNameAlpha(firstName)) &&
+                    saved === false
+                  }
+                  helperText={
+                    saved === true
+                      ? ""
+                      : checkNameEmpty(firstName)
+                      ? "First name is a required field"
+                      : checkNameLength(firstName)
+                      ? "First name must be between 2 to 32 characters long"
+                      : checkNameAlpha(firstName)
+                      ? "First name must be alphabetical"
+                      : ""
+                  }
                   required
                 />
               </Grid>
@@ -145,6 +210,23 @@ export default function Profile() {
                   onChange={(event) => {
                     setLastName(event.target.value);
                   }}
+                  error={
+                    (checkNameEmpty(lastName) ||
+                      checkNameLength(lastName) ||
+                      checkNameAlpha(lastName)) &&
+                    saved === false
+                  }
+                  helperText={
+                    saved === true
+                      ? ""
+                      : checkNameEmpty(lastName)
+                      ? "Last name is a required field"
+                      : checkNameLength(lastName)
+                      ? "Last name must be between 2 to 32 characters long"
+                      : checkNameAlpha(lastName)
+                      ? "Last name must be alphabetical"
+                      : ""
+                  }
                   value={lastName}
                   required
                 />
@@ -158,6 +240,23 @@ export default function Profile() {
                   onChange={(event) => {
                     setUserName(event.target.value);
                   }}
+                  error={
+                    (checkNameEmpty(userName) ||
+                      checkUserNameLength(userName) ||
+                      checkUserNameAlnum(userName)) &&
+                    saved === false
+                  }
+                  helperText={
+                    saved === true
+                      ? ""
+                      : checkNameEmpty(userName)
+                      ? "Username is a required field"
+                      : checkUserNameLength(userName)
+                      ? "Username must be between 4 to 32 characters long"
+                      : checkUserNameAlnum(userName)
+                      ? "Username must only contain aplhabets and numbers"
+                      : ""
+                  }
                   value={userName}
                   required
                 />
@@ -236,6 +335,7 @@ export default function Profile() {
             </Grid>
           </Grid>
         </Grid>
+        </form>
       </Box>
     </ThemeProvider>
   );
