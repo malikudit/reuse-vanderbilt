@@ -32,9 +32,8 @@ export default function CountdownTimer(props) {
       {hours}
       {" hours, "}
       {minutes}
-      {" minutes, "}
-      {seconds}
-      {" seconds"}
+      {" minutes"}
+      {props.productPage === true ? ", " + seconds + " seconds" : ""}
     </div>
   );
 }

@@ -109,7 +109,10 @@ export default function ProductPage() {
               </Grid>
               <Grid item marginBottom={2}>
                 <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
-                  <CountdownTimer countDownDate={locTimeLeft} />
+                  <CountdownTimer
+                    countDownDate={locTimeLeft}
+                    productPage={true}
+                  />
                 </Typography>
               </Grid>
               <Grid container justifyContent={"space-between"}>

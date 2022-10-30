@@ -15,7 +15,10 @@ export default function FilterCategory(props) {
   }
   if (props.searchProduct[0] !== "") {
     filtered = filtered.filter(function (entry) {
-      return entry.itemName.toLowerCase().includes(props.searchProduct);
+      return (
+        entry.itemName.toLowerCase().includes(props.searchProduct) ||
+        entry.description.toLowerCase().includes(props.searchProduct)
+      );
     });
   }
 
