@@ -19,7 +19,6 @@ import { SampleReviews } from "../content/SampleReviews";
 import "./Profile.css";
 import {
   paymentMethods,
-  meetingLocations,
   formsOfContact,
 } from "../content/ProfilePreferences";
 import Parwaz from "../assets/Parwaz.png";
@@ -55,9 +54,6 @@ export default function Profile() {
   var [firstNameError, setFirstNameError] = useState(false);
   const [lastName, setLastName] = useState("");
   var [lastNameError, setLastNameError] = useState(false);
-  const [userName, setUserName] = useState("");
-  var [userNameError, setUserNameError] = useState(false);
-  const [meetingLocation, setMeetingLocation] = useState("");
   const [preferredPayment, setPreferredPayment] = useState([]);
   const [contact, setContact] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -78,11 +74,6 @@ export default function Profile() {
 
   const checkNameAlpha = (name) => !name.match(regex);
 
-  const checkUserNameLength = (userName) =>
-    userName.length < 4 || userName.length > 32;
-
-  const checkUserNameAlnum = (userName) => !userName.match(/^[a-zA-Z0-9]+$/);
-
   const checkPhoneNumber = (phoneNumber) =>
     !isMobilePhone(phoneNumber, "en-US");
 
@@ -96,30 +87,24 @@ export default function Profile() {
   const handleEdit = () => {
     setFirstNameError(false);
     setLastNameError(false);
-    setUserNameError(false);
     setPhoneNumberError(false);
     setGroupMeError(false);
     setError(false);
     setSaved(false);
   };
   const handleSave = () => {
-    console.log(phoneNumber);
+
     if (
-      checkNameEmpty(firstName) ||
       checkNameLength(firstName) ||
       checkNameAlpha(firstName)
     ) {
       firstNameError = true;
     }
     if (
-      checkNameEmpty(lastName) ||
       checkNameLength(lastName) ||
       checkNameAlpha(lastName)
     ) {
       lastNameError = true;
-    }
-    if (checkUserNameLength(userName) || checkUserNameAlnum(userName)) {
-      userNameError = true;
     }
     if ((contact === "Phone" || contact === "Any") && checkPhoneNumber(phoneNumber)) {
       phoneNumberError = true;
@@ -127,7 +112,7 @@ export default function Profile() {
     if ((contact === "GroupMe" || contact === "Any") && checkGroupMeURL(groupMe)) {
       groupMeError = true;
     }
-    if (firstNameError || lastNameError || userNameError || phoneNumberError || groupMeError) {
+    if (firstNameError || lastNameError || phoneNumberError || groupMeError) {
       error = true;
     }
     if (!error) {
@@ -227,15 +212,12 @@ export default function Profile() {
                     helperText={
                       saved === true
                         ? ""
-                        : checkNameEmpty(firstName)
-                        ? "First name is a required field"
                         : checkNameLength(firstName)
                         ? "First name must be between 2 to 32 characters long"
                         : checkNameAlpha(firstName)
                         ? "First name must be alphabetical"
                         : ""
                     }
-                    required
                   />
                 </Grid>
                 <Grid xs={6} padding={2}>
@@ -256,8 +238,6 @@ export default function Profile() {
                     helperText={
                       saved === true
                         ? ""
-                        : checkNameEmpty(lastName)
-                        ? "Last name is a required field"
                         : checkNameLength(lastName)
                         ? "Last name must be between 2 to 32 characters long"
                         : checkNameAlpha(lastName)
@@ -265,40 +245,17 @@ export default function Profile() {
                         : ""
                     }
                     value={lastName}
-                    required
                   />
                 </Grid>
                 <Grid xs={6} padding={2}>
                   <TextField
                     fullWidth
-                    label="Username"
+                    label="Email"
                     variant={saved ? "outlined" : "filled"}
-                    disabled={saved}
-                    onChange={(event) => {
-                      setUserName(event.target.value);
-                    }}
-                    error={
-                      (checkNameEmpty(userName) ||
-                        checkUserNameLength(userName) ||
-                        checkUserNameAlnum(userName)) &&
-                      saved === false
-                    }
-                    helperText={
-                      saved === true
-                        ? ""
-                        : checkNameEmpty(userName)
-                        ? "Username is a required field"
-                        : checkUserNameLength(userName)
-                        ? "Username must be between 4 to 32 characters long"
-                        : checkUserNameAlnum(userName)
-                        ? "Username must only contain aplhabets and numbers"
-                        : ""
-                    }
-                    value={userName}
-                    required
+                    disabled
                   />
                 </Grid>
-                <Grid xs={6} padding={2}>
+                {/*<Grid xs={6} padding={2}>
                   <TextField
                     fullWidth
                     select
@@ -316,7 +273,7 @@ export default function Profile() {
                       </MenuItem>
                     ))}
                   </TextField>
-                </Grid>
+                </Grid> */}
                 <Grid xs={6} padding={2}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
@@ -367,8 +324,6 @@ export default function Profile() {
                   </TextField>
                 </Grid>
                 {contact === "Phone" ? (
-                  <Grid container>
-                    <Grid xs={6} padding={2} />
                     <Grid xs={6} padding={2}>
                       <TextField
                         fullWidth
@@ -389,10 +344,7 @@ export default function Profile() {
                         value={phoneNumber}
                       />
                     </Grid>
-                  </Grid>
                 ) : contact === "GroupMe" ? (
-                  <Grid container>
-                    <Grid xs={6} padding={2} />
                     <Grid xs={6} padding={2}>
                       <TextField
                         fullWidth
@@ -413,7 +365,6 @@ export default function Profile() {
                         value={groupMe}
                       />
                     </Grid>
-                  </Grid>
                 ) : contact === "Any" ? (
                   <Grid container>
                     <Grid xs={6} padding={2}>

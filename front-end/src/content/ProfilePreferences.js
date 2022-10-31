@@ -1,13 +1,5 @@
 export const paymentMethods = [
   {
-    value: "Credit Card",
-    label: "Credit Card",
-  },
-  {
-    value: "Debit Card",
-    label: "Debit Card",
-  },
-  {
     value: "Venmo",
     label: "Venmo",
   },
@@ -20,8 +12,8 @@ export const paymentMethods = [
     label: "Zelle",
   },
   {
-    value: "Any",
-    label: "Any",
+    value: "Other Payment Method",
+    label: "Other Payment Method",
   },
 ];
 
