@@ -8,6 +8,10 @@ import {
   Box,
   ThemeProvider,
   createTheme,
+  Chip,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import DefaultBanner from "../components/DefaultBanner";
 import ReviewCards from "../components/ReviewCards";
@@ -15,10 +19,11 @@ import { SampleReviews } from "../content/SampleReviews";
 import "./Profile.css";
 import {
   paymentMethods,
-  meetingLocations,
   formsOfContact,
 } from "../content/ProfilePreferences";
 import Parwaz from "../assets/Parwaz.png";
+import isMobilePhone from "validator/es/lib/isMobilePhone";
+import isURL from "validator/es/lib/isURL";
 
 const theme = createTheme({
   palette: {
@@ -45,54 +50,75 @@ const theme = createTheme({
 
 export default function Profile() {
   const [saved, setSaved] = useState(true);
-  const [firstName, setFirstName] = useState("");
-  const [firstNameError, setFirstNameError] = useState(false);
-  const [lastName, setLastName] = useState("");
-  const [lastNameError, setLastNameError] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [userNameError, setUserNameError] = useState(false);
-  const [meetingLocation, setMeetingLocation] = useState();
-  const [preferredPayment, setPreferredPayment] = useState();
-  const [contact, setContact] = useState();
+  const [firstName, setFirstName] = useState("Parwaz");
+  var [firstNameError, setFirstNameError] = useState(false);
+  const [lastName, setLastName] = useState("Gill");
+  var [lastNameError, setLastNameError] = useState(false);
+  const [preferredPayment, setPreferredPayment] = useState(["Venmo"]);
+  const [contact, setContact] = useState("Phone");
+  const [phoneNumber, setPhoneNumber] = useState("2022022020");
+  var [phoneNumberError, setPhoneNumberError] = useState(false);
+  const [groupMe, setGroupMe] = useState("");
+  var [groupMeError, setGroupMeError] = useState(false);
+  var [error, setError] = useState(false);
 
-  const [error, setError] = useState(false);
+  const preferredPaymentHandler = (event) => {
+    setPreferredPayment(event.target.value);
+  };
 
   const regex = /^[a-zA-Z]+$/;
 
   const checkNameEmpty = (name) => name.length === 0;
 
-  const checkNameLength = (name) => name.length <= 2 || name.length >= 32;
+  const checkNameLength = (name) => name.length < 2 || name.length > 32;
 
   const checkNameAlpha = (name) => !name.match(regex);
 
-  const checkUserNameLength = (userName) =>
-    userName.length <= 4 || userName.length >= 32;
+  const checkPhoneNumber = (phoneNumber) =>
+    !isMobilePhone(phoneNumber, "en-US");
 
-  const checkUserNameAlnum = (userName) => !userName.match(/^[a-zA-Z0-9]+$/);
+  const checkGroupMeURL = (groupme) =>
+    !isURL(groupme, {
+      protocols: ["https"],
+      require_protocol: true,
+      host_whitelist: ["groupme.com", "www.groupme.com"],
+    });
 
-  const handleSave = () => {
-
+  const handleEdit = () => {
     setFirstNameError(false);
     setLastNameError(false);
-    setUserNameError(false);
+    setPhoneNumberError(false);
+    setGroupMeError(false);
     setError(false);
-    
-    if (checkNameEmpty(firstName) || checkNameLength(firstName) || checkNameAlpha(firstName)) {
-      setFirstNameError(true);
-      setError(true);
+    setSaved(false);
+  };
+  const handleSave = () => {
+
+    if (
+      checkNameLength(firstName) ||
+      checkNameAlpha(firstName)
+    ) {
+      firstNameError = true;
     }
-    if (checkNameEmpty(lastName) || checkNameLength(lastName) || checkNameAlpha(lastName)) {
-      setLastNameError(true);
-      setError(true);
+    if (
+      checkNameLength(lastName) ||
+      checkNameAlpha(lastName)
+    ) {
+      lastNameError = true;
     }
-    if (checkUserNameLength(userName) || checkUserNameAlnum(userName)) {
-      setUserNameError(true);
-      setError(true);
+    if ((contact === "Phone" || contact === "Any") && checkPhoneNumber(phoneNumber)) {
+      phoneNumberError = true;
     }
-    if (firstNameError === false && lastNameError === false && userNameError === false && error === false) {
+    if ((contact === "GroupMe" || contact === "Any") && checkGroupMeURL(groupMe)) {
+      groupMeError = true;
+    }
+    if (firstNameError || lastNameError || phoneNumberError || groupMeError) {
+      error = true;
+    }
+    if (!error) {
+      setSaved(true);
       alert("Profile saved!");
     }
-
   };
 
   return (
@@ -100,241 +126,291 @@ export default function Profile() {
       <Box sx={{ backgroundColor: "#FFFFFF" }}>
         <DefaultBanner banner={"User Profile"} />
         <form autoComplete="off" onSubmit={handleSave}>
-        <Grid container paddingRight={4} justifyContent="flex-end">
-          {saved ? (
-            <Grid padding={2}>
-              <Button
-                variant="contained"
-                color="info"
-                component="label"
-                onClick={() => {
-                  setSaved(false);
-                }}
-              >
-                Edit Profile
-              </Button>
-            </Grid>
-          ) : (
-            <Grid padding={2}>
-              <Button
-                variant="contained"
-                component="label"
-                color="success"
-                onClick={() => {
-                  handleSave();
-                  error ? setSaved(false) : setSaved(true);
-                }}
-              >
-                Save Changes
-              </Button>
-            </Grid>
-          )}
-        </Grid>
-        <Grid container margin={"auto"}>
-          <Grid xs={3} padding={1}>
-            <Grid
-              sx={{ border: "2px solid black", borderRadius: "16px" }}
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Grid align="center">
-                <img
-                  src={Parwaz}
-                  alt="Parwaz"
-                  height={300}
-                  className="img-wrapper"
-                />
+          <Grid container paddingRight={4} justifyContent="flex-end">
+            {saved ? (
+              <Grid padding={2}>
+                <Button
+                  variant="contained"
+                  color="info"
+                  component="label"
+                  onClick={() => {
+                    handleEdit();
+                  }}
+                >
+                  Edit Profile
+                </Button>
               </Grid>
-              <Grid container alignItems="center" align="center">
-                <Grid xs={6}>
-                  <Typography variant="h6">Profile Picture</Typography>
+            ) : (
+              <Grid padding={2}>
+                <Button
+                  variant="contained"
+                  component="label"
+                  color="success"
+                  onClick={() => {
+                    handleSave();
+                  }}
+                >
+                  Save Changes
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+          <Grid container margin={"auto"}>
+            <Grid xs={3} padding={1}>
+              <Grid
+                sx={{ border: "2px solid black", borderRadius: "16px" }}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Grid align="center">
+                  <img
+                    src={Parwaz}
+                    alt="Parwaz"
+                    height={300}
+                    className="img-wrapper"
+                  />
+                </Grid>
+                <Grid container alignItems="center" align="center">
+                  <Grid xs={6}>
+                    <Typography variant="h6">Profile Picture</Typography>
+                  </Grid>
+                  <Grid xs={6} padding={2}>
+                    <Button
+                      variant="contained"
+                      color="info"
+                      component="label"
+                      disabled={saved}
+                    >
+                      Upload File
+                      <input type="file" hidden />
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid xs={9} padding={1} sx={{ color: "secondary.main" }}>
+              <Grid
+                container
+                sx={{ border: "2px solid black", borderRadius: "16px" }}
+              >
+                <Grid xs={6} padding={2}>
+                  <TextField
+                    fullWidth
+                    label="First Name"
+                    variant={saved ? "outlined" : "filled"}
+                    disabled={saved}
+                    onChange={(event) => {
+                      setFirstName(event.target.value);
+                    }}
+                    value={firstName}
+                    error={
+                      (checkNameEmpty(firstName) ||
+                        checkNameLength(firstName) ||
+                        checkNameAlpha(firstName)) &&
+                      saved === false
+                    }
+                    helperText={
+                      saved === true
+                        ? ""
+                        : checkNameLength(firstName)
+                        ? "First name must be between 2 to 32 characters long"
+                        : checkNameAlpha(firstName)
+                        ? "First name must be alphabetical"
+                        : ""
+                    }
+                  />
                 </Grid>
                 <Grid xs={6} padding={2}>
-                  <Button
-                    variant="contained"
-                    color="info"
-                    component="label"
+                  <TextField
+                    fullWidth
+                    label="Last Name"
+                    variant={saved ? "outlined" : "filled"}
                     disabled={saved}
-                  >
-                    Upload File
-                    <input type="file" hidden />
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid xs={9} padding={1} sx={{ color: "secondary.main" }}>
-            <Grid
-              container
-              sx={{ border: "2px solid black", borderRadius: "16px" }}
-            >
-              <Grid xs={6} padding={2}>
-                <TextField
-                  fullWidth
-                  label="First Name"
-                  variant={saved ? "outlined" : "filled"}
-                  disabled={saved}
-                  onChange={(event) => {
-                    setFirstName(event.target.value); 
-                    if (checkNameEmpty(event.target.value) || checkNameLength(event.target.value) || checkNameAlpha(event.target.value)) {
-                      setFirstNameError(true);
+                    onChange={(event) => {
+                      setLastName(event.target.value);
+                    }}
+                    error={
+                      (checkNameEmpty(lastName) ||
+                        checkNameLength(lastName) ||
+                        checkNameAlpha(lastName)) &&
+                      saved === false
                     }
-                  }}
-                  value={firstName}
-                  error={
-                    (checkNameEmpty(firstName) ||
-                      checkNameLength(firstName) ||
-                      checkNameAlpha(firstName)) &&
-                    saved === false
-                  }
-                  helperText={
-                    saved === true
-                      ? ""
-                      : checkNameEmpty(firstName)
-                      ? "First name is a required field"
-                      : checkNameLength(firstName)
-                      ? "First name must be between 2 to 32 characters long"
-                      : checkNameAlpha(firstName)
-                      ? "First name must be alphabetical"
-                      : ""
-                  }
-                  required
-                />
-              </Grid>
-              <Grid xs={6} padding={2}>
-                <TextField
-                  fullWidth
-                  label="Last Name"
-                  variant={saved ? "outlined" : "filled"}
-                  disabled={saved}
-                  onChange={(event) => {
-                    setLastName(event.target.value);
-                  }}
-                  error={
-                    (checkNameEmpty(lastName) ||
-                      checkNameLength(lastName) ||
-                      checkNameAlpha(lastName)) &&
-                    saved === false
-                  }
-                  helperText={
-                    saved === true
-                      ? ""
-                      : checkNameEmpty(lastName)
-                      ? "Last name is a required field"
-                      : checkNameLength(lastName)
-                      ? "Last name must be between 2 to 32 characters long"
-                      : checkNameAlpha(lastName)
-                      ? "Last name must be alphabetical"
-                      : ""
-                  }
-                  value={lastName}
-                  required
-                />
-              </Grid>
-              <Grid xs={6} padding={2}>
-                <TextField
-                  fullWidth
-                  label="Username"
-                  variant={saved ? "outlined" : "filled"}
-                  disabled={saved}
-                  onChange={(event) => {
-                    setUserName(event.target.value);
-                  }}
-                  error={
-                    (checkNameEmpty(userName) ||
-                      checkUserNameLength(userName) ||
-                      checkUserNameAlnum(userName)) &&
-                    saved === false
-                  }
-                  helperText={
-                    saved === true
-                      ? ""
-                      : checkNameEmpty(userName)
-                      ? "Username is a required field"
-                      : checkUserNameLength(userName)
-                      ? "Username must be between 4 to 32 characters long"
-                      : checkUserNameAlnum(userName)
-                      ? "Username must only contain aplhabets and numbers"
-                      : ""
-                  }
-                  value={userName}
-                  required
-                />
-              </Grid>
-              <Grid xs={6} padding={2}>
-                <TextField
-                  fullWidth
-                  select
-                  label="Preferred Meeting Location"
-                  variant={saved ? "outlined" : "filled"}
-                  disabled={saved}
-                  onChange={(event) => {
-                    setMeetingLocation(event.target.value);
-                  }}
-                  value={meetingLocation}
-                >
-                  {meetingLocations.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid xs={6} padding={2}>
-                <TextField
-                  fullWidth
-                  select
-                  label="Preferred Form of Payment"
-                  variant={saved ? "outlined" : "filled"}
-                  disabled={saved}
-                  onChange={(event) => {
-                    setPreferredPayment(event.target.value);
-                  }}
-                  value={preferredPayment}
-                >
-                  {paymentMethods.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid xs={6} padding={2}>
-                <TextField
-                  fullWidth
-                  select
-                  label="Preferred Form of Contact"
-                  variant={saved ? "outlined" : "filled"}
-                  disabled={saved}
-                  onChange={(event) => {
-                    setContact(event.target.value);
-                  }}
-                  value={contact}
-                >
-                  {formsOfContact.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-            </Grid>
-            <Grid xs={12} marginTop={4}>
-              <Box sx={{ border: "1px solid black", borderRadius: "16px" }}>
-                <Grid sx={{ border: "1px solid black", borderRadius: "16px" }}>
-                  <Typography variant="h4" align="center">
-                    Reviews of this User
-                  </Typography>
+                    helperText={
+                      saved === true
+                        ? ""
+                        : checkNameLength(lastName)
+                        ? "Last name must be between 2 to 32 characters long"
+                        : checkNameAlpha(lastName)
+                        ? "Last name must be alphabetical"
+                        : ""
+                    }
+                    value={lastName}
+                  />
                 </Grid>
-                <Grid container>
-                  {SampleReviews.map((review) => (
-                    <ReviewCards {...review} key={review.itemName} />
-                  ))}
+                <Grid xs={6} padding={2}>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    variant={saved ? "outlined" : "filled"}
+                    disabled
+                    value="parwaz.s.gill@vanderbilt.edu"
+                  />
                 </Grid>
-              </Box>
+                <Grid xs={6} padding={2}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Preferred Form(s) of Payment
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      multiple
+                      label="Preferred Form of Payment"
+                      variant={saved ? "outlined" : "filled"}
+                      disabled={saved}
+                      onChange={preferredPaymentHandler}
+                      value={preferredPayment}
+                      renderValue={(preferredPayment) => (
+                        <div>
+                          {preferredPayment.map((value) => (
+                            <Chip key={value} label={value} />
+                          ))}
+                        </div>
+                      )}
+                    >
+                      {paymentMethods.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid xs={6} padding={2}>
+                  <TextField
+                    fullWidth
+                    select
+                    label="Preferred Form of Contact"
+                    variant={saved ? "outlined" : "filled"}
+                    disabled={saved}
+                    onChange={(event) => {
+                      setContact(event.target.value);
+                    }}
+                    value={contact}
+                  >
+                    {formsOfContact.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                {contact === "Phone" ? (
+                    <Grid xs={6} padding={2}>
+                      <TextField
+                        fullWidth
+                        label="Phone Number"
+                        variant={saved ? "outlined" : "filled"}
+                        disabled={saved}
+                        onChange={(event) => {
+                          setPhoneNumber(event.target.value);
+                        }}
+                        error={checkPhoneNumber(phoneNumber) && saved === false}
+                        helperText={
+                          saved === true
+                            ? ""
+                            : checkPhoneNumber(phoneNumber)
+                            ? "Enter a valid US phone number"
+                            : ""
+                        }
+                        value={phoneNumber}
+                      />
+                    </Grid>
+                ) : contact === "GroupMe" ? (
+                    <Grid xs={6} padding={2}>
+                      <TextField
+                        fullWidth
+                        label="GroupMe URL"
+                        variant={saved ? "outlined" : "filled"}
+                        disabled={saved}
+                        onChange={(event) => {
+                          setGroupMe(event.target.value);
+                        }}
+                        error={checkGroupMeURL(groupMe) && saved === false}
+                        helperText={
+                          saved === true
+                            ? ""
+                            : checkGroupMeURL(groupMe)
+                            ? "The provided URL must be from groupme.com and use https"
+                            : ""
+                        }
+                        value={groupMe}
+                      />
+                    </Grid>
+                ) : contact === "Any" ? (
+                  <Grid container>
+                    <Grid xs={6} padding={2}>
+                      <TextField
+                        fullWidth
+                        label="Phone Number"
+                        variant={saved ? "outlined" : "filled"}
+                        disabled={saved}
+                        onChange={(event) => {
+                          setPhoneNumber(event.target.value);
+                        }}
+                        error={checkPhoneNumber(phoneNumber) && saved === false}
+                        helperText={
+                          saved === true
+                            ? ""
+                            : checkPhoneNumber(phoneNumber)
+                            ? "Enter a valid US phone number"
+                            : ""
+                        }
+                        value={phoneNumber}
+                      />
+                    </Grid>
+
+                    <Grid xs={6} padding={2}>
+                      <TextField
+                        fullWidth
+                        label="GroupMe URL"
+                        variant={saved ? "outlined" : "filled"}
+                        disabled={saved}
+                        onChange={(event) => {
+                          setGroupMe(event.target.value);
+                        }}
+                        error={checkGroupMeURL(groupMe) && saved === false}
+                        helperText={
+                          saved === true
+                            ? ""
+                            : checkGroupMeURL(groupMe)
+                            ? "The provided URL must be from groupme.com and use https"
+                            : ""
+                        }
+                        value={groupMe}
+                      />
+                    </Grid>
+                  </Grid>
+                ) : null}
+              </Grid>
+              <Grid xs={12} marginTop={4}>
+                <Box sx={{ border: "1px solid black", borderRadius: "16px" }}>
+                  <Grid
+                    sx={{ border: "1px solid black", borderRadius: "16px" }}
+                  >
+                    <Typography variant="h4" align="center">
+                      Reviews of this User
+                    </Typography>
+                  </Grid>
+                  <Grid container>
+                    {SampleReviews.map((review) => (
+                      <ReviewCards {...review} key={review.itemName} />
+                    ))}
+                  </Grid>
+                </Box>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
         </form>
       </Box>
     </ThemeProvider>
