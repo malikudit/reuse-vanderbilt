@@ -4,6 +4,7 @@ const router = express.Router();
 
 const { User } = require('../models');
 const { authenticateUser, generateToken } = require('./utils/auth');
+const { decryptJSON } = require('./utils/verify');
 
 router.post('/', async (req, res, next) => {
     try {
@@ -60,7 +61,23 @@ router.post('/forgot-password', async (req, res, next) => {
 });
 
 router.post('/reset-password', async (_req, _res, _next) => {
-    
+    try {
+        const secret = req.query.secret;
+
+        if (!secret) {
+            const err = {
+                field: 'email',
+                value: email,
+                msg: 'That email address is not registered'
+            }
+
+            res.status(404).send({ errors: [ err ] });
+        } else {
+            
+        }
+    } catch (err) {
+
+    }
 });
 
 router.post('/logout', async (req, res, _next) => {
