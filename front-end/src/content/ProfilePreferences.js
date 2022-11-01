@@ -1,5 +1,7 @@
 export const paymentMethods = [
   {
+<<<<<<< HEAD
+=======
     value: "Credit Card",
     label: "Credit Card",
   },
@@ -8,6 +10,7 @@ export const paymentMethods = [
     label: "Debit Card",
   },
   {
+>>>>>>> main
     value: "Venmo",
     label: "Venmo",
   },
@@ -20,8 +23,13 @@ export const paymentMethods = [
     label: "Zelle",
   },
   {
+<<<<<<< HEAD
+    value: "Other Payment Method",
+    label: "Other Payment Method",
+=======
     value: "Any",
     label: "Any",
+>>>>>>> main
   },
 ];
 

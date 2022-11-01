@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
+import CountdownTimer from "../components/CountdownTimer";
+import NavBar from "../components/NavBar";
 
 const theme = createTheme({
   palette: {
@@ -42,7 +44,7 @@ export default function ProductPage() {
   const locLocation = useLocation().state.location;
   const locCurrentBid = useLocation().state.currentBid;
   const locBuyNow = useLocation().state.buyNow;
-  const locTimeLeft = useLocation().state.timeLeft;
+  const locTimeLeft = useLocation().state.expirationDate;
   const locCategory = useLocation().state.category;
 
   const handleSubmit = (e) => {
@@ -51,6 +53,7 @@ export default function ProductPage() {
 
   return (
     <ThemeProvider theme={theme}>
+      <NavBar />
       <DefaultBanner banner={"Product Listing Page"} />
       <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -104,6 +107,14 @@ export default function ProductPage() {
                 <Typography variant="h6">
                   {"Product Description: "}
                   {locDescription}
+                </Typography>
+              </Grid>
+              <Grid item marginBottom={2}>
+                <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
+                  <CountdownTimer
+                    countDownDate={locTimeLeft}
+                    productPage={true}
+                  />
                 </Typography>
               </Grid>
               <Grid container justifyContent={"space-between"}>

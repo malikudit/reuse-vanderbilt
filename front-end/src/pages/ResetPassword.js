@@ -1,10 +1,7 @@
 import React from "react";
 import Form from "../components/ResetPasswordForm.js";
-import {
-    Box,
-    createTheme,
-    ThemeProvider,
-} from "@mui/material";
+import { Box, createTheme, ThemeProvider } from "@mui/material";
+import NavBar from "../components/NavBar.js";
 
 const theme = createTheme({
     palette: {
@@ -20,13 +17,12 @@ const theme = createTheme({
     },
 });
 
-
 export default function ResetPasswordPage(props) {
     return (
         <ThemeProvider theme={theme}>
+            <NavBar />
             <Box sx={{ width: "100%" }}>
-                <Form>
-                </Form>
+                <Form></Form>
             </Box>
         </ThemeProvider>
     );

@@ -1,6 +1,10 @@
 import React from "react";
-import CountdownTimer from "../components/CountdownTimer";
+import NavBar from "../components/NavBar";
 
 export default function NotificationsSettings() {
-  return <div></div>;
+  return (
+  <div>
+    <NavBar />
+  </div>
+  );
 }

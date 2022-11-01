@@ -132,7 +132,6 @@ export default function MainRoutes(props) {
       <Route path="/profile" element={<Profile />} />
       <Route path="/create_listing" element={<CreateListings />} />
 
-
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/reset" element={<ResetPasswordPage />} />
