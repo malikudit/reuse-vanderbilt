@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 * > * {
-=======
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-*>* {
->>>>>>> main
   font-family: "Poppins", cursive;
   margin: 0;
 }
@@ -34,10 +28,6 @@
   border-radius: 5px;
   /* box-shadow: 1px 3px 10px #e9ecef; */
   background-color: 212121;
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 }
 
 .form-design span {
@@ -48,7 +38,6 @@
   max-width: 320px;
   width: 100vw;
   margin: 2em auto;
-<<<<<<< HEAD
 }
 
 #form > input,
@@ -62,22 +51,6 @@
 }
 
 #form > .btn {
-=======
-
-}
-
-#form>input,
-.btn {
-  border: 1px solid #e9ecef;
-  padding: .9em 1em;
-}
-
-#form>input:focus {
-  outline: none;
-}
-
-#form>.btn {
->>>>>>> main
   background-color: #212121;
   color: #e9ecef;
   font-size: 1em;
@@ -121,8 +94,4 @@
 .errorPara::before {
   display: inline;
   content: "⚠ ";
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
