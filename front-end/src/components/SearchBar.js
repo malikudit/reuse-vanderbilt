@@ -163,10 +163,14 @@ export default function SearchBar(props) {
             <TextField
               label="Search by product title or description"
               variant="filled"
+<<<<<<< HEAD
               sx={{
                 minWidth: "450px",
                 border: "1px solid black",
               }}
+=======
+              sx={{ minWidth: "450px" }}
+>>>>>>> main
               onChange={(e) => {
                 props.setSearchProduct(e.target.value.toLowerCase());
               }}

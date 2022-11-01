@@ -3,6 +3,7 @@ import ProductCards from "./ProductCards";
 import { Grid } from "@mui/material";
 
 export default function FilterCategory(props) {
+<<<<<<< HEAD
   function compare(a, b) {
     var now = new Date().getTime();
     var aDate = new Date(a.expirationDate).getTime();
@@ -35,6 +36,21 @@ export default function FilterCategory(props) {
         entry.itemName.toLowerCase().includes(props.searchProduct) ||
         entry.description.toLowerCase().includes(props.searchProduct)
       );
+=======
+  var filtered;
+  if (props.categoryProduct !== "Home") {
+    filtered = SampleProducts.filter(function (entry) {
+      return entry.category === props.categoryProduct;
+    });
+  } else {
+    filtered = SampleProducts.filter(function (entry) {
+      return entry.category;
+    });
+  }
+  if (props.searchProduct[0] !== "") {
+    filtered = filtered.filter(function (entry) {
+      return entry.itemName.toLowerCase().includes(props.searchProduct);
+>>>>>>> main
     });
   }
 

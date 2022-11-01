@@ -9,7 +9,6 @@ function App() {
 
   return (
     <>
-      <NavBar />
       <MainRoutes
         searchProduct={searchProduct}
         setSearchProduct={setSearchProduct}
