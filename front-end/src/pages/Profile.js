@@ -253,6 +253,7 @@ export default function Profile() {
                     label="Email"
                     variant={saved ? "outlined" : "filled"}
                     disabled
+                    value="parwaz.s.gill@vanderbilt.edu"
                   />
                 </Grid>
                 <Grid xs={6} padding={2}>
