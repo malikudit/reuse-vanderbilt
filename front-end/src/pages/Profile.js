@@ -50,13 +50,13 @@ const theme = createTheme({
 
 export default function Profile() {
   const [saved, setSaved] = useState(true);
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState("Parwaz");
   var [firstNameError, setFirstNameError] = useState(false);
-  const [lastName, setLastName] = useState("");
+  const [lastName, setLastName] = useState("Gill");
   var [lastNameError, setLastNameError] = useState(false);
-  const [preferredPayment, setPreferredPayment] = useState([]);
-  const [contact, setContact] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [preferredPayment, setPreferredPayment] = useState(["Venmo"]);
+  const [contact, setContact] = useState("Phone");
+  const [phoneNumber, setPhoneNumber] = useState("2022022020");
   var [phoneNumberError, setPhoneNumberError] = useState(false);
   const [groupMe, setGroupMe] = useState("");
   var [groupMeError, setGroupMeError] = useState(false);
@@ -255,25 +255,6 @@ export default function Profile() {
                     disabled
                   />
                 </Grid>
-                {/*<Grid xs={6} padding={2}>
-                  <TextField
-                    fullWidth
-                    select
-                    label="Preferred Meeting Location"
-                    variant={saved ? "outlined" : "filled"}
-                    disabled={saved}
-                    onChange={(event) => {
-                      setMeetingLocation(event.target.value);
-                    }}
-                    value={meetingLocation}
-                  >
-                    {meetingLocations.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid> */}
                 <Grid xs={6} padding={2}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
