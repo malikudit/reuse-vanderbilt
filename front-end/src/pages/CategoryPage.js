@@ -1,10 +1,12 @@
 import React from "react";
 import SearchBar from "../components/SearchBar.js";
 import FilterCategory from "../components/FilterCategory.js";
+import NavBar from "../components/NavBar.js";
 
 export default function CategoryPage(props) {
   return (
     <div>
+      <NavBar />
       <SearchBar
         setSearchProduct={props.setSearchProduct}
         searchProduct={props.searchProduct}

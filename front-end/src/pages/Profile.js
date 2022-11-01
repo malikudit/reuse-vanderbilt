@@ -24,6 +24,7 @@ import {
 import Parwaz from "../assets/Parwaz.png";
 import isMobilePhone from "validator/es/lib/isMobilePhone";
 import isURL from "validator/es/lib/isURL";
+import NavBar from "../components/NavBar";
 
 const theme = createTheme({
   palette: {
@@ -123,6 +124,7 @@ export default function Profile() {
 
   return (
     <ThemeProvider theme={theme}>
+      <NavBar />
       <Box sx={{ backgroundColor: "#FFFFFF" }}>
         <DefaultBanner banner={"User Profile"} />
         <form autoComplete="off" onSubmit={handleSave}>

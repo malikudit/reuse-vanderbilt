@@ -10,6 +10,7 @@ import {
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
 import CountdownTimer from "../components/CountdownTimer";
+import NavBar from "../components/NavBar";
 
 const theme = createTheme({
   palette: {
@@ -52,6 +53,7 @@ export default function ProductPage() {
 
   return (
     <ThemeProvider theme={theme}>
+      <NavBar />
       <DefaultBanner banner={"Product Listing Page"} />
       <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
