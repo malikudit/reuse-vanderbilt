@@ -74,10 +74,10 @@ const NavBar = () => {
             aria-label="logo"
             onClick={handleHome}
           >
-            <Typography variant="h3" color="neutral">
+            <Typography variant="h3" color="neutral" fontStyle="helvetica">
               Reuse
             </Typography>
-            <Typography variant="h3" color="secondary" sx={{ flexGrow: 1 }}>
+            <Typography variant="h3" color="secondary" sx={{ flexGrow: 1, fontStyle: "helvetica"}}>
               Vandy
             </Typography>
           </IconButton>
@@ -88,6 +88,9 @@ const NavBar = () => {
               to="/"
               color={home === true ? "secondary" : "neutral"}
               onClick={handleHome}
+              sx={{
+                textTransform: 'none',
+              }}
             >
               <HomeIcon sx={{ padding: 1 }} />
               Home
@@ -97,6 +100,9 @@ const NavBar = () => {
               to="/notifications"
               color={notifications === true ? "secondary" : "neutral"}
               onClick={handleNotifications}
+              sx={{
+                textTransform: 'none',
+              }}
             >
               <NotificationsActiveIcon sx={{ padding: 1 }} />
               Notifications
@@ -106,6 +112,9 @@ const NavBar = () => {
               to="/listings"
               color={listings === true ? "secondary" : "neutral"}
               onClick={handleListings}
+              sx={{
+                textTransform: 'none',
+              }}
             >
               <NotificationsActiveIcon sx={{ padding: 1 }} />
               My Listings
@@ -115,6 +124,9 @@ const NavBar = () => {
               to="/profile"
               color={profile === true ? "secondary" : "neutral"}
               onClick={handleProfile}
+              sx={{
+                textTransform: 'none',
+              }}
             >
               <PersonIcon sx={{ padding: 1 }} />
               Profile

@@ -7,18 +7,14 @@ import Textbook from "../assets/Textbook.jpg";
 export const SampleProducts = [
   {
     image: Couch,
-    itemName: "New Couch",
+    itemName: "New Couch Feels Good to Sit On",
     description: "Couch that I bought from IKEA",
     seller: "Parwaz Gill",
     condition: "Brand New",
     location: "Seller Delivery",
     currentBid: "$100",
     buyNow: "$250",
-<<<<<<< HEAD
-    expirationDate: "Jan 5, 2024 15:37:25",
-=======
-    timeLeft: "2 days 12 hours 10 minutes",
->>>>>>> main
+    expirationDate: "Nov 2, 2022 19:08:25",
     category: "Furniture",
     buying: true,
   },
@@ -31,11 +27,7 @@ export const SampleProducts = [
     location: "Buyer and Seller Meet at Common Point",
     currentBid: "$150",
     buyNow: "$200",
-<<<<<<< HEAD
-    expirationDate: "Jan 5, 2025 15:37:25",
-=======
-    timeLeft: "1 days 8 hours 32 minutes",
->>>>>>> main
+    expirationDate: "Nov 2, 2022 19:35:25",
     category: "Transportation",
     buying: false,
   },
@@ -48,11 +40,7 @@ export const SampleProducts = [
     location: "Buyer Will Come to Seller",
     currentBid: "$500",
     buyNow: "$700",
-<<<<<<< HEAD
     expirationDate: "Mar 5, 2026 15:37:25",
-=======
-    timeLeft: "12 hours 10 minutes",
->>>>>>> main
     category: "Electronics",
     buying: true,
   },
@@ -65,11 +53,7 @@ export const SampleProducts = [
     location: "Seller Delivery",
     currentBid: "$120",
     buyNow: "N/A",
-<<<<<<< HEAD
     expirationDate: "Oct 5, 2024 15:37:25",
-=======
-    timeLeft: "3 days 3 hours 53 minutes",
->>>>>>> main
     category: "Transportation",
     buying: false,
   },
@@ -82,11 +66,7 @@ export const SampleProducts = [
     location: "Seller Delivery",
     currentBid: "$50",
     buyNow: "$100",
-<<<<<<< HEAD
     expirationDate: "Feb 8, 2028 15:37:25",
-=======
-    timeLeft: "6 hours 14 minutes",
->>>>>>> main
     category: "Books",
     buying: true,
   },
