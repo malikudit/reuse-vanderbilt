@@ -11,10 +11,31 @@ export default function Form(props) {
     formState: {},
   } = useForm();
   const onSubmit = (values) => {
+    async function postData(url = "", data = { values }) {
+      const response = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        // cache: 'no-cache',
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow",
+        // referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data),
+      });
+      console.log(response.json());
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    postData("http://localhost:8080", { answer: "Parwaz" }).then((data) => {
+      console.log(data); // JSON data parsed by `data.json()` call
+    });
+
     swal("Success", "Account created", "success").then(function () {
       window.location.href = "/login";
     });
-    console.log(values);
   };
 
   return (
@@ -30,12 +51,12 @@ export default function Form(props) {
           >
             <input
               type="text"
-              {...register("first_name")}
+              {...register("firstName")}
               placeholder="First Name"
             />
             <input
               type="text"
-              {...register("last_name")}
+              {...register("lastName")}
               placeholder="Last Name"
             />
             <input

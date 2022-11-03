@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./Form.css";
 import swal from "sweetalert";
 import emailjs from "emailjs-com";
 
 export default function Form(props) {
+  const [printErr, setPrintErr] = useState(false);
   const {
     register,
     handleSubmit,
@@ -12,10 +13,30 @@ export default function Form(props) {
   } = useForm();
 
   const onSubmit = (values) => {
-    swal("Success", "Session created", "success").then(function () {
-      window.location.href = "/";
+    async function postData(url = "") {
+      const response = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        body: JSON.stringify({
+          user: values,
+        }),
+      });
+
+      return response.json();
+    }
+
+    postData("http://localhost:8080/users/").then((data) => {
+      if (data.error) {
+        swal("Oops!", data.error, "error");
+      } else {
+        setPrintErr(data.error);
+      }
     });
-    console.log(values);
   };
 
   const forgotPassword = () => {
@@ -98,6 +119,11 @@ export default function Form(props) {
               Don't have an account? <a href="/register">Register</a> here.
             </small>
           </form>
+          {printErr !== "" ? (
+            <small className="errorPara">{printErr}</small>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </section>
