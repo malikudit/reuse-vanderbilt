@@ -1,14 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  CardActionArea,
-  Grid,
-} from "@mui/material";
+import "./ProductCards.css";
+import TimeAgo from "react-timeago";
 import CountdownTimer from "./CountdownTimer";
 
 const ProductCards = ({
@@ -41,63 +34,47 @@ const ProductCards = ({
     }}
     style={{ textDecoration: "none" }}
   >
-    <Box padding={2}>
-      <Grid container>
-        <Card
-          variant="outlined"
-          sx={{
-            width: 300,
-            height: 375,
-            margin: 1,
-            borderRadius: "16px",
-            border: "0.5px solid black",
-          }}
-        >
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              width="100%"
-              image={image}
-            />
-            <CardContent>
-              <Typography
-                gutterBottom
-                variant="h5"
-                component="div"
-                align={"center"}
-              >
-                {itemName}
-              </Typography>
-              <Typography variant="body2" style={{ color: "#228B22" }}>
-                {"Current bid: "}
-                {currentBid}
-              </Typography>
-              <Typography variant="body2" style={{ color: "#228B22" }}>
-                {"Buy now price: "}
-                {buyNow}
-              </Typography>
-              <Typography variant="body2" style={{ color: "#FF0000" }}>
+      <div className="card">
+        <div className="top">
+          <img src={image} alt="product" />
+          <div className="overlay">
+            <div className="condition">
+              {condition}
+            </div>
+          </div>
+        </div>
+        <div className="bottom">
+          <div className="categoryBar">
+            <div className="category">
+              {category}
+            </div>
+            <div className="time_left">
                 <CountdownTimer countDownDate={expirationDate} />
-              </Typography>
-              <Typography variant="body2" style={{ color: "#4169E1" }}>
-                {"Category: "}
-                {category}
-              </Typography>
-              <Typography variant="body2" style={{ color: "#000000" }}>
-                {"Condition: "}
-                {condition}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <Grid
-            container
-            alignItems={"center"}
-            justifyContent={"center"}
-          ></Grid>
-        </Card>
-      </Grid>
-    </Box>
+            </div>
+          </div>
+          <div className="title">
+            {itemName}
+          </div>
+          <div className="price">
+            <div className="item">
+              <div className="value">
+                {currentBid}
+              </div>
+              <div className="label">
+                Current Bid
+              </div>
+            </div>
+            <div className="item">
+              <div className="value">
+                {buyNow}
+              </div>
+              <div className="label">
+                Buy Now
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </Link>
 );
 
