@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
-import NavBar from "../components/NavBar";
 
 const theme = createTheme({
   palette: {
@@ -48,7 +47,6 @@ export default function ReviewPage() {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
       <DefaultBanner banner={"Review Page"} />{" "}
       <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
         <form noValidate autoComplete="off">

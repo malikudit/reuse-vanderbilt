@@ -154,23 +154,22 @@ export default function SearchBar(props) {
               sx={{
                 flexGrow: 1,
                 display: { xs: "none", sm: "block" },
-                fontWeight: "bold",
+                fontStyle: "helvetica",
               }}
             >
-              Welcome to Reuse Vandy! – Click an Item to Bid, Buy, or View
-              Description
+              Welcome to Reuse Vandy! Click an item to bid, buy, or view
+              description.
             </Typography>
             <TextField
               label="Search by product title or description"
               variant="filled"
-<<<<<<< HEAD
               sx={{
                 minWidth: "450px",
-                border: "1px solid black",
+                border: "0px",
+                boxShadow: "1",
+                p: "2",
+                fontStyle: "helvetica",
               }}
-=======
-              sx={{ minWidth: "450px" }}
->>>>>>> main
               onChange={(e) => {
                 props.setSearchProduct(e.target.value.toLowerCase());
               }}
@@ -317,4 +316,4 @@ export default function SearchBar(props) {
       </Box>
     </ThemeProvider>
   );
-}
+};
