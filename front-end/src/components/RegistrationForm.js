@@ -15,27 +15,30 @@ export default function Form(props) {
       const response = await fetch(url, {
         method: "POST",
         mode: "cors",
-        // cache: 'no-cache',
-        credentials: "same-origin",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: "follow",
-        // referrerPolicy: 'no-referrer',
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          user: data
+        }),
       });
-      console.log(response.json());
+      
       return response.json(); // parses JSON response into native JavaScript objects
     }
 
-    postData("http://localhost:8080", { answer: "Parwaz" }).then((data) => {
-      console.log(data); // JSON data parsed by `data.json()` call
+    postData("http://localhost:8080/users", values).then((data) => {
+      if (data.error) {
+        swal("Oops!", data.error, "error");
+      } else {
+        swal("Success", "Account created", "success").then(function () {
+          window.location.href = "/login";
+        });
+      }
     });
 
-    swal("Success", "Account created", "success").then(function () {
-      window.location.href = "/login";
-    });
+
   };
 
   return (

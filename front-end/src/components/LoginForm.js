@@ -22,19 +22,17 @@ export default function Form(props) {
           "Content-Type": "application/json",
         },
         redirect: "follow",
-        body: JSON.stringify({
-          user: values,
-        }),
+        body: JSON.stringify(values),
       });
 
       return response.json();
     }
 
-    postData("http://localhost:8080/users/").then((data) => {
+    postData("http://localhost:8080/users/login").then((data) => {
       if (data.error) {
-        swal("Oops!", data.error, "error");
-      } else {
         setPrintErr(data.error);
+      } else {
+        window.location.href = '/'
       }
     });
   };
@@ -95,11 +93,11 @@ export default function Form(props) {
             <input
               name="email_address"
               type="text"
-              {...register("email_address", { required: true })}
+              {...register("email", { required: true })}
               placeholder="Email Address"
             />
             <input
-              type="text"
+              type="password"
               {...register("password", { required: true })}
               placeholder="Password"
             />
@@ -108,6 +106,11 @@ export default function Form(props) {
             )}
             {errors.password && (
               <small className="errorPara">Password is required!</small>
+            )}
+            {printErr !== "" ? (
+            <small className="errorPara">{printErr}</small>
+            ) : (
+            <></>
             )}
             <button className="btn">Login</button>
             <small>
@@ -119,11 +122,6 @@ export default function Form(props) {
               Don't have an account? <a href="/register">Register</a> here.
             </small>
           </form>
-          {printErr !== "" ? (
-            <small className="errorPara">{printErr}</small>
-          ) : (
-            <></>
-          )}
         </div>
       </div>
     </section>
