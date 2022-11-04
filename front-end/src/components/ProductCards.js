@@ -23,7 +23,7 @@ const ProductCards = ({
 }) => (
   <Link
     to={{
-      pathname: `/product_listing/${category.toLowerCase()}/${itemName}`,
+      pathname: `/product_listing/${itemName}`,
     }}
     state={{
       image: image,
