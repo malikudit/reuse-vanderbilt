@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./Form.css";
 import swal from "sweetalert";
 import emailjs from "emailjs-com";
 
 export default function Form(props) {
+  const [printErr, setPrintErr] = useState(false);
   const {
     register,
     handleSubmit,
@@ -12,10 +13,28 @@ export default function Form(props) {
   } = useForm();
 
   const onSubmit = (values) => {
-    swal("Success", "Session created", "success").then(function () {
-      window.location.href = "/";
+    async function postData(url = "") {
+      const response = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        body: JSON.stringify(values),
+      });
+
+      return response.json();
+    }
+
+    postData("http://localhost:8080/users/login").then((data) => {
+      if (data.error) {
+        setPrintErr(data.error);
+      } else {
+        window.location.href = '/'
+      }
     });
-    console.log(values);
   };
 
   const forgotPassword = () => {
@@ -74,11 +93,11 @@ export default function Form(props) {
             <input
               name="email_address"
               type="text"
-              {...register("email_address", { required: true })}
+              {...register("email", { required: true })}
               placeholder="Email Address"
             />
             <input
-              type="text"
+              type="password"
               {...register("password", { required: true })}
               placeholder="Password"
             />
@@ -87,6 +106,11 @@ export default function Form(props) {
             )}
             {errors.password && (
               <small className="errorPara">Password is required!</small>
+            )}
+            {printErr !== "" ? (
+            <small className="errorPara">{printErr}</small>
+            ) : (
+            <></>
             )}
             <button className="btn">Login</button>
             <small>

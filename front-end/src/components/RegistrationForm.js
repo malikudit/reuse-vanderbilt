@@ -11,10 +11,34 @@ export default function Form(props) {
     formState: {},
   } = useForm();
   const onSubmit = (values) => {
-    swal("Success", "Account created", "success").then(function () {
-      window.location.href = "/login";
+    async function postData(url = "", data = { values }) {
+      const response = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        body: JSON.stringify({
+          user: data
+        }),
+      });
+      
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    postData("http://localhost:8080/users", values).then((data) => {
+      if (data.error) {
+        swal("Oops!", data.error, "error");
+      } else {
+        swal("Success", "Account created", "success").then(function () {
+          window.location.href = "/login";
+        });
+      }
     });
-    console.log(values);
+
+
   };
 
   return (
@@ -30,12 +54,12 @@ export default function Form(props) {
           >
             <input
               type="text"
-              {...register("first_name")}
+              {...register("firstName")}
               placeholder="First Name"
             />
             <input
               type="text"
-              {...register("last_name")}
+              {...register("lastName")}
               placeholder="Last Name"
             />
             <input

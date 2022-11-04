@@ -1,23 +1,47 @@
-const { DataTypes, Model } = require('sequelize');
+const _ = require('lodash');
+const { ValidationError, DataTypes, Model } = require('sequelize');
+const bcrypt = require('bcrypt');
 const validator = require('validator');
 const { nanoid } = require('nanoid/async');
 
 const sequelize = require('./database');
 
+const defaultFields = [
+    'id',
+    'firstName',
+    'lastName',
+    'cash',
+    'venmo',
+    'zelle',
+    'otherPaymentMethod',
+    'modeOfCommunication',
+    'phoneNumber',
+    'groupMe'
+]
+
 class User extends Model {
-    displayView() {
-        return {
-            id: this.id,
-            firstName: this.firstName,
-            lastName: this.lastName,
-            cash: this.cash,
-            zelle: this.zelle,
-            venmo: this.venmo,
-            otherPaymentMethod: this.otherPaymentMethod,
-            modeOfCommunication: this.modeOfCommunication,
-            phoneNumber: this.phoneNumber,
-            groupMe: this.groupMe
-        };
+    static async authenticate(email, password) {
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            throw new ValidationError('Invalid login details');
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (match) {
+            return user;
+        }
+
+        throw new ValidationError('Invalid login details');
+    }
+
+    selfView() {
+        return this.generateView(['email']);
+    }
+
+    generateView(additionalFields = []) {
+        return _.pick(this, defaultFields.concat(additionalFields));
     }
 }
 
@@ -66,27 +90,6 @@ User.init({
             }
         }
     },
-    userName: {
-        type: DataTypes.STRING(32),
-        allowNull: false,
-        unique: true,
-        validate: {
-            notNull: {
-                msg: 'Username is a required field'
-            },
-            notIn: {
-                args: [[true, false, NaN]],
-                msg: 'Username must only contain alphabets and numbers'
-            },
-            isAlphanumeric: {
-                msg: 'Username must only contain alphabets and numbers'
-            },
-            len: {
-                args: [4, 32],
-                msg: 'Username must be between 4 to 32 characters long'
-            }
-        }
-    },
     email: {
         type: DataTypes.STRING(254),
         allowNull: false,
@@ -108,8 +111,50 @@ User.init({
             }
         }
     },
+    password: {
+        type: DataTypes.CHAR(60),
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'Password is a required field'
+            },
+            len: {
+                args: [8, 32],
+                msg: 'Password must be between 8 to 32 characters long'
+            },
+            strongPassword(value) {
+                if (!validator.isStrongPassword(value + '')) {
+                    throw new Error('Password must include at least one uppercase, one lowercase, one number and a special character');
+                }
+            }
+        }
+    },
+    state: {
+        type: DataTypes.ENUM('Unverified', 'Verified', 'Complete'),
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'User must be in a valid state at all times'
+            },
+            isIn: {
+                args: [['Unverified', 'Verified', 'Complete']],
+                msg: 'State must be either Unverified, Verified or Complete'
+            },
+            completeProfile(value) {
+                if (value === 'Complete' && !this.modeOfCommunication) {
+                    throw new Error('Must specify a preferred mode of communication');
+                }
+
+                if (value === 'Complete' && 
+                    !(this.cash || this.venmo || this.zelle || this.otherPaymentMethod)) {
+                    throw new Error('Must support at least one payment method');
+                }
+            }
+        }
+    },
     cash: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -124,6 +169,7 @@ User.init({
     },
     venmo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -138,6 +184,7 @@ User.init({
     },
     zelle: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -152,6 +199,7 @@ User.init({
     },
     otherPaymentMethod: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -166,14 +214,10 @@ User.init({
     },
     modeOfCommunication: {
         type: DataTypes.ENUM('Phone', 'GroupMe'),
-        allowNull: false,
         validate: {
             isIn: {
                 args: [['Phone', 'GroupMe']],
                 msg: 'Preferred mode of communication must be either Phone or GroupMe'
-            },
-            notNull: {
-                msg: 'Must specify a preferred mode of communication'
             },
             notNullIfPreferred(value) {
                 if (value === 'Phone' && !this.phoneNumber) {
@@ -214,6 +258,9 @@ User.init({
         beforeCreate: async (user) => {
             const userId = await nanoid();
             user.setDataValue('id', userId);
+
+            const password = user.getDataValue('password');
+            user.setDataValue('password', await bcrypt.hash(password + '', 11))
         },
         beforeSave: (user) => {
             if (user.phoneNumber) {
