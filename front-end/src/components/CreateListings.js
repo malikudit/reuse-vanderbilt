@@ -55,6 +55,8 @@ export default function CreateListings() {
   const [allowBidError, setAllowBidError] = useState(false);
   const [bid, setBid] = useState("");
   const [bidError, setBidError] = useState(false);
+  const [bidIncrement, setBidIncrement] = useState("");
+  const [bidIncrementError, setBidIncrementError] = useState(false);
   const [buy, setBuy] = useState("");
   const [buyError, setBuyError] = useState("");
   const [allowBuy, setAllowBuy] = useState();
@@ -101,6 +103,7 @@ export default function CreateListings() {
     setCategoryError(false);
     setBidError(false);
     setAllowBidError(false);
+    setBidIncrementError(false);
     setBuyError(false);
     setAllowBuyError(false);
     setLocationError(false);
@@ -125,6 +128,9 @@ export default function CreateListings() {
     }
     if (bid === "") {
       setBidError(true);
+    }
+    if (bidIncrement === "") {
+      setBidIncrementError(true);
     }
     if (allowBid === "") {
       setAllowBidError(true);
@@ -353,6 +359,16 @@ export default function CreateListings() {
                           </Grid>
                           <Grid item xs={6} marginBottom={2}>
                             <TextField
+                              onChange={(e) => setBidIncrement(e.target.value)}
+                              label="Set Bid Increment"
+                              variant="outlined"
+                              required
+                              error={bidIncrementError}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6} marginBottom={2}>
+                            <TextField
                               onChange={(e) => setBuy(e.target.value)}
                               label="Set Buy Now Price"
                               variant="outlined"
@@ -363,15 +379,27 @@ export default function CreateListings() {
                           </Grid>
                         </Grid>
                       ) : (
-                        <Grid item xs={6} marginBottom={2}>
-                          <TextField
-                            onChange={(e) => setBid(e.target.value)}
-                            label="Set Starting Bid Price"
-                            variant="outlined"
-                            required
-                            error={bidError}
-                            fullWidth
-                          />
+                        <Grid container>
+                          <Grid item xs={6} marginBottom={2}>
+                            <TextField
+                              onChange={(e) => setBid(e.target.value)}
+                              label="Set Starting Bid Price"
+                              variant="outlined"
+                              required
+                              error={bidError}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6} marginBottom={2}>
+                            <TextField
+                              onChange={(e) => setBidIncrement(e.target.value)}
+                              label="Set Bid Increment"
+                              variant="outlined"
+                              required
+                              error={bidIncrementError}
+                              fullWidth
+                            />
+                          </Grid>
                         </Grid>
                       )}
                     </Grid>

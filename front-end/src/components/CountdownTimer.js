@@ -20,7 +20,6 @@ export default function CountdownTimer(props) {
     // If the count down is finished, write some text
     if (distance < 0) {
       clearInterval(newInterval);
-      document.getElementById("demo").innerHTML = "EXPIRED";
     }
   }, 1000);
 
