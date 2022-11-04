@@ -49,15 +49,19 @@ export default function ProductPage() {
   const locCategory = useLocation().state.category;
   const nextBid = locCurrentBid + " + " + locBidIncrement;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleBid = (e) => {
+    // e.preventDefault();
+  };
+
+  const handleBuyNow = (e) => {
+    // e.preventDefault();
   };
 
   return (
     <ThemeProvider theme={theme}>
       <DefaultBanner banner={"Product Listing Page"} />
       <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <form noValidate autoComplete="off">
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <Box
@@ -120,78 +124,91 @@ export default function ProductPage() {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container justifyContent={"space-between"}>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
-                    {"Current Bid Price: "}
-                    {locCurrentBid}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#228B22", fontWeight: "bold" }}>
-                    {"Buy Now Price: "}
-                    {locBuyNow}
-                  </Typography>
-                </Grid>
-                {locListingType === "Bid-Only" || "Bid-And-Buy-Now" ? (
-                  <Grid item xs={6} marginBottom={2}>
-                    <Typography
-                      style={{ color: "#FF0000", fontWeight: "bold" }}
-                    >
-                      {"Next Minimum Bid Allowed: "}
-                      {nextBid}
-                    </Typography>
-                  </Grid>
-                ) : (
-                  <div></div>
-                )}
-              </Grid>
-              <Grid container justifyContent={"space-evenly"} marginTop={4}>
-                {locListingType === "Bid-And-Buy-Now" ? (
-                  <Grid container flex justifyContent={"space-evenly"}>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      type="reset"
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      Place Bid
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      type="submit"
-                      sx={{ fontWeight: "bold" }}
-                    >
-                      Buy Now
-                    </Button>
-                  </Grid>
-                ) : (
-                  <div>
-                    {locListingType === "Bid-Only" ? (
-                      <Button
-                        variant="contained"
-                        color="error"
-                        type="reset"
-                        sx={{ fontWeight: "bold" }}
+              {new Date(locTimeLeft).getTime() - new Date().getTime() > 0 ? (
+                <div>
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    marginBottom={2}
+                    borderBottom={1}
+                  >
+                    <Grid item xs={6} marginBottom={2}>
+                      <Typography
+                        style={{ color: "#FF0000", fontWeight: "bold" }}
                       >
-                        Place Bid
-                      </Button>
+                        {"Current Bid Price: "}
+                        {locCurrentBid}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6} marginBottom={2}>
+                      <Typography
+                        style={{ color: "#228B22", fontWeight: "bold" }}
+                      >
+                        {"Buy Now Price: "}
+                        {locBuyNow}
+                      </Typography>
+                    </Grid>
+                    {locListingType === "Bid-Only" || "Bid-And-Buy-Now" ? (
+                      <Grid item xs={6} marginBottom={2}>
+                        <Typography
+                          style={{ color: "#FF0000", fontWeight: "bold" }}
+                        >
+                          {"Next Minimum Bid Allowed: "}
+                          {nextBid}
+                        </Typography>
+                      </Grid>
                     ) : (
-                      <Button
-                        variant="contained"
-                        color="success"
-                        type="submit"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        Buy Now
-                      </Button>
+                      <div></div>
                     )}
-                  </div>
-                )}
-
-                {}
-              </Grid>
+                  </Grid>
+                  <Grid container justifyContent={"space-evenly"} marginTop={4}>
+                    {locListingType === "Bid-And-Buy-Now" ? (
+                      <Grid container flex justifyContent={"space-evenly"}>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          type="reset"
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          Place Bid
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          type="submit"
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          Buy Now
+                        </Button>
+                      </Grid>
+                    ) : (
+                      <div>
+                        {locListingType === "Bid-Only" ? (
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={handleBid()}
+                            sx={{ fontWeight: "bold" }}
+                          >
+                            Place Bid
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="contained"
+                            color="success"
+                            onClick={handleBuyNow()}
+                            sx={{ fontWeight: "bold" }}
+                          >
+                            Buy Now
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </Grid>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </Grid>
           </Grid>
         </form>

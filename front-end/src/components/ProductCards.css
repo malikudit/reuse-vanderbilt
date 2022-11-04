@@ -68,6 +68,7 @@
 .card .bottom {
   width: 96%;
   text-overflow: ellipsis;
+  text-align: center;
   border: 1px #666;
   position: relative;
 }

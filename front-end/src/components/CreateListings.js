@@ -178,7 +178,7 @@ export default function CreateListings() {
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
                     onChange={(e) => setTitle(e.target.value)}
-                    label="Enter Product Title"
+                    label="Enter Product Title (between 5-32 characters)"
                     variant="outlined"
                     required
                     error={titleError}
@@ -188,11 +188,10 @@ export default function CreateListings() {
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
                     onChange={(e) => setDescription(e.target.value)}
-                    label="Enter Product Description (max 300 characters)" // need some sort of validation here
+                    label="Enter Product Description (maximum 300 characters)" // need some sort of validation here
                     variant="outlined"
                     rows={4}
                     multiline
-                    required
                     error={descriptionError}
                     fullWidth
                   />

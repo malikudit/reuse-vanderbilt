@@ -115,14 +115,8 @@ export default function MainRoutes(props) {
           />
         }
       />
-      <Route
-        path="/product_listing/:category/:itemName"
-        element={<ProductPage />}
-      />
-      <Route
-        path="/product_review/:category/:itemName"
-        element={<ReviewPage />}
-      />
+      <Route path="/product_listing/:itemName" element={<ProductPage />} />
+      <Route path="/product_review/:itemName" element={<ReviewPage />} />
       <Route path="/listings" element={<ListingsPage />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route

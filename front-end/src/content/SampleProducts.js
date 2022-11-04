@@ -20,7 +20,7 @@ export const SampleProducts = [
     listingPrice: null,
     expirationDate: "2022-11-05T01:20:52.377Z",
     category: "Furniture",
-    buying: "Parwaz",
+    sellerID: "Parwaz",
   },
   {
     image: Bike,
@@ -37,7 +37,7 @@ export const SampleProducts = [
     listingPrice: null,
     expirationDate: "2023-11-05T01:20:52.377Z",
     category: "Transportation",
-    buying: "Not Parwaz",
+    sellerID: "Not Parwaz",
   },
   {
     image: iPad,
@@ -54,7 +54,7 @@ export const SampleProducts = [
     listingPrice: null,
     expirationDate: "2022-09-05T01:20:52.377Z",
     category: "Electronics",
-    buying: "Not Parwaz",
+    sellerID: "Not Parwaz",
   },
   {
     image: Skateboard,

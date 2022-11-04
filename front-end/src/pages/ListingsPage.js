@@ -66,10 +66,10 @@ function a11yProps(index) {
 
 export default function ListingsPage(props) {
   var buying = SampleProducts.filter(function (entry) {
-    return entry.buying === true;
+    return entry.sellerID === "Parwaz";
   });
   var selling = SampleProducts.filter(function (entry) {
-    return entry.buying === false;
+    return entry.sellerID !== "Parwaz";
   });
   const [value, setValue] = React.useState(0);
 
@@ -120,7 +120,7 @@ export default function ListingsPage(props) {
             container
             alignContent={"center"}
             display="flex"
-            justifyContent={"center"}
+            justifyContent={"space-evenly"}
           >
             {buying.map((buyingProduct) => (
               <ProductCards {...buyingProduct} />
@@ -132,10 +132,10 @@ export default function ListingsPage(props) {
             container
             alignContent={"center"}
             display="flex"
-            justifyContent={"center"}
+            justifyContent={"space-evenly"}
           >
-            {selling.map((buyingProduct) => (
-              <ProductCards {...buyingProduct} />
+            {selling.map((sellingProduct) => (
+              <ProductCards {...sellingProduct} />
             ))}
           </Grid>
         </TabPanel>
