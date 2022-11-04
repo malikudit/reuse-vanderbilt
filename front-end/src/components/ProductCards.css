@@ -1,0 +1,142 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: Inter, system-ui;
+  color: #333;
+  margin-left: 1em;
+}
+
+.top {
+  height: 24vh;
+  width: 24vw;
+  /* max-width: 24vw; */
+}
+
+.bottom {
+  width: 24vw;
+  height: 22vh;
+  margin: 6px;
+}
+
+.card {
+  width: 24vw;
+  max-height: 60vh;
+  flex-flow: column;
+  flex: 1 1 auto;
+  border: 1px solid #333;
+  border-radius: 10px;
+  margin-bottom: 25px;
+}
+
+.card .top img {
+  width: 24vw;
+  height: 24vh;
+  border-radius: 8px 8px 0 0;
+}
+
+.card .top {
+  position: relative;
+}
+
+.card .top .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  backdrop-filter: brightness(95%);
+  border-radius: 10px 10px 0 0;
+}
+
+.card .top .overlay .condition {
+  margin: 20px;
+  padding: 5px 10px;
+  background: black;
+  color: white;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  opacity: 75%;
+  backdrop-filter: blur(10px) brightness(50%);
+}
+
+.card .bottom {
+  width: 96%;
+  text-overflow: ellipsis;
+  text-align: center;
+  border: 1px #666;
+  position: relative;
+}
+
+.card .bottom .categoryBar {
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #bbb;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.card .bottom .categoryBar .time_left {
+  text-align: right;
+  align-items: right;
+  display: inline-block;
+  margin-right: 10px;
+  color: #daa520;
+}
+
+.card .bottom .categoryBar .category {
+  text-align: left;
+  align-items: left;
+  color: black;
+  display: inline-block;
+}
+
+.card .bottom .title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 6px 0 10px 0;
+  color: #333;
+  text-overflow: ellipsis;
+}
+
+.card .bottom .price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 0 5px;
+}
+
+.card .bottom .price .item {
+  border: 1px solid #eaeaef;
+  border-radius: 5px;
+  background: #efefef60;
+  /* padding: 10px 0; */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card .bottom .price .value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #666;
+}
+
+.card .bottom .price .label {
+  text-align: center;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #666;
+}

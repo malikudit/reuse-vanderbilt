@@ -16,7 +16,6 @@ import DefaultBanner from "../components/DefaultBanner";
 import AddIcon from "@mui/icons-material/Add";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import NavBar from "../components/NavBar";
 
 const theme = createTheme({
   palette: {
@@ -66,11 +65,25 @@ function a11yProps(index) {
 }
 
 export default function ListingsPage(props) {
-  var buying = SampleProducts.filter(function (entry) {
-    return entry.buying === true;
+  function compare(a, b) {
+    var now = new Date().getTime();
+    var aDate = new Date(a.expirationDate).getTime();
+    var bDate = new Date(b.expirationDate).getTime();
+    if (aDate - now < bDate - now) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
+  var buying = SampleProducts.sort(compare);
+  buying = buying.filter(function (entry) {
+    return entry.sellerID !== "Parwaz";
   });
-  var selling = SampleProducts.filter(function (entry) {
-    return entry.buying === false;
+
+  var selling = SampleProducts.sort(compare);
+  selling = selling.filter(function (entry) {
+    return entry.sellerID === "Parwaz";
   });
   const [value, setValue] = React.useState(0);
 
@@ -80,7 +93,6 @@ export default function ListingsPage(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
       <DefaultBanner banner={"My Listings"} />
       <Box sx={{ width: "100%", backgroundColor: "#FFFFFF" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -122,7 +134,7 @@ export default function ListingsPage(props) {
             container
             alignContent={"center"}
             display="flex"
-            justifyContent={"center"}
+            justifyContent={"space-evenly"}
           >
             {buying.map((buyingProduct) => (
               <ProductCards {...buyingProduct} />
@@ -134,10 +146,10 @@ export default function ListingsPage(props) {
             container
             alignContent={"center"}
             display="flex"
-            justifyContent={"center"}
+            justifyContent={"space-evenly"}
           >
-            {selling.map((buyingProduct) => (
-              <ProductCards {...buyingProduct} />
+            {selling.map((sellingProduct) => (
+              <ProductCards {...sellingProduct} />
             ))}
           </Grid>
         </TabPanel>

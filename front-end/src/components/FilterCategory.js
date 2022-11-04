@@ -1,6 +1,7 @@
 import { SampleProducts } from "../content/SampleProducts";
-import ProductCards from "./ProductCards";
 import { Grid } from "@mui/material";
+import ProductCards from "./ProductCards";
+import "./ProductCards.css";
 
 export default function FilterCategory(props) {
   function compare(a, b) {
@@ -39,21 +40,20 @@ export default function FilterCategory(props) {
   }
 
   return (
-    <div>
-      <Grid
-        container
-        alignContent={"center"}
-        display="flex"
-        justifyContent={"center"}
-      >
-        {filtered.map((searchedCategory) => (
-          <ProductCards
-            {...searchedCategory}
-            key={searchedCategory.itemName}
-            searchProduct={props.searchProduct}
-          />
-        ))}
-      </Grid>
-    </div>
+    <Grid
+      container
+      flex
+      justifyContent="space-evenly"
+      alignItems="center"
+      marginTop={2}
+    >
+      {filtered.map((searchedCategory) => (
+        <ProductCards
+          {...searchedCategory}
+          key={searchedCategory.itemName}
+          searchProduct={props.searchProduct}
+        />
+      ))}
+    </Grid>
   );
 }

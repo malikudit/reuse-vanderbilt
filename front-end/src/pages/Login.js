@@ -1,7 +1,6 @@
 import React from "react";
 import Form from "../components/LoginForm.js";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
-import NavBar from "../components/NavBar.js";
 
 const theme = createTheme({
   palette: {
@@ -20,7 +19,6 @@ const theme = createTheme({
 export default function LoginPage(props) {
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
       <Box sx={{ width: "100%" }}>
         <Form></Form>
       </Box>
