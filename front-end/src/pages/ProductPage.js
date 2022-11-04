@@ -10,7 +10,6 @@ import {
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
 import CountdownTimer from "../components/CountdownTimer";
-import NavBar from "../components/NavBar";
 
 const theme = createTheme({
   palette: {
@@ -39,24 +38,31 @@ export default function ProductPage() {
   const locImage = useLocation().state.image;
   const locItemName = useLocation().state.itemName;
   const locDescription = useLocation().state.description;
-  const locSeller = useLocation().state.seller;
+  const locSellerName = useLocation().state.seller;
   const locCondition = useLocation().state.condition;
   const locLocation = useLocation().state.location;
+  const locListingType = useLocation().state.listingType;
   const locCurrentBid = useLocation().state.currentBid;
+  const locBidIncrement = useLocation().state.bidIncrement;
   const locBuyNow = useLocation().state.buyNow;
   const locTimeLeft = useLocation().state.expirationDate;
   const locCategory = useLocation().state.category;
+  const locSellerID = useLocation().state.sellerID;
+  const nextBid = locCurrentBid + " + " + locBidIncrement;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleBid = (e) => {
+    // e.preventDefault();
+  };
+
+  const handleBuyNow = (e) => {
+    // e.preventDefault();
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
       <DefaultBanner banner={"Product Listing Page"} />
       <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <form noValidate autoComplete="off">
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <Box
@@ -79,7 +85,7 @@ export default function ProductPage() {
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#4169E1" }}>
                     {"Seller: "}
-                    {locSeller}
+                    {locSellerName}
                   </Typography>
                 </Grid>
                 <Grid item xs={5.9} marginBottom={2}>
@@ -103,52 +109,138 @@ export default function ProductPage() {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid item xs={6} marginBottom={5} marginTop={2}>
-                <Typography variant="h6">
-                  {"Product Description: "}
-                  {locDescription}
-                </Typography>
-              </Grid>
-              <Grid item marginBottom={2}>
-                <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
-                  <CountdownTimer
-                    countDownDate={locTimeLeft}
-                    productPage={true}
-                  />
-                </Typography>
-              </Grid>
-              <Grid container justifyContent={"space-between"}>
-                <Grid item xs={6} marginBottom={2}>
+              <Grid container marginBottom={2} borderBottom={1}>
+                <Grid item xs={12} marginBottom={5} marginTop={2}>
+                  <Typography variant="h6">
+                    {"Product Description: "}
+                    {locDescription}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} marginBottom={2}>
                   <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
-                    {"Current Bid Price: "}
-                    {locCurrentBid}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#228B22", fontWeight: "bold" }}>
-                    {"Buy Now Price: "}
-                    {locBuyNow}
+                    <CountdownTimer
+                      countDownDate={locTimeLeft}
+                      productPage={true}
+                    />
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container justifyContent={"space-around"} marginTop={4}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  type="reset"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  Place Bid
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  type="submit"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  Buy Now
-                </Button>
-              </Grid>
+              {new Date(locTimeLeft).getTime() - new Date().getTime() > 0 ? (
+                <div>
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    borderBottom={1}
+                    marginBottom={2}
+                  >
+                    <Grid item xs={6} marginBottom={2}>
+                      <Typography
+                        style={{ color: "#4169E1", fontWeight: "bold" }}
+                      >
+                        {"Current Bid Price: "}
+                        {locCurrentBid}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6} marginBottom={2}>
+                      <Typography
+                        style={{ color: "#228B22", fontWeight: "bold" }}
+                      >
+                        {"Buy Now Price: "}
+                        {locBuyNow}
+                      </Typography>
+                    </Grid>
+                    {locListingType === "Bid-Only" || "Bid-And-Buy-Now" ? (
+                      <Grid item xs={6} marginBottom={2}>
+                        <Typography
+                          style={{ color: "#4169E1", fontWeight: "bold" }}
+                        >
+                          {"Next Minimum Bid Allowed: "}
+                          {nextBid}
+                        </Typography>
+                      </Grid>
+                    ) : (
+                      <div></div>
+                    )}
+                  </Grid>
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    borderBottom={1}
+                    marginBottom={2}
+                  >
+                    {locSellerID !== "Parwaz" ? (
+                      <Grid
+                        container
+                        justifyContent={"space-evenly"}
+                        marginBottom={2}
+                      >
+                        {locListingType === "Bid-And-Buy-Now" ? (
+                          <Grid container justifyContent={"space-evenly"}>
+                            <Button
+                              variant="contained"
+                              color="info"
+                              sx={{ fontWeight: "bold" }}
+                            >
+                              Place Bid
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="success"
+                              type="submit"
+                              sx={{ fontWeight: "bold" }}
+                            >
+                              Buy Now
+                            </Button>
+                          </Grid>
+                        ) : (
+                          <Grid
+                            container
+                            flex
+                            justifyContent={"center"}
+                            marginBottom={2}
+                          >
+                            {locListingType === "Bid-Only" ? (
+                              <Button
+                                variant="contained"
+                                color="info"
+                                onClick={handleBid()}
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                Place Bid
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="contained"
+                                color="success"
+                                onClick={handleBuyNow()}
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                Buy Now
+                              </Button>
+                            )}
+                          </Grid>
+                        )}
+                      </Grid>
+                    ) : (
+                      <Grid
+                        container
+                        justifyContent={"space-evenly"}
+                        marginBottom={2}
+                      >
+                        <Button
+                          variant="contained"
+                          color="error"
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          Delete Listing
+                        </Button>
+                      </Grid>
+                    )}
+                  </Grid>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </Grid>
           </Grid>
         </form>

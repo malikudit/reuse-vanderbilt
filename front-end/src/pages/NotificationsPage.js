@@ -2,13 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
 import { Grid, Typography } from "@mui/material";
-import NavBar from "../components/NavBar";
 
 export default function NotificationsPage() {
-  // document.body.style.background = "#DCDCDC";
   return (
     <div>
-      <NavBar />
       <DefaultBanner banner={"Notifications"} />
       <Grid
         align="center"
