@@ -65,11 +65,25 @@ function a11yProps(index) {
 }
 
 export default function ListingsPage(props) {
-  var buying = SampleProducts.filter(function (entry) {
-    return entry.sellerID === "Parwaz";
-  });
-  var selling = SampleProducts.filter(function (entry) {
+  function compare(a, b) {
+    var now = new Date().getTime();
+    var aDate = new Date(a.expirationDate).getTime();
+    var bDate = new Date(b.expirationDate).getTime();
+    if (aDate - now < bDate - now) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
+  var buying = SampleProducts.sort(compare);
+  buying = buying.filter(function (entry) {
     return entry.sellerID !== "Parwaz";
+  });
+
+  var selling = SampleProducts.sort(compare);
+  selling = selling.filter(function (entry) {
+    return entry.sellerID === "Parwaz";
   });
   const [value, setValue] = React.useState(0);
 
