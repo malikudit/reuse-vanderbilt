@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+
 export default function CountdownTimer(props) {
   var [distance, setDistance] = useState();
   var [days, setDays] = useState();
@@ -25,20 +26,39 @@ export default function CountdownTimer(props) {
     }
   }, 1000);
 
-  if (days < 0) {
-    return <div>Expired</div>;
+  if (props.productPage) {
+    if (days < 0) {
+      return <div>Listing Has Expired</div>;
+    } else {
+      return (
+        <div>
+          <div>
+            Time Left: {days} days, {hours} hours, {minutes} minutes, {seconds}{" "}
+            seconds
+          </div>
+        </div>
+      );
+    }
+  } else {
+    if (days < 0) {
+      return <div>Expired</div>;
+    }
+    if (days < 1 && hours < 1 && minutes < 1) {
+      return <div>{seconds} seconds left</div>;
+    }
+    if (days < 1 && hours < 1) {
+      return <div>{minutes} minutes left</div>;
+    }
+    if (days < 1) {
+      return <div>{hours} hours left</div>;
+    }
+    if (days === 1) {
+      return (
+        <div>
+          {days} day {hours} hours left
+        </div>
+      );
+    }
+    return <div>{days} days left</div>;
   }
-  if (days < 1 && hours < 1 && minutes < 1) {
-    return <div>{seconds} seconds left</div>;
-  }
-  if (days < 1 && hours < 1) {
-    return <div>{minutes} minutes left</div>;
-  }
-  if (days < 1) {
-    return <div>{hours} hours left</div>;
-  }
-  if (days == 1) {
-    return <div>{days} day {hours} hours left</div>;
-  }
-  return <div>{days} days left</div>;
 }

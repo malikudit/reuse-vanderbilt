@@ -72,9 +72,10 @@ export default function CreateListings() {
     setDate();
     setDateError(false);
     var now = new Date().getTime();
-    if (date - now > 12096e5 || date - now < 0) {
+    if (date - now > 12096e5 || date - now < 1.08e7) {
       setDateError(true);
     } else {
+      date = dayjs(date).toISOString();
       setDate(date);
     }
   };
@@ -262,7 +263,7 @@ export default function CreateListings() {
                           error={dateError ? true : false}
                           helperText={
                             dateError
-                              ? "Listings must be in the future and can be no longer than 14 days"
+                              ? "Listings must be at least 3 hours in the future and can be no longer than 14 days ahead"
                               : ""
                           }
                           sx={{ width: "100%" }}
