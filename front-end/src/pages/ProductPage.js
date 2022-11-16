@@ -45,6 +45,7 @@ export default function ProductPage() {
   const locCurrentBid = useLocation().state.currentBid;
   const locBidIncrement = useLocation().state.bidIncrement;
   const locBuyNow = useLocation().state.buyNow;
+  const locListingPrice = useLocation().state.listingPrice;
   const locTimeLeft = useLocation().state.expirationDate;
   const locCategory = useLocation().state.category;
   const locSellerID = useLocation().state.sellerID;
@@ -127,41 +128,77 @@ export default function ProductPage() {
               </Grid>
               {new Date(locTimeLeft).getTime() - new Date().getTime() > 0 ? (
                 <div>
-                  <Grid
-                    container
-                    justifyContent="space-between"
-                    borderBottom={1}
-                    marginBottom={2}
-                  >
-                    <Grid item xs={6} marginBottom={2}>
-                      <Typography
-                        style={{ color: "#4169E1", fontWeight: "bold" }}
-                      >
-                        {"Current Bid Price: "}
-                        {locCurrentBid}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6} marginBottom={2}>
-                      <Typography
-                        style={{ color: "#228B22", fontWeight: "bold" }}
-                      >
-                        {"Buy Now Price: "}
-                        {locBuyNow}
-                      </Typography>
-                    </Grid>
-                    {locListingType === "Bid-Only" || "Bid-And-Buy-Now" ? (
+                  {locCurrentBid !== null && locBuyNow !== null ? (
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      borderBottom={1}
+                      marginBottom={2}
+                    >
                       <Grid item xs={6} marginBottom={2}>
                         <Typography
                           style={{ color: "#4169E1", fontWeight: "bold" }}
                         >
-                          {"Next Minimum Bid Allowed: "}
-                          {nextBid}
+                          {"Current Bid Price: "}
+                          {locCurrentBid}
                         </Typography>
                       </Grid>
-                    ) : (
-                      <div></div>
-                    )}
-                  </Grid>
+                      <Grid item xs={6} marginBottom={2}>
+                        <Typography
+                          style={{ color: "#228B22", fontWeight: "bold" }}
+                        >
+                          {"Buy Now Price: "}
+                          {locBuyNow}
+                        </Typography>
+                      </Grid>
+                      {locListingType === "Bid-Only" || "Bid-And-Buy-Now" ? (
+                        <Grid item xs={6} marginBottom={2}>
+                          <Typography
+                            style={{ color: "#4169E1", fontWeight: "bold" }}
+                          >
+                            {"Next Minimum Bid Allowed: "}
+                            {nextBid}
+                          </Typography>
+                        </Grid>
+                      ) : (
+                        <div></div>
+                      )}
+                    </Grid>
+                  ) : (
+                    <div>
+                      {locCurrentBid !== null ? (
+                        <div>
+                          <Grid item xs={6} marginBottom={2}>
+                            <Typography
+                              style={{ color: "#4169E1", fontWeight: "bold" }}
+                            >
+                              {"Current Bid Price: "}
+                              {locCurrentBid}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6} marginBottom={2}>
+                            <Typography
+                              style={{ color: "#4169E1", fontWeight: "bold" }}
+                            >
+                              {"Next Minimum Bid Allowed: "}
+                              {nextBid}
+                            </Typography>
+                          </Grid>
+                        </div>
+                      ) : (
+                        <div>
+                          <Grid item xs={6} marginBottom={2}>
+                            <Typography
+                              style={{ color: "#228B22", fontWeight: "bold" }}
+                            >
+                              {"Buy Now Price: "}
+                              {locListingPrice}
+                            </Typography>
+                          </Grid>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <Grid
                     container
                     justifyContent="space-between"

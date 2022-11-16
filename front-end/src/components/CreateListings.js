@@ -62,8 +62,38 @@ export default function CreateListings() {
   const [allowBuy, setAllowBuy] = useState();
   const [allowBuyError, setAllowBuyError] = useState(false);
 
+  const handleTitle = (event) => {
+    if (event.length < 5 || event.length > 32) {
+      setTitleError("Title must be between 5 and 32 characters.");
+    } else {
+      setTitleError(false);
+      setTitle(event);
+    }
+  };
+
+  const handleDescription = (event) => {
+    if (event.length > 0) {
+      if (event.length < 20 || event.length > 300) {
+        setDescriptionError(
+          "Description is not required, but if you enter one, it must be between 20 and 300 characters."
+        );
+      } else {
+        setDescriptionError(false);
+        setDescription(event);
+      }
+    } else {
+      setDescriptionError(false);
+      setDescription(event);
+    }
+  };
+
   const handleCondition = (event) => {
-    setCondition(event.target.value);
+    if (condition === "") {
+      setConditionError(true);
+    } else {
+      setConditionError(false);
+      setCondition(event.target.value);
+    }
   };
 
   const handleCategory = (event) => {
@@ -83,11 +113,21 @@ export default function CreateListings() {
   };
 
   const handleAllowBid = (event) => {
-    setAllowBid(event.target.value);
+    if (allowBid === "") {
+      setAllowBidError(true);
+    } else {
+      setAllowBidError(false);
+      setAllowBid(event.target.value);
+    }
   };
 
   const handleAllowBuy = (event) => {
-    setAllowBuy(event.target.value);
+    if (allowBuy === "") {
+      setAllowBuyError(true);
+    } else {
+      setAllowBuyError(false);
+      setAllowBuy(event.target.value);
+    }
   };
 
   const handleLocation = (event) => {
@@ -181,24 +221,26 @@ export default function CreateListings() {
                 />
               </Grid>
               <Grid xs={6} direction="column" marginTop={2}>
-                <Grid item xs={2} marginBottom={2}>
+                <Grid item xs={2} marginBottom={4}>
                   <TextField
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(e) => handleTitle(e.target.value)}
                     label="Enter Product Title (between 5-32 characters)"
                     variant="outlined"
                     required
                     error={titleError}
+                    helperText={titleError ? titleError : ""}
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={2} marginBottom={2}>
+                <Grid item xs={2} marginBottom={4}>
                   <TextField
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => handleDescription(e.target.value)}
                     label="Enter Product Description (maximum 300 characters)" // need some sort of validation here
                     variant="outlined"
                     rows={4}
                     multiline
                     error={descriptionError}
+                    helperText={descriptionError ? descriptionError : ""}
                     fullWidth
                   />
                 </Grid>
@@ -226,7 +268,7 @@ export default function CreateListings() {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={6} marginBottom={2}>
+                  <Grid item xs={5.9} marginBottom={2}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         Prefer To Exchange
@@ -276,7 +318,7 @@ export default function CreateListings() {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={5.9}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         Category
@@ -326,7 +368,7 @@ export default function CreateListings() {
                   </Grid>
                   {allowBid === "Yes" ? (
                     <Grid container>
-                      <Grid item xs={6} marginBottom={2}>
+                      <Grid item xs={5.9} marginBottom={2}>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">
                             Allow Buy Now Price?
@@ -347,7 +389,7 @@ export default function CreateListings() {
                       </Grid>
                       {allowBuy === "Yes" ? (
                         <Grid container justifyContent={"space-between"}>
-                          <Grid item xs={6} marginBottom={2}>
+                          <Grid item xs={5.9} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBid(e.target.value)}
                               label="Set Starting Bid Price"
@@ -357,7 +399,7 @@ export default function CreateListings() {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={6} marginBottom={2}>
+                          <Grid item xs={5.9} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBidIncrement(e.target.value)}
                               label="Set Bid Increment"
@@ -367,7 +409,7 @@ export default function CreateListings() {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={6} marginBottom={2}>
+                          <Grid item xs={5.9} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBuy(e.target.value)}
                               label="Set Buy Now Price"
@@ -379,8 +421,8 @@ export default function CreateListings() {
                           </Grid>
                         </Grid>
                       ) : (
-                        <Grid container>
-                          <Grid item xs={6} marginBottom={2}>
+                        <Grid container justifyContent="space-between">
+                          <Grid item xs={5.9} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBid(e.target.value)}
                               label="Set Starting Bid Price"
@@ -390,7 +432,7 @@ export default function CreateListings() {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={6} marginBottom={2}>
+                          <Grid item xs={5.9} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBidIncrement(e.target.value)}
                               label="Set Bid Increment"
