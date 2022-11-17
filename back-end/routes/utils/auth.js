@@ -4,11 +4,12 @@ const jwt = require('jsonwebtoken');
 const privateKey = process.env.JWT_KEY;
 
 const { User } = require('../../models');
+const { LoginError } = require('../../types/error');
 
 async function authenticateUser(req, res, next) {
     try {
         if (!req.session.authToken) {
-            throw new Error('You need to be logged in to view this page');
+            throw new LoginError('You need to be logged in to view this page');
         }
 
         const id = await validateToken(req.session.authToken);

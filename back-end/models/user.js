@@ -1,10 +1,11 @@
 const _ = require('lodash');
-const { ValidationError, DataTypes, Model } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 const { nanoid } = require('nanoid/async');
 
 const sequelize = require('./database');
+const { LoginError } = require('../types/error');
 
 const defaultFields = [
     'id',
@@ -24,7 +25,7 @@ class User extends Model {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            throw new ValidationError('Invalid login details');
+            throw new LoginError('No account exists with that email address');
         }
 
         const match = await bcrypt.compare(password, user.password);
@@ -33,7 +34,7 @@ class User extends Model {
             return user;
         }
 
-        throw new ValidationError('Invalid login details');
+        throw new LoginError('Password is incorrect');
     }
 
     selfView() {

@@ -9,6 +9,7 @@ import {
   TextField,
   createTheme,
   ThemeProvider,
+  Typography
 } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -97,8 +98,8 @@ export default function CreateListings() {
     setLocation(event.target.value);
   };
 
-  const handleSubmit = () => {
-    // e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     setTitleError(false);
     setDescriptionError(false);
@@ -158,11 +159,11 @@ export default function CreateListings() {
       setError(true);
     }
 
-    if (bid !== "" && buy !== "") {
+    if (bid && buy) {
       setListingType("Bid-And-Buy-Now");
-    } else if (bid !== "") {
+    } else if (bid && !buy) {
       setListingType("Bid-Only");
-    } else if (buy !== "") {
+    } else if (buy && !bid) {
       setListingType("Buy-Only");
     }
     const obj = {};
@@ -179,7 +180,8 @@ export default function CreateListings() {
     obj.expirationDate = date;
     obj.location = location;
     if (!error) {
-      async function postData(url = "", data = { obj }) {
+      console.log("Object is " + obj);
+      async function postData(url = "", data = obj) {
         const response = await fetch(url, {
           method: "POST",
           mode: "cors",
@@ -192,7 +194,7 @@ export default function CreateListings() {
             product: data,
           }),
         });
-
+        console.log("Response.json " + response.json());
         return response.json();
       }
 
@@ -212,7 +214,7 @@ export default function CreateListings() {
     <div>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <form noValidate autoComplete="off" onSubmit={handleSubmit()}>
+          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={6} container flex>
                 <TextField
@@ -278,7 +280,7 @@ export default function CreateListings() {
                         error={conditionError ? true : false}
                         onChange={handleCondition}
                       >
-                        <MenuItem value={"Brand New"}>Brand New</MenuItem>
+                        <MenuItem value={"New"}>New</MenuItem>
                         <MenuItem value={"Like New"}>Like New</MenuItem>
                         <MenuItem value={"Slightly Used"}>
                           Slightly Used
@@ -301,13 +303,13 @@ export default function CreateListings() {
                         label="Location"
                         onChange={handleLocation}
                       >
-                        <MenuItem value={"Seller Delivery"}>
+                        <MenuItem value={"Seller Delivers to Buyer"}>
                           Seller Will Deliver to Buyer
                         </MenuItem>
-                        <MenuItem value={"Buyer Pickup"}>
+                        <MenuItem value={"Buyer Comes to Seller"}>
                           Buyer Will Come to Seller
                         </MenuItem>
-                        <MenuItem value={"Meet at Common Point"}>
+                        <MenuItem value={"Exchange at Common Point"}>
                           Buyer and Seller Meet at Common Point
                         </MenuItem>
                       </Select>
@@ -380,12 +382,12 @@ export default function CreateListings() {
                         error={allowBidError ? true : false}
                         onChange={handleAllowBid}
                       >
-                        <MenuItem value={"Yes"}>Yes</MenuItem>
-                        <MenuItem value={"No"}>No</MenuItem>
+                        <MenuItem value={true}>Yes</MenuItem>
+                        <MenuItem value={false}>No</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
-                  {allowBid === "Yes" ? (
+                  {allowBid ? (
                     <Grid container>
                       <Grid item xs={6} marginBottom={2}>
                         <FormControl fullWidth>
@@ -401,12 +403,12 @@ export default function CreateListings() {
                             error={allowBuyError ? true : false}
                             onChange={handleAllowBuy}
                           >
-                            <MenuItem value={"Yes"}>Yes</MenuItem>
-                            <MenuItem value={"No"}>No</MenuItem>
+                            <MenuItem value={true}>Yes</MenuItem>
+                            <MenuItem value={false}>No</MenuItem>
                           </Select>
                         </FormControl>
                       </Grid>
-                      {allowBuy === "Yes" ? (
+                      {allowBuy ? (
                         <Grid container justifyContent={"space-between"}>
                           <Grid item xs={6} marginBottom={2}>
                             <TextField

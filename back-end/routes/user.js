@@ -43,14 +43,9 @@ router.post('/forgot-password', async (req, res, next) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            const err = {
-                field: 'email',
-                value: email,
-                msg: 'That email address is not registered'
-            }
-
-            res.status(404).send({ errors: [ err ] });
+            res.status(404).send({ error: 'No account exists with that email address' });
         } else {
+            
             // TO DO
             // send password reset email here
             res.send('Thanks! We have just sent you an email with a link to set a new password');
@@ -107,7 +102,7 @@ const editableFields = [
 
 router.put('/me', async (req, res, next) => {
     const edits = _.pick(req.body, editableFields);
-
+    
     try {
         const user = await req.user.update(edits);
         res.send(user);
