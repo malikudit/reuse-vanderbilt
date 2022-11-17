@@ -165,9 +165,21 @@ export default function CreateListings() {
     } else if (buy !== "") {
       setListingType("Buy-Only");
     }
-
+    const obj = {};
+    obj.title = title;
+    obj.description = description;
+    obj.category = category;
+    obj.condition = condition;
+    obj.listingType = listingType;
+    obj.listingPrice = buy;
+    obj.openBidPrice = bid;
+    obj.bidIncrement = bidIncrement;
+    obj.currentBid = bid;
+    obj.buyNow = buy;
+    obj.expirationDate = date;
+    obj.location = location;
     if (!error) {
-      async function postData(url = "") {
+      async function postData(url = "", data = { obj }) {
         const response = await fetch(url, {
           method: "POST",
           mode: "cors",
@@ -176,16 +188,9 @@ export default function CreateListings() {
             "Content-Type": "application/json",
           },
           redirect: "follow",
-          body: {
-            title,
-            description,
-            category,
-            condition,
-            listingType,
-            bid,
-            date,
-            location,
-          },
+          body: JSON.stringify({
+            product: data,
+          }),
         });
 
         return response.json();
@@ -207,7 +212,7 @@ export default function CreateListings() {
     <div>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+          <form noValidate autoComplete="off" onSubmit={handleSubmit()}>
             <Grid container spacing={2}>
               <Grid item xs={6} container flex>
                 <TextField
