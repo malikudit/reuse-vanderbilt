@@ -61,39 +61,12 @@ export default function CreateListings() {
   const [buyError, setBuyError] = useState("");
   const [allowBuy, setAllowBuy] = useState();
   const [allowBuyError, setAllowBuyError] = useState(false);
-
-  const handleTitle = (event) => {
-    if (event.length < 5 || event.length > 32) {
-      setTitleError("Title must be between 5 and 32 characters.");
-    } else {
-      setTitleError(false);
-      setTitle(event);
-    }
-  };
-
-  const handleDescription = (event) => {
-    if (event.length > 0) {
-      if (event.length < 20 || event.length > 300) {
-        setDescriptionError(
-          "Description is not required, but if you enter one, it must be between 20 and 300 characters."
-        );
-      } else {
-        setDescriptionError(false);
-        setDescription(event);
-      }
-    } else {
-      setDescriptionError(false);
-      setDescription(event);
-    }
-  };
+  const [listingType, setListingType] = useState("");
+  const [error, setError] = useState(false);
+  const [printErr, setPrintErr] = useState("");
 
   const handleCondition = (event) => {
-    if (condition === "") {
-      setConditionError(true);
-    } else {
-      setConditionError(false);
-      setCondition(event.target.value);
-    }
+    setCondition(event.target.value);
   };
 
   const handleCategory = (event) => {
@@ -113,29 +86,19 @@ export default function CreateListings() {
   };
 
   const handleAllowBid = (event) => {
-    if (allowBid === "") {
-      setAllowBidError(true);
-    } else {
-      setAllowBidError(false);
-      setAllowBid(event.target.value);
-    }
+    setAllowBid(event.target.value);
   };
 
   const handleAllowBuy = (event) => {
-    if (allowBuy === "") {
-      setAllowBuyError(true);
-    } else {
-      setAllowBuyError(false);
-      setAllowBuy(event.target.value);
-    }
+    setAllowBuy(event.target.value);
   };
 
   const handleLocation = (event) => {
     setLocation(event.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // e.preventDefault();
 
     setTitleError(false);
     setDescriptionError(false);
@@ -148,42 +111,95 @@ export default function CreateListings() {
     setBuyError(false);
     setAllowBuyError(false);
     setLocationError(false);
+    setError(false);
 
     if (title === "") {
       setTitleError(true);
+      setError(true);
     }
     if (description === "") {
       setDescriptionError(true);
+      setError(true);
     }
     if (condition === "") {
       setConditionError(true);
+      setError(true);
     }
     if (location === "") {
       setLocationError(true);
+      setError(true);
     }
     if (date === "") {
       setDateError(true);
+      setError(true);
     }
     if (category === "") {
       setCategoryError(true);
+      setError(true);
     }
     if (bid === "") {
       setBidError(true);
+      setError(true);
     }
     if (bidIncrement === "") {
       setBidIncrementError(true);
+      setError(true);
     }
     if (allowBid === "") {
       setAllowBidError(true);
+      setError(true);
     }
     if (buy === "") {
       setBuyError(true);
+      setError(true);
     }
     if (allowBuy === "") {
       setBuyError(true);
+      setError(true);
     }
-    if (title && description && condition && (bid || buy) && location) {
-      alert("Listing Posted Successfully!");
+
+    if (bid !== "" && buy !== "") {
+      setListingType("Bid-And-Buy-Now");
+    } else if (bid !== "") {
+      setListingType("Bid-Only");
+    } else if (buy !== "") {
+      setListingType("Buy-Only");
+    }
+
+    if (!error) {
+      async function postData(url = "") {
+        const response = await fetch(url, {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: {
+            title,
+            description,
+            category,
+            condition,
+            listingType,
+            bid,
+            date,
+            location,
+          },
+        });
+
+        return response.json();
+      }
+
+      postData("http://localhost:8080/product").then((data) => {
+        if (data.error) {
+          setPrintErr(data.error);
+          console.log(printErr);
+        } else {
+          alert("Listing Posted Successfully!");
+          window.location.href = "/";
+        }
+      });
     }
   };
 
@@ -221,26 +237,24 @@ export default function CreateListings() {
                 />
               </Grid>
               <Grid xs={6} direction="column" marginTop={2}>
-                <Grid item xs={2} marginBottom={4}>
+                <Grid item xs={2} marginBottom={2}>
                   <TextField
-                    onChange={(e) => handleTitle(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                     label="Enter Product Title (between 5-32 characters)"
                     variant="outlined"
                     required
                     error={titleError}
-                    helperText={titleError ? titleError : ""}
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={2} marginBottom={4}>
+                <Grid item xs={2} marginBottom={2}>
                   <TextField
-                    onChange={(e) => handleDescription(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                     label="Enter Product Description (maximum 300 characters)" // need some sort of validation here
                     variant="outlined"
                     rows={4}
                     multiline
                     error={descriptionError}
-                    helperText={descriptionError ? descriptionError : ""}
                     fullWidth
                   />
                 </Grid>
@@ -268,7 +282,7 @@ export default function CreateListings() {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={5.9} marginBottom={2}>
+                  <Grid item xs={6} marginBottom={2}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         Prefer To Exchange
@@ -318,7 +332,7 @@ export default function CreateListings() {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={5.9}>
+                  <Grid item xs={6}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         Category
@@ -368,7 +382,7 @@ export default function CreateListings() {
                   </Grid>
                   {allowBid === "Yes" ? (
                     <Grid container>
-                      <Grid item xs={5.9} marginBottom={2}>
+                      <Grid item xs={6} marginBottom={2}>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">
                             Allow Buy Now Price?
@@ -389,7 +403,7 @@ export default function CreateListings() {
                       </Grid>
                       {allowBuy === "Yes" ? (
                         <Grid container justifyContent={"space-between"}>
-                          <Grid item xs={5.9} marginBottom={2}>
+                          <Grid item xs={6} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBid(e.target.value)}
                               label="Set Starting Bid Price"
@@ -399,7 +413,7 @@ export default function CreateListings() {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={5.9} marginBottom={2}>
+                          <Grid item xs={6} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBidIncrement(e.target.value)}
                               label="Set Bid Increment"
@@ -409,7 +423,7 @@ export default function CreateListings() {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={5.9} marginBottom={2}>
+                          <Grid item xs={6} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBuy(e.target.value)}
                               label="Set Buy Now Price"
@@ -421,8 +435,8 @@ export default function CreateListings() {
                           </Grid>
                         </Grid>
                       ) : (
-                        <Grid container justifyContent="space-between">
-                          <Grid item xs={5.9} marginBottom={2}>
+                        <Grid container>
+                          <Grid item xs={6} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBid(e.target.value)}
                               label="Set Starting Bid Price"
@@ -432,7 +446,7 @@ export default function CreateListings() {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={5.9} marginBottom={2}>
+                          <Grid item xs={6} marginBottom={2}>
                             <TextField
                               onChange={(e) => setBidIncrement(e.target.value)}
                               label="Set Bid Increment"
