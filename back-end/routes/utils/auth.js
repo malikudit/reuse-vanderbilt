@@ -14,6 +14,10 @@ async function authenticateUser(req, res, next) {
 
         const id = await validateToken(req.session.authToken);
         req.user = await User.findByPk(id);
+        
+        if (!req.user) {
+            throw new LoginError('You need to be logged in to view this page');
+        }
 
         // extend the user session every 10 mins
         req.session.nowInMinutes = Math.floor(Date.now() / 60e4)
