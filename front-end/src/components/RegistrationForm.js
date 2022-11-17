@@ -21,14 +21,14 @@ export default function Form(props) {
         },
         redirect: "follow",
         body: JSON.stringify({
-          user: data
+          user: data,
         }),
       });
-      
+
       return response.json(); // parses JSON response into native JavaScript objects
     }
 
-    postData("http://localhost:8080/users", values).then((data) => {
+    postData("http://3.230.48.124:8080/users", values).then((data) => {
       if (data.error) {
         swal("Oops!", data.error, "error");
       } else {
@@ -37,8 +37,6 @@ export default function Form(props) {
         });
       }
     });
-
-
   };
 
   return (

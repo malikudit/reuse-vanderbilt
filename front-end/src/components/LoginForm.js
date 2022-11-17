@@ -28,11 +28,11 @@ export default function Form(props) {
       return response.json();
     }
 
-    postData("http://localhost:8080/users/login").then((data) => {
+    postData("http://3.230.48.124:8080/users/login").then((data) => {
       if (data.error) {
         setPrintErr(data.error);
       } else {
-        window.location.href = '/'
+        window.location.href = "/";
       }
     });
   };
@@ -108,9 +108,9 @@ export default function Form(props) {
               <small className="errorPara">Password is required!</small>
             )}
             {printErr !== "" ? (
-            <small className="errorPara">{printErr}</small>
+              <small className="errorPara">{printErr}</small>
             ) : (
-            <></>
+              <></>
             )}
             <button className="btn">Login</button>
             <small>

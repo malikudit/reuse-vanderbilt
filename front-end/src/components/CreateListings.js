@@ -9,7 +9,7 @@ import {
   TextField,
   createTheme,
   ThemeProvider,
-  Typography
+  Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -198,7 +198,7 @@ export default function CreateListings() {
         return response.json();
       }
 
-      postData("http://localhost:8080/product").then((data) => {
+      postData("http://3.230.48.124:8080/product").then((data) => {
         if (data.error) {
           setPrintErr(data.error);
           console.log(printErr);
