@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router";
-
 import CategoryPage from "./pages/CategoryPage.js";
 import Notifications from "./pages/NotificationsPage.js";
 import NotificationsSettings from "./pages/NotificationsSettings.js";
@@ -8,10 +7,10 @@ import Profile from "./pages/Profile.js";
 import CreateListings from "./components/CreateListings.js";
 import ProductPage from "./pages/ProductPage.js";
 import ReviewPage from "./pages/ReviewPage.js";
-
 import RegisterPage from "./pages/Register.js";
 import LoginPage from "./pages/Login.js";
 import ResetPasswordPage from "./pages/ResetPassword.js";
+import NewReviewPage from "./pages/NewReviewPage.js";
 
 export default function MainRoutes(props) {
   return (
@@ -116,7 +115,10 @@ export default function MainRoutes(props) {
         }
       />
       <Route path="/product_listing/:itemName" element={<ProductPage />} />
-      <Route path="/product_review/:itemName" element={<ReviewPage />} />
+      <Route
+        path="/product_review/:category/:itemName"
+        element={<ReviewPage />}
+      />
       <Route path="/listings" element={<ListingsPage />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route
@@ -129,6 +131,10 @@ export default function MainRoutes(props) {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/reset" element={<ResetPasswordPage />} />
+      <Route
+        path="/product_listing/:itemName/new_review"
+        element={<NewReviewPage />}
+      />
     </Routes>
   );
 }
