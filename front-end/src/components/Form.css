@@ -21,17 +21,20 @@
 }
 
 .form-design {
-  max-width: 978px;
-  width: 100vw;
   display: flex;
   border: 1px solid #e9ecef;
   border-radius: 5px;
-  /* box-shadow: 1px 3px 10px #e9ecef; */
+  box-shadow: 1px 3px 10px #e9ecef;
   background-color: 212121;
 }
-
-.form-design span {
-  color: #adb5bd;
+.form-design .btn {
+  background-color: #212121;
+  color: #e9ecef;
+  font-size: 0.7em;
+  cursor: pointer;
+  border: 1px solid #e9ecef;
+  padding: 0.9em 1em;
+  border-radius: 5px;
 }
 
 #form {
