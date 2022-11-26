@@ -29,7 +29,11 @@ const theme = createTheme({
 });
 
 export default function ProductPage() {
-  const locImage = useLocation().state.image;
+  const locCoverImage = useLocation().state.coverImage;
+  const locSecondaryImage1 = useLocation().state.secondaryImage1;
+  const locSecondaryImage2 = useLocation().state.secondaryImage2;
+  const locSecondaryImage3 = useLocation().state.secondaryImage3;
+  const locSecondaryImage4 = useLocation().state.secondaryImage4;
   const locItemName = useLocation().state.itemName;
   const locDescription = useLocation().state.description;
   const locSellerName = useLocation().state.seller;
@@ -56,7 +60,7 @@ export default function ProductPage() {
       {console.log(timeLeft - now)}
       {expired <= 0 ? (
         <ExchangeInfo
-          image={locImage}
+          coverImage={locCoverImage}
           itemName={locItemName}
           sellerID={locSellerID}
           sellerName={locSellerName}
@@ -67,7 +71,11 @@ export default function ProductPage() {
         />
       ) : (
         <LiveSale
-          image={locImage}
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
           itemName={locItemName}
           sellerID={locSellerID}
           sellerName={locSellerName}

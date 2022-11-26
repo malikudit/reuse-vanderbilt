@@ -29,14 +29,23 @@ export default function CountdownTimer(props) {
     if (days < 0) {
       return <div>Listing Has Expired</div>;
     } else {
-      return (
-        <div>
+      if (days < 1 && hours < 1 && minutes < 1) {
+        return <div>{seconds} seconds left</div>;
+      }
+      if (days < 1 && hours < 1) {
+        return <div>{minutes} minutes left</div>;
+      }
+      if (days < 1) {
+        return <div>{hours} hours left</div>;
+      }
+      if (days === 1) {
+        return (
           <div>
-            Time Left: {days} days, {hours} hours, {minutes} minutes, {seconds}{" "}
-            seconds
+            {days} day {hours} hours left
           </div>
-        </div>
-      );
+        );
+      }
+      return <div>{days} days left</div>;
     }
   } else {
     if (days < 0) {

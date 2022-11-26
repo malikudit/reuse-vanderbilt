@@ -158,7 +158,9 @@ export default function Profile() {
           <Grid container margin={"auto"}>
             <Grid xs={3} padding={1}>
               <Grid
-                sx={{ border: "2px solid black", borderRadius: "16px" }}
+                sx={{ 
+                  boxShadow: "0 0 5px #ccc",
+                }}
                 alignItems="center"
                 justifyContent="center"
               >
@@ -191,7 +193,7 @@ export default function Profile() {
             <Grid xs={9} padding={1} sx={{ color: "secondary.main" }}>
               <Grid
                 container
-                sx={{ border: "2px solid black", borderRadius: "16px" }}
+                sx={{ boxShadow: "0 0 5px #ccc", }}
               >
                 <Grid xs={6} padding={2}>
                   <TextField
@@ -394,9 +396,9 @@ export default function Profile() {
                 ) : null}
               </Grid>
               <Grid xs={12} marginTop={4}>
-                <Box sx={{ border: "1px solid black", borderRadius: "16px" }}>
+                <Box sx={{ boxShadow: "0 0 5px #ccc", }}>
                   <Grid
-                    sx={{ border: "1px solid black", borderRadius: "16px" }}
+                    sx={{ boxShadow: "0 0 5px #ccc", }}
                   >
                     <Typography variant="h4" align="center">
                       Reviews of this User
