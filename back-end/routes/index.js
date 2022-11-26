@@ -43,8 +43,8 @@ app.use(session({
     keys: keys,
     
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'strict',
-    secure: false, // change this to true in prod
+    sameSite: 'lax',
+    secure: true, // change this to true in prod
     httpOnly: true,
     signed: true,
 
