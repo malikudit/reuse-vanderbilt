@@ -14,17 +14,17 @@ app.enable('trust proxy');
 app.disable('x-powered-by');
 app.use(helmet());
 
+// Health check route for AWS load balancer
+app.get('/aws-alb/health', (_req, res) => {
+    res.sendStatus(200);
+});
+
 app.use((req, _res, next) => {
     console.log(req.ip);
     console.log(req.hostname);
     console.log(req.method);
     console.log(req.path);
     next();
-});
-
-// Health check route for AWS load balancer
-app.get('/aws-alb/health', (_req, res) => {
-    res.sendStatus(200);
 });
 
 const keys = new Keygrip([process.env.COOKIE_KEY_1, process.env.COOKIE_KEY_2, process.env.COOKIE_KEY_3], 'sha256');
@@ -43,7 +43,7 @@ app.use(session({
     keys: keys,
     
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'lax',
+    sameSite: 'none',
     secure: true, // change this to true in prod
     httpOnly: true,
     signed: true,
