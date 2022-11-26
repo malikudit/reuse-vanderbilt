@@ -16,7 +16,7 @@
 
 .bottom {
   width: 24vw;
-  height: 22vh;
+  height: auto;
   margin: 6px;
 }
 
@@ -25,7 +25,7 @@
   max-height: 60vh;
   flex-flow: column;
   flex: 1 1 auto;
-  border: 1px solid #333;
+  border: 3px solid #eaeaef;
   border-radius: 10px;
   margin-bottom: 25px;
 }

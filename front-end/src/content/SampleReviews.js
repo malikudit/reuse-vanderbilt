@@ -4,7 +4,7 @@ import iPad from "../assets/iPad.jpg";
 
 export const SampleReviews = [
   {
-    image: Couch,
+    coverImage: Couch,
     reviewTitle: "Great Couch",
     rating: "4.5",
     reviewBody:
@@ -16,7 +16,7 @@ export const SampleReviews = [
     salePrice: "$250",
   },
   {
-    image: Bike,
+    coverImage: Bike,
     reviewTitle: "Mid bike!",
     rating: "2.5",
     reviewBody: "Bike was super mid honestly.",
@@ -27,7 +27,7 @@ export const SampleReviews = [
     salePrice: "$200",
   },
   {
-    image: iPad,
+    coverImage: iPad,
     reviewTitle: "Thanks Parwaz!",
     rating: "5",
     reviewBody: "Parwaz gave me a fire iPad",

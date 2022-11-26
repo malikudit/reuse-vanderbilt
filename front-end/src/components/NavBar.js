@@ -11,8 +11,10 @@ import {
   Button,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import PersonIcon from "@mui/icons-material/Person";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const theme = createTheme({
   palette: {
@@ -29,26 +31,28 @@ const theme = createTheme({
 });
 
 const NavBar = () => {
+  const [login, setLogin] = React.useState(false);
   const [home, setHome] = React.useState(true);
-  const [notifications, setNotifications] = React.useState(false);
   const [listings, setListings] = React.useState(false);
   const [profile, setProfile] = React.useState(false);
+  const [logout, setLogout] = React.useState(false);
 
   const clearAll = () => {
+    setLogin(false);
     setHome(false);
-    setNotifications(false);
     setListings(false);
     setProfile(false);
+    setLogout(false);
+  };
+
+  const handleLogin = () => {
+    clearAll();
+    setLogin(true);
   };
 
   const handleHome = () => {
     clearAll();
     setHome(true);
-  };
-
-  const handleNotifications = () => {
-    clearAll();
-    setNotifications(true);
   };
 
   const handleListings = () => {
@@ -59,6 +63,13 @@ const NavBar = () => {
   const handleProfile = () => {
     clearAll();
     setProfile(true);
+  };
+
+  const handleLogout = () => {
+    clearAll();
+    setLogout(true);
+    alert("You have successfully logged out.");
+    window.location.href = "/";
   };
 
   return (
@@ -77,7 +88,11 @@ const NavBar = () => {
             <Typography variant="h3" color="neutral" fontStyle="helvetica">
               Reuse
             </Typography>
-            <Typography variant="h3" color="secondary" sx={{ flexGrow: 1, fontStyle: "helvetica"}}>
+            <Typography
+              variant="h3"
+              color="secondary"
+              sx={{ flexGrow: 1, fontStyle: "helvetica" }}
+            >
               Vandy
             </Typography>
           </IconButton>
@@ -85,11 +100,23 @@ const NavBar = () => {
           <Stack direction="row" spacing={0}>
             <Button
               component={Link}
+              to="/login"
+              color={login === true ? "secondary" : "neutral"}
+              onClick={handleLogin}
+              sx={{
+                textTransform: "none",
+              }}
+            >
+              <LoginIcon sx={{ padding: 1 }} />
+              Login
+            </Button>
+            <Button
+              component={Link}
               to="/"
               color={home === true ? "secondary" : "neutral"}
               onClick={handleHome}
               sx={{
-                textTransform: 'none',
+                textTransform: "none",
               }}
             >
               <HomeIcon sx={{ padding: 1 }} />
@@ -97,26 +124,14 @@ const NavBar = () => {
             </Button>
             <Button
               component={Link}
-              to="/notifications"
-              color={notifications === true ? "secondary" : "neutral"}
-              onClick={handleNotifications}
-              sx={{
-                textTransform: 'none',
-              }}
-            >
-              <NotificationsActiveIcon sx={{ padding: 1 }} />
-              Notifications
-            </Button>
-            <Button
-              component={Link}
               to="/listings"
               color={listings === true ? "secondary" : "neutral"}
               onClick={handleListings}
               sx={{
-                textTransform: 'none',
+                textTransform: "none",
               }}
             >
-              <NotificationsActiveIcon sx={{ padding: 1 }} />
+              <ShoppingCartIcon sx={{ padding: 1 }} />
               My Listings
             </Button>
             <Button
@@ -125,11 +140,21 @@ const NavBar = () => {
               color={profile === true ? "secondary" : "neutral"}
               onClick={handleProfile}
               sx={{
-                textTransform: 'none',
+                textTransform: "none",
               }}
             >
               <PersonIcon sx={{ padding: 1 }} />
               Profile
+            </Button>
+            <Button
+              color={"neutral"}
+              onClick={handleLogout}
+              sx={{
+                textTransform: "none",
+              }}
+            >
+              <LogoutIcon sx={{ padding: 1 }} />
+              Logout
             </Button>
           </Stack>
         </Toolbar>

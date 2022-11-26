@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "./Form.css";
+import { Typography } from "@mui/material";
 import swal from "sweetalert";
 import emailjs from "emailjs-com";
 
@@ -28,7 +30,7 @@ export default function Form(props) {
       return response.json();
     }
 
-    postData("http://3.230.48.124:8080/users/login").then((data) => {
+    postData("http://api.reuse-vandy.org/users/login").then((data) => {
       if (data.error) {
         setPrintErr(data.error);
       } else {
@@ -119,7 +121,17 @@ export default function Form(props) {
               </a>
             </small>
             <small>
-              Don't have an account? <a href="/register">Register</a> here.
+              Don't have an account?{" "}
+              <Typography
+                variant="h8"
+                noWrap
+                component={Link}
+                to="/register"
+                underline="none"
+              >
+                Register
+              </Typography>{" "}
+              here.
             </small>
           </form>
         </div>

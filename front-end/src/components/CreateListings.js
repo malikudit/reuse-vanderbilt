@@ -8,8 +8,7 @@ import {
   FormControl,
   TextField,
   createTheme,
-  ThemeProvider,
-  Typography,
+  ThemeProvider
 } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -179,6 +178,7 @@ export default function CreateListings() {
     obj.buyNow = buy;
     obj.expirationDate = date;
     obj.location = location;
+
     if (!error) {
       console.log("Object is " + obj);
       async function postData(url = "", data = obj) {
@@ -198,7 +198,7 @@ export default function CreateListings() {
         return response.json();
       }
 
-      postData("http://3.230.48.124:8080/product").then((data) => {
+      postData("http://api.reuse-vandy.org/product").then((data) => {
         if (data.error) {
           setPrintErr(data.error);
           console.log(printErr);
@@ -257,7 +257,7 @@ export default function CreateListings() {
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
                     onChange={(e) => setDescription(e.target.value)}
-                    label="Enter Product Description (maximum 300 characters)" // need some sort of validation here
+                    label="Enter Product Description (maximum 300 characters)"
                     variant="outlined"
                     rows={4}
                     multiline
