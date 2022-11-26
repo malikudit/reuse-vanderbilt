@@ -52,13 +52,6 @@ export default function ExchangeInfo(props) {
               </Typography>
             </Grid>
             <Grid container justifyContent={"center"}>
-              <Typography
-                variant="h8"
-                style={{ color: "#4169E1", fontWeight: "bold" }}
-              >
-                When you've completed the transaction, be sure to leave a review
-                of your exchange experience!
-              </Typography>
               <Grid marginBottom={2}>
                 <Button
                   variant="contained"
