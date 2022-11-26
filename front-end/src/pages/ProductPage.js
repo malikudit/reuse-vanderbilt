@@ -1,8 +1,7 @@
 import { React } from "react";
-import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
-import CountdownTimer from "../components/CountdownTimer";
 import ExchangeInfo from "../components/ExchangeInfo";
 import LiveSale from "../components/LiveSale";
 

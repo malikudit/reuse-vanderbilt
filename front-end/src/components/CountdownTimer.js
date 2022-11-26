@@ -12,7 +12,7 @@ export default function CountdownTimer(props) {
 
     var expDate = new Date(props.countDownDate).getTime();
 
-    var distance = expDate - now;
+    distance = expDate - now;
     setDistance(distance);
 
     setDays(Math.floor(distance / (1000 * 60 * 60 * 24)));

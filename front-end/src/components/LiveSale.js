@@ -42,7 +42,7 @@ export default function LiveSale(props) {
               <Grid item xs={5.9} marginBottom={2}>
                 <Typography style={{ color: "#4169E1" }}>
                   {"Category: "}
-                  {props.color}
+                  {props.category}
                 </Typography>
               </Grid>
             </Grid>
@@ -89,7 +89,7 @@ export default function LiveSale(props) {
                       <Typography
                         style={{ color: "#4169E1", fontWeight: "bold" }}
                       >
-                        {"Current Bid Price: "}
+                        {"Current Bid Placed: "}
                         {props.currentBid}
                       </Typography>
                     </Grid>
@@ -122,7 +122,7 @@ export default function LiveSale(props) {
                           <Typography
                             style={{ color: "#4169E1", fontWeight: "bold" }}
                           >
-                            {"Current Bid Price: "}
+                            {"Current Bid Placed: "}
                             {props.currentBid}
                           </Typography>
                         </Grid>

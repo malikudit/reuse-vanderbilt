@@ -184,7 +184,7 @@ export default function Form(props) {
         return response.json(); // parses JSON response into native JavaScript objects
       }
 
-      postData("http://3.230.48.124:8080/users", obj).then((data) => {
+      postData("http://api.reuse-vandy.org/users", obj).then((data) => {
         if (data.error) {
           swal("Oops!", data.error, "error");
         } else {

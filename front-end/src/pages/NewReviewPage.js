@@ -12,8 +12,14 @@ import {
 
 export default function NewReviewPage(props) {
   const [reviewTitle, setReviewTitle] = useState("");
+  const [reviewStars, setReviewStars] = useState(undefined);
   const [reviewBody, setReviewBody] = useState("");
-  const [reviewStars, setReviewStars] = useState();
+  const [titleError, setTitleError] = useState(false);
+  const [starsError, setStarsError] = useState(false);
+  const [bodyError, setBodyError] = useState(false);
+  const [error, setError] = useState(false);
+  const [printErr, setPrintErr] = useState("");
+
   const itemName = useLocation().state.itemName;
   const image = useLocation().state.image;
   const sellerID = useLocation().state.sellerID;
@@ -22,11 +28,68 @@ export default function NewReviewPage(props) {
   const condition = useLocation().state.condition;
   const location = useLocation().state.location;
   const salePrice = useLocation().state.salePrice;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setTitleError(false);
+    setStarsError(false);
+    setBodyError(false);
+
+    if (reviewTitle === "") {
+      setTitleError(true);
+      setError(true);
+    }
+    if (reviewStars === undefined) {
+      setStarsError(true);
+      setError(true);
+    }
+    if (reviewBody === "") {
+      setBodyError(true);
+      setError(true);
+    }
+
+    const obj = {};
+    obj.reviewTitle = reviewTitle;
+    obj.reviewStars = reviewStars;
+    obj.reviewBody = reviewBody;
+
+    if (!error) {
+      console.log("Object is " + obj);
+      async function postData(url = "", data = obj) {
+        const response = await fetch(url, {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify({
+            product: data,
+          }),
+        });
+        console.log("Response.json " + response.json());
+        return response.json();
+      }
+
+      postData("http://api.reuse-vandy.org/review").then((data) => {
+        if (data.error) {
+          setPrintErr(data.error);
+          console.log(printErr);
+        } else {
+          alert("Review Added Successfully!");
+          window.location.href = "/";
+        }
+      });
+    }
+  };
+
   return (
     <div>
       <DefaultBanner banner={"Review Page"} />
       <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
-        <form noValidate autoComplete="off">
+        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <Box
@@ -49,7 +112,6 @@ export default function NewReviewPage(props) {
                   {itemName}
                 </Typography>
               </Grid>
-
               <Grid container justifyContent="space-between">
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#4169E1" }}>
@@ -98,17 +160,24 @@ export default function NewReviewPage(props) {
                     fullWidth
                     label="Review Title"
                     onChange={(event) => setReviewTitle(event.target.value)}
+                    error={titleError}
                   />
                 </Grid>
                 <Grid xs={12} marginBottom={2}>
                   <Typography>
                     Rate the exchange experience out of 5 stars
                   </Typography>
+                  {starsError ? (
+                    <Typography style={{ color: "red" }}>
+                      {"Please select a rating"}
+                    </Typography>
+                  ) : null}
                   <Rating
                     precision={0.5}
                     onChange={(newValue) => {
                       setReviewStars(newValue);
                     }}
+                    error={starsError}
                   />
                 </Grid>
                 <Grid xs={12} marginBottom={2}>
@@ -117,7 +186,8 @@ export default function NewReviewPage(props) {
                     label="Review Body"
                     multiline
                     rows={10}
-                    onChange={(event) => setReviewTitle(event.target.value)}
+                    onChange={(event) => setReviewBody(event.target.value)}
+                    error={bodyError}
                   />
                 </Grid>
               </Grid>

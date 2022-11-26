@@ -8,7 +8,7 @@ import CreateListings from "./components/CreateListings.js";
 import ProductPage from "./pages/ProductPage.js";
 import ReviewPage from "./pages/ReviewPage.js";
 import RegisterPage from "./pages/Register.js";
-import LoginPage from "./pages/Login.js";
+import LoginPage from "./pages/LoginPage.js";
 import ResetPasswordPage from "./pages/ResetPassword.js";
 import NewReviewPage from "./pages/NewReviewPage.js";
 
@@ -127,7 +127,6 @@ export default function MainRoutes(props) {
       />
       <Route path="/profile" element={<Profile />} />
       <Route path="/create_listing" element={<CreateListings />} />
-
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/reset" element={<ResetPasswordPage />} />

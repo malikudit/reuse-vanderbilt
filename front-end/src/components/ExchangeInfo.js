@@ -35,10 +35,13 @@ export default function ExchangeInfo(props) {
             </Grid>
             <Grid item xs={12} marginBottom={2} marginTop={2} borderBottom={1}>
               <Typography variant="h6">
-                Contact Info of Person You're Exchanging With:
+                Person You're Exchanging With:
                 {" " + props.sellerName}
               </Typography>
-              <Typography variant="h6">{"Insert Phone/GroupMe"}</Typography>
+              <Typography variant="h6">
+                Contact Info of Person You're Exchanging With:
+                {" Insert Phone/GroupMe"}
+              </Typography>
             </Grid>
             <Grid container justifyContent={"center"} borderBottom={1}>
               <Typography
