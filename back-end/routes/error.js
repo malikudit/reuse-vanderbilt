@@ -29,8 +29,13 @@ const serverError = function (err, _req, res, _next) {
     res.sendStatus(500);
 }
 
+const clientError = function (err, req, res) {
+    res.sendStatus(404);
+}
+
 module.exports = [
     validation,
     login,
-    serverError
+    serverError,
+    clientError
 ];

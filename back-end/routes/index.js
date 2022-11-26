@@ -1,18 +1,36 @@
 const express = require('express');
 const app = express();
+const helmet = require('helmet');
 const cors = require('cors');
 
-const cookieSession = require('cookie-session');
+const session = require('cookie-session');
 const Keygrip = require('keygrip');
 
 const user = require('./user');
 const product = require('./product');
 const error = require('./error');
 
+app.enable('trust proxy');
+app.disable('x-powered-by');
+app.use(helmet());
+
+app.use((req, _res, next) => {
+    console.log(req.ip);
+    console.log(req.hostname);
+    console.log(req.method);
+    console.log(req.path);
+    next();
+});
+
+// Health check route for AWS load balancer
+app.get('/aws-alb/health', (_req, res) => {
+    res.sendStatus(200);
+});
+
 const keys = new Keygrip([process.env.COOKIE_KEY_1, process.env.COOKIE_KEY_2, process.env.COOKIE_KEY_3], 'sha256');
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: /(www.)?reusevandy\.org/,
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 }
@@ -20,7 +38,7 @@ const corsOptions = {
 app.options(cors(corsOptions));
 app.use(cors(corsOptions));
 
-app.use(cookieSession({
+app.use(session({
     name: 'session',
     keys: keys,
     
@@ -28,7 +46,9 @@ app.use(cookieSession({
     sameSite: 'strict',
     secure: false, // change this to true in prod
     httpOnly: true,
-    signed: true
+    signed: true,
+
+    domain: 'api.reusevandy.org'
 }));
 
 app.use(express.json());
