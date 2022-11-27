@@ -18,7 +18,7 @@ const validation = function (err, _req, res, next) {
 const login = function (err, _req, res, next) {
     if (err instanceof LoginError) {
         const error = err.message;
-        res.status(404).send({ error });
+        res.status(403).send({ error });
     } else {
         next(err);
     }
@@ -29,8 +29,13 @@ const serverError = function (err, _req, res, _next) {
     res.sendStatus(500);
 }
 
+const clientError = function (req, res) {
+    res.sendStatus(404);
+}
+
 module.exports = [
     validation,
     login,
-    serverError
+    serverError,
+    clientError
 ];
