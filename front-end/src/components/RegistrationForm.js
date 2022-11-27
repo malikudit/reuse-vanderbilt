@@ -21,7 +21,6 @@ import { Container } from "@mui/system";
 
 export default function Form(props) {
   const {
-    register,
     formState: {},
   } = useForm();
 
