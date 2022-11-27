@@ -269,120 +269,120 @@ export default function Profile() {
                         setContact(event.target.value);
                       }}
                       value={contact}
-                      sx = {{
+                      sx={{
                         marginTop: "1vh"
                       }}
-                      >
-                        {formsOfContact.map((option) => (
-                          <MenuItem 
-                            key={option.value}
-                            value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                        ))}
-                      </TextField>
+                    >
+                      {formsOfContact.map((option) => (
+                        <MenuItem
+                          key={option.value}
+                          value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
 
-                  { contact === "Any" ? (
-                    <Grid>
-                      <TextField
-                      fullWidth
-                      label="Phone Number"
-                      variant={saved ? "standard" : "standard"}
-                      disabled={saved}
-                      onChange={(event) => {
-                        setPhoneNumber(event.target.value);
-                      }}
-                      error={
-                        checkPhoneNumber(phoneNumber) && saved === false
-                      }
-                      helperText={
-                        saved === true
-                          ? ""
-                          : checkPhoneNumber(phoneNumber)
-                            ? "Enter a valid US phone number"
-                            : ""
-                      }
-                      sx={{
-                        marginTop: "1vh"
-                      }} 
-                      value={phoneNumber}
-                      />
-                      <TextField
-                      fullWidth
-                      label="GroupMe URL"
-                      variant={saved ? "standard" : "standard"}
-                      disabled={saved}
-                      onChange={(event) => {
-                        setGroupMe(event.target.value);
-                      }}
-                      error={
-                        checkGroupMeURL(groupMe) && saved === false
-                      }
-                      helperText={
-                        saved === true
-                          ? ""
-                          : checkGroupMeURL(groupMe)
-                            ? "The provided URL must be from groupme.com and use https"
-                            : ""
-                      }
-                      value={groupMe}
-                      sx={{
-                        marginTop: "1vh"
-                      }}/>
+                    {contact === "Any" ? (
+                      <Grid>
+                        <TextField
+                          fullWidth
+                          label="Phone Number"
+                          variant={saved ? "standard" : "standard"}
+                          disabled={saved}
+                          onChange={(event) => {
+                            setPhoneNumber(event.target.value);
+                          }}
+                          error={
+                            checkPhoneNumber(phoneNumber) && saved === false
+                          }
+                          helperText={
+                            saved === true
+                              ? ""
+                              : checkPhoneNumber(phoneNumber)
+                                ? "Enter a valid US phone number"
+                                : ""
+                          }
+                          sx={{
+                            marginTop: "1vh"
+                          }}
+                          value={phoneNumber}
+                        />
+                        <TextField
+                          fullWidth
+                          label="GroupMe URL"
+                          variant={saved ? "standard" : "standard"}
+                          disabled={saved}
+                          onChange={(event) => {
+                            setGroupMe(event.target.value);
+                          }}
+                          error={
+                            checkGroupMeURL(groupMe) && saved === false
+                          }
+                          helperText={
+                            saved === true
+                              ? ""
+                              : checkGroupMeURL(groupMe)
+                                ? "The provided URL must be from groupme.com and use https"
+                                : ""
+                          }
+                          value={groupMe}
+                          sx={{
+                            marginTop: "1vh"
+                          }} />
                       </Grid>
-                  
+
                     ) :
-                  
-                    contact === "Phone" ? (
-                    <TextField
-                      fullWidth
-                      label="Phone Number"
-                      variant={saved ? "standard" : "standard"}
-                      disabled={saved}
-                      onChange={(event) => {
-                        setPhoneNumber(event.target.value);
-                      }}
-                      error={
-                        checkPhoneNumber(phoneNumber) && saved === false
-                      }
-                      helperText={
-                        saved === true
-                          ? ""
-                          : checkPhoneNumber(phoneNumber)
-                            ? "Enter a valid US phone number"
-                            : ""
-                      }
-                      sx={{
-                        marginTop: "1vh"
-                      }} 
-                      value={phoneNumber}
-                      />
 
-                    ) : contact === "GroupMe" ? (
+                      contact === "Phone" ? (
+                        <TextField
+                          fullWidth
+                          label="Phone Number"
+                          variant={saved ? "standard" : "standard"}
+                          disabled={saved}
+                          onChange={(event) => {
+                            setPhoneNumber(event.target.value);
+                          }}
+                          error={
+                            checkPhoneNumber(phoneNumber) && saved === false
+                          }
+                          helperText={
+                            saved === true
+                              ? ""
+                              : checkPhoneNumber(phoneNumber)
+                                ? "Enter a valid US phone number"
+                                : ""
+                          }
+                          sx={{
+                            marginTop: "1vh"
+                          }}
+                          value={phoneNumber}
+                        />
 
-                    <TextField
-                      fullWidth
-                      label="GroupMe URL"
-                      variant={saved ? "standard" : "standard"}
-                      disabled={saved}
-                      onChange={(event) => {
-                        setGroupMe(event.target.value);
-                      }}
-                      error={
-                        checkGroupMeURL(groupMe) && saved === false
-                      }
-                      helperText={
-                        saved === true
-                          ? ""
-                          : checkGroupMeURL(groupMe)
-                            ? "The provided URL must be from groupme.com and use https"
-                            : ""
-                      }
-                      sx={{
-                        marginTop: "1vh"
-                      }}
-                      value={groupMe}/>
-                    ) : null }
+                      ) : contact === "GroupMe" ? (
+
+                        <TextField
+                          fullWidth
+                          label="GroupMe URL"
+                          variant={saved ? "standard" : "standard"}
+                          disabled={saved}
+                          onChange={(event) => {
+                            setGroupMe(event.target.value);
+                          }}
+                          error={
+                            checkGroupMeURL(groupMe) && saved === false
+                          }
+                          helperText={
+                            saved === true
+                              ? ""
+                              : checkGroupMeURL(groupMe)
+                                ? "The provided URL must be from groupme.com and use https"
+                                : ""
+                          }
+                          sx={{
+                            marginTop: "1vh"
+                          }}
+                          value={groupMe} />
+                      ) : null}
                   </div>
                 </div>
               </div>
@@ -446,7 +446,7 @@ export default function Profile() {
 
       </ThemeProvider>
     </div >
-    
+
     //               <Grid xs={12} marginTop={4}>
     //                 <Box sx={{ boxShadow: "0 0 5px #ccc", }}>
     //                   <Grid

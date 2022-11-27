@@ -111,7 +111,7 @@ export default function NewReviewPage(props) {
               <Grid item marginBottom={2}>
                 <Typography
                   variant="h4"
-                  sx={{ 
+                  sx={{
                     textTransform: "uppercase",
                     letterSpacing: "2px"
                   }}

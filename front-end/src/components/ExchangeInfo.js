@@ -5,7 +5,7 @@ import { Grid, Box, Typography, Button } from "@mui/material";
 export default function ExchangeInfo(props) {
   return (
     <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}
-      sx = {{
+      sx={{
         boxShadow: "0 0 5px #ccc",
         margin: "10vh",
         width: "90vw",
@@ -56,7 +56,7 @@ export default function ExchangeInfo(props) {
                 <Button
                   variant="contained"
                   type="submit"
-                  sx={{ 
+                  sx={{
                     background: "white",
                     text: "black",
                     outline: "none",
@@ -92,7 +92,7 @@ export default function ExchangeInfo(props) {
                 {props.itemName}
               </Typography>
             </Grid>
-            <Grid container marginBottom={1} sx = {{
+            <Grid container marginBottom={1} sx={{
               maxWidth: "40vw"
             }}>
               <Grid item xs={12} marginBottom={1} marginTop={1}>
@@ -102,7 +102,7 @@ export default function ExchangeInfo(props) {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container marginBottom={1} sx = {{
+            <Grid container marginBottom={1} sx={{
               maxWidth: "40vw"
             }}>
               <Grid item xs={12} marginBottom={1} marginTop={1}>
@@ -110,12 +110,12 @@ export default function ExchangeInfo(props) {
                   {"Exchange location: "}
                   {props.location}
                 </Typography>
-                </Grid>
+              </Grid>
             </Grid>
             <Grid container marginBottom={1}
-             sx = {{
-              maxWidth: "40vw",
-             }}>
+              sx={{
+                maxWidth: "40vw",
+              }}>
               <Grid item xs={12} marginBottom={1} marginTop={1}>
                 <Typography variant="p">
                   {props.description}
