@@ -4,7 +4,11 @@ import "./ProductCards.css";
 import CountdownTimer from "./CountdownTimer";
 
 const ProductCards = ({
-  image = "",
+  coverImage = "",
+  secondaryImage1 = "",
+  secondaryImage2 = "",
+  secondaryImage3 = "",
+  secondaryImage4 = "",
   productID = "",
   itemName = "",
   description = "",
@@ -26,7 +30,11 @@ const ProductCards = ({
       pathname: `/product_listing/${itemName}`,
     }}
     state={{
-      image: image,
+      coverImage: coverImage,
+      secondaryImage1: secondaryImage1,
+      secondaryImage2: secondaryImage2,
+      secondaryImage3: secondaryImage3,
+      secondaryImage4: secondaryImage4,
       productID: productID,
       itemName: itemName,
       description: description,
@@ -47,7 +55,7 @@ const ProductCards = ({
   >
     <div className="card">
       <div className="top">
-        <img src={image} alt="product" />
+        <img src={coverImage} alt="product" />
         <div className="overlay">
           <div className="condition">{condition}</div>
         </div>

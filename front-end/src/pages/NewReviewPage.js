@@ -21,7 +21,11 @@ export default function NewReviewPage(props) {
   const [printErr, setPrintErr] = useState("");
 
   const itemName = useLocation().state.itemName;
-  const image = useLocation().state.image;
+  const coverImage = useLocation().state.coverImage;
+  const secondaryImage1 = useLocation.state.secondaryImage1;
+  const secondaryImage2 = useLocation.state.secondaryImage2;
+  const secondaryImage3 = useLocation.state.secondaryImage3;
+  const secondaryImage4 = useLocation.state.secondaryImage4;
   const sellerID = useLocation().state.sellerID;
   const sellerName = useLocation().state.sellerName;
   const category = useLocation().state.category;
@@ -95,52 +99,35 @@ export default function NewReviewPage(props) {
               <Box
                 component="img"
                 sx={{
-                  height: "100%",
                   width: "100%",
+                  height: "100%",
+                  maxHeight: "75vh",
+                  maxWidth: "75vw"
                 }}
-                src={image}
+                src={coverImage}
               />
             </Grid>
             <Grid xs={7} direction="column" marginTop={2}>
               <Grid item marginBottom={2}>
                 <Typography
                   variant="h4"
-                  borderBottom={1}
-                  sx={{ fontWeight: "bold" }}
+                  sx={{
+                    textTransform: "uppercase",
+                    letterSpacing: "2px"
+                  }}
                 >
-                  {"Product Name: "}
                   {itemName}
                 </Typography>
               </Grid>
-              <Grid container justifyContent="space-between">
-                <Grid item xs={6} marginBottom={2}>
+              <Grid container justifyContent={"space-between"}>
+                <Grid item xs={12} marginBottom={2}>
                   <Typography style={{ color: "#4169E1" }}>
                     {"Seller: "}
                     {sellerName}
                   </Typography>
                 </Grid>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#4169E1" }}>
-                    {"Category: "}
-                    {category}
-                  </Typography>
-                </Grid>
               </Grid>
-              <Grid container justifyContent="space-between">
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography>
-                    {"Condition: "}
-                    {condition}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography>
-                    {"Location of Exchange: "}
-                    {location}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container justifyContent={"space-between"} borderBottom={1}>
+              <Grid container justifyContent={"space-between"}>
                 <Grid item xs={12} marginBottom={2}>
                   <Typography style={{ color: "#228B22" }}>
                     {"Sale Price: "}
@@ -165,7 +152,7 @@ export default function NewReviewPage(props) {
                 </Grid>
                 <Grid xs={12} marginBottom={2}>
                   <Typography>
-                    Rate the exchange experience out of 5 stars
+                    Rate your exchange experience!
                   </Typography>
                   {starsError ? (
                     <Typography style={{ color: "red" }}>

@@ -3,6 +3,7 @@ import { Grid, Box, Typography, Button } from "@mui/material";
 import CountdownTimer from "./CountdownTimer";
 
 export default function LiveSale(props) {
+
   const handleBid = (e) => {
     // e.preventDefault();
   };
@@ -12,23 +13,50 @@ export default function LiveSale(props) {
   };
 
   return (
-    <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
+    <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}
+      sx={{
+        boxShadow: "0 0 5px #ccc",
+        margin: "10vh",
+        width: "90vw",
+        height: "auto",
+        paddingBottom: "7vh"
+      }}
+    >
       <form noValidate autoComplete="off">
-        <Grid container spacing={2}>
+        <Grid container spacing={2}
+          sx={{
+            display: "flex",
+            justifyContent: "space-around",
+            flexWrap: "wrap"
+          }}>
           <Grid item xs={5}>
             <Box
               component="img"
               sx={{
-                width: "100%",
+                width: "35vw",
                 height: "100%",
+                overflow: "hidden",
+                display: "block"
               }}
-              src={props.image}
+              src={props.coverImage}
             />
           </Grid>
-          <Grid item xs={7} direction="column" marginTop={2}>
-            <Grid item xs={2} marginBottom={2} borderBottom={1}>
-              <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-                {"Product Name: "}
+          <Grid item xs={7} direction="column" marginTop={2}
+            sx={{
+              maxWidth: "50vw",
+              maxHeight: "50vh",
+            }}>
+            <Grid item xs={2} marginBottom={2} sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: "15px",
+              justifyItems: "center",
+              maxWidth: "80%"
+            }}>
+              <Typography variant="h4" sx={{
+                textTransform: "uppercase",
+                letterSpacing: "2px"
+              }}>
                 {props.itemName}
               </Typography>
             </Grid>
@@ -46,7 +74,7 @@ export default function LiveSale(props) {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container justifyContent="space-between" borderBottom={1}>
+            <Grid container justifyContent="space-between">
               <Grid item xs={6} marginBottom={2}>
                 <Typography>
                   {"Condition: "}
@@ -60,10 +88,16 @@ export default function LiveSale(props) {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container marginBottom={2} borderBottom={1}>
-              <Grid item xs={12} marginBottom={5} marginTop={2}>
-                <Typography variant="h6">
-                  {"Product Description: "}
+            <Grid container marginBottom={2}>
+              <Grid item xs={12} marginBottom={5} marginTop={2}
+                sx = {{
+                  maxWidth: "40vw",
+                  justifyContent: "left",
+                  justifyItems: "left",
+                  alignText: "left"
+                }}
+              >
+                <Typography variant="p" sx = {{ lineHeight: "1.5" }}>
                   {props.description}
                 </Typography>
               </Grid>
@@ -82,7 +116,6 @@ export default function LiveSale(props) {
                   <Grid
                     container
                     justifyContent="space-between"
-                    borderBottom={1}
                     marginBottom={2}
                   >
                     <Grid item xs={6} marginBottom={2}>
@@ -152,7 +185,6 @@ export default function LiveSale(props) {
                 <Grid
                   container
                   justifyContent="space-between"
-                  borderBottom={1}
                   marginBottom={2}
                 >
                   {props.sellerID !== "Parwaz" ? (
@@ -166,7 +198,14 @@ export default function LiveSale(props) {
                           <Button
                             variant="contained"
                             color="info"
-                            sx={{ fontWeight: "bold" }}
+                            sx={{
+                              background: "#333",
+                              color: "white",
+                              outline: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              padding: "10px 25px",
+                            }}
                           >
                             Place Bid
                           </Button>
@@ -174,7 +213,14 @@ export default function LiveSale(props) {
                             variant="contained"
                             color="success"
                             type="submit"
-                            sx={{ fontWeight: "bold" }}
+                            sx={{
+                              background: "#333",
+                              color: "white",
+                              outline: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              padding: "10px 25px",
+                            }}
                           >
                             Buy Now
                           </Button>
@@ -191,7 +237,14 @@ export default function LiveSale(props) {
                               variant="contained"
                               color="info"
                               onClick={handleBid()}
-                              sx={{ fontWeight: "bold" }}
+                              sx={{ 
+                                background: "#333",
+                                color: "white",
+                                outline: "none",
+                                border: "none",
+                                cursor: "pointer",
+                                padding: "10px 25px",
+                              }}
                             >
                               Place Bid
                             </Button>
@@ -200,7 +253,14 @@ export default function LiveSale(props) {
                               variant="contained"
                               color="success"
                               onClick={handleBuyNow()}
-                              sx={{ fontWeight: "bold" }}
+                              sx={{
+                                background: "#333",
+                                color: "white",
+                                outline: "none",
+                                border: "none",
+                                cursor: "pointer",
+                                padding: "10px 25px",
+                              }}
                             >
                               Buy Now
                             </Button>
@@ -217,7 +277,28 @@ export default function LiveSale(props) {
                       <Button
                         variant="contained"
                         color="error"
-                        sx={{ fontWeight: "bold" }}
+                        sx={{
+                          background: "#333",
+                          color: "white",
+                          outline: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: "10px 25px",
+                        }}
+                      >
+                        Buy Now!
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        sx={{
+                          background: "error",
+                          color: "white",
+                          outline: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: "10px 25px",
+                        }}
                       >
                         Delete Listing
                       </Button>
