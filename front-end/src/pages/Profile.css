@@ -1,7 +1,7 @@
 .container-profile {
   background: #F1F3FA;
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
 .profile {
@@ -40,28 +40,11 @@
   margin-bottom: 7px;
 }
 
-.profile-userbuttons {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.profile-userbuttons .btn {
-  text-transform: uppercase;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 6px 15px;
-  margin-right: 5px;
-}
-
-.profile-userbuttons .btn:last-child {
-  margin-right: 0px;
-}
-
 .profile-content {
   margin-left: 2vw;
   background: #fff;
   min-height: 460px;
-  width: 20vw;
+  width: 30vw;
 }
 
 .centered {
@@ -122,13 +105,6 @@ ul {
   border: 1px solid #e7ecf1 !important;
 }
 
-
-
-.profile-stat {
-  padding-bottom: 20px;
-  border-bottom: 1px solid #f0f4f7;
-}
-
 .profile-stat-title {
   color: #7f90a4;
   font-size: 25px;
@@ -142,7 +118,7 @@ ul {
 
 .profile-stat-text {
   color: #5b9bd1;
-  font-size: 10px;
+  font-size: 0.8em;
   font-weight: 600;
   text-align: center;
 }
@@ -161,10 +137,6 @@ ul {
   text-align: center;
 }
 
-.margin-top-20 {
-  margin-top: 20px !important;
-}
-
 [class*=" fa-"]:not(.fa-stack),
 [class*=" glyphicon-"],
 [class*=" icon-"],
@@ -174,11 +146,4 @@ ul {
   display: inline-block;
   line-height: 14px;
   -webkit-font-smoothing: antialiased;
-}
-
-.profile-desc-link i {
-  width: 22px;
-  font-size: 19px;
-  color: #abb6c4;
-  margin-right: 5px;
 }
