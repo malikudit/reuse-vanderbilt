@@ -2,6 +2,7 @@ import { React, useState } from "react";
 
 export default function CountdownTimer(props) {
   var [distance, setDistance] = useState();
+  var [distance, setDistance] = useState();
   var [days, setDays] = useState();
   var [hours, setHours] = useState();
   var [minutes, setMinutes] = useState();

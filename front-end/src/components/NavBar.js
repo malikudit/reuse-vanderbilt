@@ -100,6 +100,7 @@ const NavBar = () => {
             onClick={handleHome}
           >
             <Typography variant="h3" color="neutral" fontStyle="helvetica">
+            <Typography variant="h3" color="neutral" fontStyle="helvetica">
               Reuse
             </Typography>
             <Typography
