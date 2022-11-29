@@ -51,17 +51,14 @@ export default function CreateListings() {
   const [dateError, setDateError] = useState(false);
   const [category, setCategory] = useState("");
   const [categoryError, setCategoryError] = useState("");
-  const [allowBid, setAllowBid] = useState();
-  const [allowBidError, setAllowBidError] = useState(false);
-  const [bid, setBid] = useState("");
-  const [bidError, setBidError] = useState(false);
+  const [listingType, setListingType] = useState("");
+  const [listingTypeError, setListingTypeError] = useState("");
+  const [openingBid, setOpeningBid] = useState("");
+  const [openingBidError, setOpeningBidError] = useState("");
   const [bidIncrement, setBidIncrement] = useState("");
   const [bidIncrementError, setBidIncrementError] = useState(false);
-  const [buy, setBuy] = useState("");
-  const [buyError, setBuyError] = useState("");
-  const [allowBuy, setAllowBuy] = useState();
-  const [allowBuyError, setAllowBuyError] = useState(false);
-  const [listingType, setListingType] = useState("");
+  const [listingPrice, setListingPrice] = useState("");
+  const [listingPriceError, setListingPriceError] = useState(false);
   const [error, setError] = useState(false);
   const [printErr, setPrintErr] = useState("");
 
@@ -85,12 +82,8 @@ export default function CreateListings() {
     }
   };
 
-  const handleAllowBid = (event) => {
-    setAllowBid(event.target.value);
-  };
-
-  const handleAllowBuy = (event) => {
-    setAllowBuy(event.target.value);
+  const handleListingType = (event) => {
+    setListingType(event.target.value);
   };
 
   const handleLocation = (event) => {
@@ -105,11 +98,8 @@ export default function CreateListings() {
     setConditionError(false);
     setDateError(false);
     setCategoryError(false);
-    setBidError(false);
-    setAllowBidError(false);
     setBidIncrementError(false);
-    setBuyError(false);
-    setAllowBuyError(false);
+    setListingTypeError(false);
     setLocationError(false);
     setError(false);
 
@@ -137,45 +127,33 @@ export default function CreateListings() {
       setCategoryError(true);
       setError(true);
     }
-    if (bid === "") {
-      setBidError(true);
+    if (listingType === "") {
+      setListingTypeError(true);
       setError(true);
     }
-    if (bidIncrement === "") {
-      setBidIncrementError(true);
-      setError(true);
-    }
-    if (allowBid === "") {
-      setAllowBidError(true);
-      setError(true);
-    }
-    if (buy === "") {
-      setBuyError(true);
-      setError(true);
-    }
-    if (allowBuy === "") {
-      setBuyError(true);
-      setError(true);
+    if (listingType === "Bid Only") {
+      if (openingBid === "") {
+        setOpeningBidError(true);
+        setError(true);
+      }
+      if (bidIncrement === "") {
+        setBidIncrementError(true);
+        setError(true);
+      }
+    } else {
+      if (listingPrice === "") {
+        setListingPriceError(true);
+        setError(true);
+      }
     }
 
-    if (bid && buy) {
-      setListingType("Bid-And-Buy-Now");
-    } else if (bid && !buy) {
-      setListingType("Bid-Only");
-    } else if (buy && !bid) {
-      setListingType("Buy-Only");
-    }
     const obj = {};
     obj.title = title;
     obj.description = description;
     obj.category = category;
     obj.condition = condition;
     obj.listingType = listingType;
-    obj.listingPrice = buy;
-    obj.openBidPrice = bid;
     obj.bidIncrement = bidIncrement;
-    obj.currentBid = bid;
-    obj.buyNow = buy;
     obj.expirationDate = date;
     obj.location = location;
 
@@ -371,116 +349,70 @@ export default function CreateListings() {
                   </Grid>
                 </Grid>
                 <Grid container justifyContent="space-between">
-                  <Grid item xs={5.9} marginBottom={2}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">
-                        Allow Bidding?
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={allowBid}
-                        label="Allow Bid"
-                        required
-                        error={allowBidError ? true : false}
-                        onChange={handleAllowBid}
-                      >
-                        <MenuItem value={true}>Yes</MenuItem>
-                        <MenuItem value={false}>No</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  {allowBid ? (
-                    <Grid container>
-                      <Grid item xs={6} marginBottom={2}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">
-                            Allow Buy Now Price?
-                          </InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={allowBuy}
-                            label="Allow Buy Now"
-                            required
-                            error={allowBuyError ? true : false}
-                            onChange={handleAllowBuy}
-                          >
-                            <MenuItem value={true}>Yes</MenuItem>
-                            <MenuItem value={false}>No</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                      {allowBuy ? (
-                        <Grid container justifyContent={"space-between"}>
-                          <Grid item xs={6} marginBottom={2}>
-                            <TextField
-                              onChange={(e) => setBid(e.target.value)}
-                              label="Set Starting Bid Price"
-                              variant="outlined"
-                              required
-                              error={bidError}
-                              fullWidth
-                            />
-                          </Grid>
-                          <Grid item xs={6} marginBottom={2}>
-                            <TextField
-                              onChange={(e) => setBidIncrement(e.target.value)}
-                              label="Set Bid Increment"
-                              variant="outlined"
-                              required
-                              error={bidIncrementError}
-                              fullWidth
-                            />
-                          </Grid>
-                          <Grid item xs={6} marginBottom={2}>
-                            <TextField
-                              onChange={(e) => setBuy(e.target.value)}
-                              label="Set Buy Now Price"
-                              variant="outlined"
-                              required
-                              error={buyError}
-                              fullWidth
-                            />
-                          </Grid>
-                        </Grid>
-                      ) : (
-                        <Grid container>
-                          <Grid item xs={6} marginBottom={2}>
-                            <TextField
-                              onChange={(e) => setBid(e.target.value)}
-                              label="Set Starting Bid Price"
-                              variant="outlined"
-                              required
-                              error={bidError}
-                              fullWidth
-                            />
-                          </Grid>
-                          <Grid item xs={6} marginBottom={2}>
-                            <TextField
-                              onChange={(e) => setBidIncrement(e.target.value)}
-                              label="Set Bid Increment"
-                              variant="outlined"
-                              required
-                              error={bidIncrementError}
-                              fullWidth
-                            />
-                          </Grid>
-                        </Grid>
-                      )}
-                    </Grid>
-                  ) : (
+                  <Grid container justifyContent={"space-between"}>
                     <Grid item xs={5.9} marginBottom={2}>
-                      <TextField
-                        onChange={(e) => setBuy(e.target.value)}
-                        label="Set Listing Price"
-                        variant="outlined"
-                        required
-                        error={buyError}
-                        fullWidth
-                      />
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          Listing Type?
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={listingType}
+                          label="Allow Buy Now"
+                          required
+                          error={listingTypeError ? true : false}
+                          onChange={handleListingType}
+                        >
+                          <MenuItem value={"Bid Only"}>Bid Only</MenuItem>
+                          <MenuItem value={"Listing Price"}>
+                            Listing Only
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
                     </Grid>
-                  )}
+                    {listingType === "Bid Only" ? (
+                      <Grid container justifyContent="space-between">
+                        <Grid item xs={5.9} marginBottom={2}>
+                          <TextField
+                            onChange={(e) => setOpeningBid(e.target.value)}
+                            label="Set Opening Bid"
+                            variant="outlined"
+                            required
+                            error={openingBidError}
+                            fullWidth
+                          >
+                            Opening Bid
+                          </TextField>
+                        </Grid>
+                        <Grid item xs={6} marginBottom={2}>
+                          <TextField
+                            onChange={(e) => setBidIncrement(e.target.value)}
+                            label="Set Bid Increment"
+                            variant="outlined"
+                            required
+                            error={bidIncrementError}
+                            fullWidth
+                          >
+                            Bid Increment
+                          </TextField>
+                        </Grid>
+                      </Grid>
+                    ) : (
+                      <Grid item xs={6} marginBottom={2}>
+                        <TextField
+                          onChange={(e) => setListingPrice(e.target.value)}
+                          label="Set Listing Price"
+                          variant="outlined"
+                          required
+                          error={listingPriceError}
+                          fullWidth
+                        >
+                          Bid Increment
+                        </TextField>
+                      </Grid>
+                    )}
+                  </Grid>
                 </Grid>
                 <Grid container justifyContent={"space-around"}>
                   <Button

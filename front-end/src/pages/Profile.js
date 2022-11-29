@@ -1,24 +1,15 @@
 import { React, useState } from "react";
 import {
   Grid,
-  TextField,
-  MenuItem,
   Button,
-  Typography,
-  Box,
   ThemeProvider,
   createTheme,
-  Chip,
-  Select,
-  InputLabel,
-  FormControl,
 } from "@mui/material";
 import DefaultBanner from "../components/DefaultBanner";
 import ReviewCards from "../components/ReviewCards";
 import { SampleReviews } from "../content/SampleReviews";
 import "./Profile.css";
 import { paymentMethods, formsOfContact } from "../content/ProfilePreferences";
-import Parwaz from "../assets/Parwaz.png";
 import Bike from "../assets/Bike.jpg";
 import isMobilePhone from "validator/es/lib/isMobilePhone";
 import isURL from "validator/es/lib/isURL";
