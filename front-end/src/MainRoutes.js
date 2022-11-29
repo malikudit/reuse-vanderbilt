@@ -11,6 +11,7 @@ import RegisterPage from "./pages/Register.js";
 import LoginPage from "./pages/LoginPage.js";
 import ResetPasswordPage from "./pages/ResetPassword.js";
 import NewReviewPage from "./pages/NewReviewPage.js";
+import EditProfile from "./pages/EditProfile.js";
 
 export default function MainRoutes(props) {
   return (
@@ -126,6 +127,7 @@ export default function MainRoutes(props) {
         element={<NotificationsSettings />}
       />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/edit_profile" element={<EditProfile />} />
       <Route path="/create_listing" element={<CreateListings />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
