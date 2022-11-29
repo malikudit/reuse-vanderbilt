@@ -17,6 +17,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import QuizIcon from '@mui/icons-material/Quiz';
 
 const theme = createTheme({
   palette: {
@@ -39,6 +40,7 @@ const NavBar = () => {
   const [profile, setProfile] = React.useState(false);
   const [logout, setLogout] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [faq, setfaq] = React.useState(false);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -85,6 +87,12 @@ const NavBar = () => {
     window.location.href = "/";
     handleClose();
   };
+
+  const handleFAQ = () => {
+    clearAll();
+    setfaq(true);
+    handleClose();
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -173,6 +181,10 @@ const NavBar = () => {
               <MenuItem component={Link} to="/" onClick={handleLogout}>
                 <LogoutIcon />
                 Logout
+              </MenuItem>
+              <MenuItem component={Link} to="/faq" onClick={handleFAQ}>
+                <QuizIcon />
+                FAQ
               </MenuItem>
             </Menu>
           </Stack>

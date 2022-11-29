@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage.js";
 import ResetPasswordPage from "./pages/ResetPassword.js";
 import NewReviewPage from "./pages/NewReviewPage.js";
 import EditProfile from "./pages/EditProfile.js";
+import FAQ from "./pages/FAQ.js";
 
 export default function MainRoutes(props) {
   return (
@@ -133,6 +134,7 @@ export default function MainRoutes(props) {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/reset" element={<ResetPasswordPage />} />
       <Route path="/new_review/:itemName" element={<NewReviewPage />} />
+      <Route path="/faq" element={<FAQ />} />
     </Routes>
   );
 }

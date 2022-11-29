@@ -33,7 +33,7 @@ export default function ReviewCards(props) {
       }}
       style={{ textDecoration: "none" }}
     >
-      <Box padding={2} marginLeft = {3}>
+      <Box padding={2} marginLeft={3}>
         <Grid container alignItems="center" justifyContent={"center"}>
           <Card
             variant="outlined"
@@ -52,40 +52,40 @@ export default function ReviewCards(props) {
                   precision={0.5}
                   readOnly
                   align="center"
-                  sx = {{
+                  sx={{
                     marginTop: "2vh"
                   }}
                 />
               </CardActions>
             </Grid>
             <CardActionArea>
-            <Grid container alignItems={"center"} justifyContent={"center"}>
-              <CardMedia
-                component="img"
-                height="140"
-                coverImage={props.coverImage}
-                alt={props.alt}
-                sx = {{
-                  borderRadius: "50% 50% 50% 50%",
-                  backgroundSize: "100% 100%",
-                  backgroundPosition: "center",
-                  height: 120,
-                  width: 120,  
-                  border: "6px solid white",
-                  filter: "drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1))",
-                }}
-              />
+              <Grid container alignItems={"center"} justifyContent={"center"}>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  coverImage={props.coverImage}
+                  alt={props.alt}
+                  sx={{
+                    borderRadius: "50% 50% 50% 50%",
+                    backgroundSize: "100% 100%",
+                    backgroundPosition: "center",
+                    height: 120,
+                    width: 120,
+                    border: "6px solid white",
+                    filter: "drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1))",
+                  }}
+                />
               </Grid>
               <Grid container alignItems={"center"} justifyContent={"center"}>
-              <CardContent>
-                <Typography variant="h6">{props.reviewTitle}</Typography>
-              </CardContent>
+                <CardContent>
+                  <Typography variant="h6">{props.reviewTitle}</Typography>
+                </CardContent>
               </Grid>
             </CardActionArea>
             <Grid container alignItems={"center"} justifyContent={"center"}>
               <CardActions>
                 <Button size="small" color="info"
-                  sx = {{
+                  sx={{
                     background: "#333",
                     color: "white",
                     outline: "none",
