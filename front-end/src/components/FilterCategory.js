@@ -1,4 +1,5 @@
 import { SampleProducts } from "../content/SampleProducts";
+import { Grid } from "@mui/material";
 import ProductCards from "./ProductCards";
 import "./ProductCards.css";
 
@@ -39,7 +40,13 @@ export default function FilterCategory(props) {
   }
 
   return (
-    <div className="container">
+    <Grid
+      container
+      flex
+      justifyContent="space-evenly"
+      alignItems="center"
+      marginTop={2}
+    >
       {filtered.map((searchedCategory) => (
         <ProductCards
           {...searchedCategory}
@@ -47,6 +54,6 @@ export default function FilterCategory(props) {
           searchProduct={props.searchProduct}
         />
       ))}
-    </div>
+    </Grid>
   );
 }

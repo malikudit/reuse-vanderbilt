@@ -17,13 +17,12 @@ import DefaultBanner from "../components/DefaultBanner";
 import ReviewCards from "../components/ReviewCards";
 import { SampleReviews } from "../content/SampleReviews";
 import "./Profile.css";
-import {
-  paymentMethods,
-  formsOfContact,
-} from "../content/ProfilePreferences";
+import { paymentMethods, formsOfContact } from "../content/ProfilePreferences";
 import Parwaz from "../assets/Parwaz.png";
+import Bike from "../assets/Bike.jpg";
 import isMobilePhone from "validator/es/lib/isMobilePhone";
 import isURL from "validator/es/lib/isURL";
+import swal from "sweetalert";
 
 const theme = createTheme({
   palette: {
@@ -93,23 +92,22 @@ export default function Profile() {
     setSaved(false);
   };
   const handleSave = () => {
-
-    if (
-      checkNameLength(firstName) ||
-      checkNameAlpha(firstName)
-    ) {
+    if (checkNameLength(firstName) || checkNameAlpha(firstName)) {
       firstNameError = true;
     }
-    if (
-      checkNameLength(lastName) ||
-      checkNameAlpha(lastName)
-    ) {
+    if (checkNameLength(lastName) || checkNameAlpha(lastName)) {
       lastNameError = true;
     }
-    if ((contact === "Phone" || contact === "Any") && checkPhoneNumber(phoneNumber)) {
+    if (
+      (contact === "Phone" || contact === "Any") &&
+      checkPhoneNumber(phoneNumber)
+    ) {
       phoneNumberError = true;
     }
-    if ((contact === "GroupMe" || contact === "Any") && checkGroupMeURL(groupMe)) {
+    if (
+      (contact === "GroupMe" || contact === "Any") &&
+      checkGroupMeURL(groupMe)
+    ) {
       groupMeError = true;
     }
     if (firstNameError || lastNameError || phoneNumberError || groupMeError) {
@@ -117,302 +115,131 @@ export default function Profile() {
     }
     if (!error) {
       setSaved(true);
-      alert("Profile saved!");
+      swal("Success", "Profile saved!", "success");
     }
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ backgroundColor: "#FFFFFF" }}>
+    <div class="container-profile">
+      <ThemeProvider theme={theme}>
         <DefaultBanner banner={"User Profile"} />
-        <form autoComplete="off" onSubmit={handleSave}>
-          <Grid container paddingRight={4} justifyContent="flex-end">
-            {saved ? (
-              <Grid padding={2}>
-                <Button
-                  variant="contained"
-                  color="info"
-                  component="label"
-                  onClick={() => {
-                    handleEdit();
-                  }}
-                >
-                  Edit Profile
-                </Button>
-              </Grid>
-            ) : (
-              <Grid padding={2}>
-                <Button
-                  variant="contained"
-                  component="label"
-                  color="success"
-                  onClick={() => {
-                    handleSave();
-                  }}
-                >
-                  Save Changes
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-          <Grid container margin={"auto"}>
-            <Grid xs={3} padding={1}>
-              <Grid
-                sx={{ border: "2px solid black", borderRadius: "16px" }}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Grid align="center">
-                  <img
-                    src={Parwaz}
-                    alt="Parwaz"
-                    height={300}
-                    className="img-wrapper"
-                  />
-                </Grid>
-                <Grid container alignItems="center" align="center">
-                  <Grid xs={6}>
-                    <Typography variant="h6">Profile Picture</Typography>
-                  </Grid>
-                  <Grid xs={6} padding={2}>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      component="label"
-                      disabled={saved}
-                    >
-                      Upload File
-                      <input type="file" hidden />
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid xs={9} padding={1} sx={{ color: "secondary.main" }}>
-              <Grid
-                container
-                sx={{ border: "2px solid black", borderRadius: "16px" }}
-              >
-                <Grid xs={6} padding={2}>
-                  <TextField
-                    fullWidth
-                    label="First Name"
-                    variant={saved ? "outlined" : "filled"}
-                    disabled={saved}
-                    onChange={(event) => {
-                      setFirstName(event.target.value);
-                    }}
-                    value={firstName}
-                    error={
-                      (checkNameEmpty(firstName) ||
-                        checkNameLength(firstName) ||
-                        checkNameAlpha(firstName)) &&
-                      saved === false
-                    }
-                    helperText={
-                      saved === true
-                        ? ""
-                        : checkNameLength(firstName)
-                        ? "First name must be between 2 to 32 characters long"
-                        : checkNameAlpha(firstName)
-                        ? "First name must be alphabetical"
-                        : ""
-                    }
-                  />
-                </Grid>
-                <Grid xs={6} padding={2}>
-                  <TextField
-                    fullWidth
-                    label="Last Name"
-                    variant={saved ? "outlined" : "filled"}
-                    disabled={saved}
-                    onChange={(event) => {
-                      setLastName(event.target.value);
-                    }}
-                    error={
-                      (checkNameEmpty(lastName) ||
-                        checkNameLength(lastName) ||
-                        checkNameAlpha(lastName)) &&
-                      saved === false
-                    }
-                    helperText={
-                      saved === true
-                        ? ""
-                        : checkNameLength(lastName)
-                        ? "Last name must be between 2 to 32 characters long"
-                        : checkNameAlpha(lastName)
-                        ? "Last name must be alphabetical"
-                        : ""
-                    }
-                    value={lastName}
-                  />
-                </Grid>
-                <Grid xs={6} padding={2}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    variant={saved ? "outlined" : "filled"}
-                    disabled
-                    value="parwaz.s.gill@vanderbilt.edu"
-                  />
-                </Grid>
-                <Grid xs={6} padding={2}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Preferred Form(s) of Payment
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      multiple
-                      label="Preferred Form of Payment"
-                      variant={saved ? "outlined" : "filled"}
-                      disabled={saved}
-                      onChange={preferredPaymentHandler}
-                      value={preferredPayment}
-                      renderValue={(preferredPayment) => (
-                        <div>
-                          {preferredPayment.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </div>
-                      )}
-                    >
-                      {paymentMethods.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid xs={6} padding={2}>
-                  <TextField
-                    fullWidth
-                    select
-                    label="Preferred Form of Contact"
-                    variant={saved ? "outlined" : "filled"}
-                    disabled={saved}
-                    onChange={(event) => {
-                      setContact(event.target.value);
-                    }}
-                    value={contact}
-                  >
-                    {formsOfContact.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                {contact === "Phone" ? (
-                    <Grid xs={6} padding={2}>
-                      <TextField
-                        fullWidth
-                        label="Phone Number"
-                        variant={saved ? "outlined" : "filled"}
-                        disabled={saved}
-                        onChange={(event) => {
-                          setPhoneNumber(event.target.value);
-                        }}
-                        error={checkPhoneNumber(phoneNumber) && saved === false}
-                        helperText={
-                          saved === true
-                            ? ""
-                            : checkPhoneNumber(phoneNumber)
-                            ? "Enter a valid US phone number"
-                            : ""
-                        }
-                        value={phoneNumber}
-                      />
-                    </Grid>
-                ) : contact === "GroupMe" ? (
-                    <Grid xs={6} padding={2}>
-                      <TextField
-                        fullWidth
-                        label="GroupMe URL"
-                        variant={saved ? "outlined" : "filled"}
-                        disabled={saved}
-                        onChange={(event) => {
-                          setGroupMe(event.target.value);
-                        }}
-                        error={checkGroupMeURL(groupMe) && saved === false}
-                        helperText={
-                          saved === true
-                            ? ""
-                            : checkGroupMeURL(groupMe)
-                            ? "The provided URL must be from groupme.com and use https"
-                            : ""
-                        }
-                        value={groupMe}
-                      />
-                    </Grid>
-                ) : contact === "Any" ? (
-                  <Grid container>
-                    <Grid xs={6} padding={2}>
-                      <TextField
-                        fullWidth
-                        label="Phone Number"
-                        variant={saved ? "outlined" : "filled"}
-                        disabled={saved}
-                        onChange={(event) => {
-                          setPhoneNumber(event.target.value);
-                        }}
-                        error={checkPhoneNumber(phoneNumber) && saved === false}
-                        helperText={
-                          saved === true
-                            ? ""
-                            : checkPhoneNumber(phoneNumber)
-                            ? "Enter a valid US phone number"
-                            : ""
-                        }
-                        value={phoneNumber}
-                      />
-                    </Grid>
 
-                    <Grid xs={6} padding={2}>
-                      <TextField
-                        fullWidth
-                        label="GroupMe URL"
-                        variant={saved ? "outlined" : "filled"}
-                        disabled={saved}
-                        onChange={(event) => {
-                          setGroupMe(event.target.value);
-                        }}
-                        error={checkGroupMeURL(groupMe) && saved === false}
-                        helperText={
-                          saved === true
-                            ? ""
-                            : checkGroupMeURL(groupMe)
-                            ? "The provided URL must be from groupme.com and use https"
-                            : ""
-                        }
-                        value={groupMe}
-                      />
-                    </Grid>
-                  </Grid>
-                ) : null}
-              </Grid>
-              <Grid xs={12} marginTop={4}>
-                <Box sx={{ border: "1px solid black", borderRadius: "16px" }}>
-                  <Grid
-                    sx={{ border: "1px solid black", borderRadius: "16px" }}
-                  >
-                    <Typography variant="h4" align="center">
-                      Reviews of this User
-                    </Typography>
-                  </Grid>
-                  <Grid container>
-                    {SampleReviews.map((review) => (
-                      <ReviewCards {...review} key={review.itemName} />
-                    ))}
-                  </Grid>
-                </Box>
-              </Grid>
+        <div class="row profile">
+          <form autoComplete="off" onSubmit={handleSave}>
+            <Grid xs={3}>
+              <div class="profile-sidebar">
+                <div class="profile-userpic">
+                  <img src={Bike} alt="" />
+                </div>
+                <div class="profile-usertitle">
+                  <div class="profile-usertitle-name">
+                    <h2 class="profile-desc-title">Parwaz Gill</h2>
+                  </div>
+                </div>
+
+                <div class="portlet light bordered">
+                  <div class="centered">
+                    <div class="profile-desc-text">Email: </div>
+                    <h3 class="profile-desc-title">parwazgill3@gmail.com</h3>
+                    <br />
+
+                    <div class="profile-desc-text">
+                      Preferred payment method:{" "}
+                    </div>
+                    <h3 class="profile-desc-title">Venmo</h3>
+                    <br />
+
+                    {contact === "Phone" ? (
+                      <div>
+                        <div class="profile-desc-text">Phone number: </div>
+                        <h3 class="profile-desc-title">615-602-9500</h3>
+                      </div>
+                    ) : contact === "GroupMe" ? (
+                      <div>
+                        <div class="profile-desc-text">GroupMe: </div>
+                        <h3 class="profile-desc-title">
+                          https://groupme.com/udit-malik
+                        </h3>
+                      </div>
+                    ) : contact === "Any" ? (
+                      <div>
+                        <div class="profile-desc-text">Phone number: </div>
+                        <h3 class="profile-desc-title">615-602-9500</h3>
+
+                        <div class="profile-stat-text">GroupMe: </div>
+                        <h3 class="profile-desc-title">
+                          https://groupme.com/udit-malik
+                        </h3>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
             </Grid>
+          </form>
+
+          <Grid>
+            <div class="profile-content">
+              <div>
+                <h3 class="profile-desc-title">Reviews for Parwaz Gill</h3>
+                <span class="profile-desc-text">
+                  {SampleReviews.map((review) => (
+                    <ReviewCards {...review} key={review.itemName} />
+                  ))}
+                </span>
+              </div>
+            </div>
           </Grid>
-        </form>
-      </Box>
-    </ThemeProvider>
+
+          <Grid>
+            <div class="profile-content">
+              <div>
+                <h2 class="profile-desc-title">Usage History</h2>
+                <div class="portlet light bordered">
+                  <div class="row list-separated profile-stat">
+                    <div class="col-md-4 col-sm-4 col-xs-6">
+                      <div class="uppercase profile-stat-title"> 37 </div>
+                      <div class="uppercase profile-stat-text"> Listings </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-6">
+                      <div class="uppercase profile-stat-title"> 51 </div>
+                      <div class="uppercase profile-stat-text">
+                        {" "}
+                        Products Sold{" "}
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-6">
+                      <div class="uppercase profile-stat-title"> 61 </div>
+                      <div class="uppercase profile-stat-text">
+                        {" "}
+                        Products Bought{" "}
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-6">
+                      <div class="uppercase profile-stat-title"> 3.77 </div>
+                      <div class="uppercase profile-stat-text">
+                        {" "}
+                        Average Rating{" "}
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-6">
+                      <div class="uppercase profile-stat-title">
+                        <Button
+                          sx={{
+                            marginTop: "5vh",
+                          }}
+                        >
+                          View All Reviews
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Grid>
+        </div>
+      </ThemeProvider>
+    </div>
   );
 }

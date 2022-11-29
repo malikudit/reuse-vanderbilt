@@ -65,11 +65,25 @@ function a11yProps(index) {
 }
 
 export default function ListingsPage(props) {
-  var buying = SampleProducts.filter(function (entry) {
-    return entry.buying === true;
+  function compare(a, b) {
+    var now = new Date().getTime();
+    var aDate = new Date(a.expirationDate).getTime();
+    var bDate = new Date(b.expirationDate).getTime();
+    if (aDate - now > bDate - now) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
+  var buying = SampleProducts.sort(compare);
+  buying = buying.filter(function (entry) {
+    return entry.sellerID !== "Parwaz";
   });
-  var selling = SampleProducts.filter(function (entry) {
-    return entry.buying === false;
+
+  var selling = SampleProducts.sort(compare);
+  selling = selling.filter(function (entry) {
+    return entry.sellerID === "Parwaz";
   });
   const [value, setValue] = React.useState(0);
 
@@ -99,13 +113,13 @@ export default function ListingsPage(props) {
             <Tab
               icon={<PersonAddIcon />}
               iconPosition="start"
-              label="Products I'm Buying"
+              label="Products I'm Buying/Bought"
               {...a11yProps(1)}
             />
             <Tab
               icon={<PersonRemoveIcon />}
               iconPosition="start"
-              label="Products I'm Selling"
+              label="Products I'm Selling/Sold"
               {...a11yProps(2)}
             />
           </Tabs>
@@ -120,7 +134,7 @@ export default function ListingsPage(props) {
             container
             alignContent={"center"}
             display="flex"
-            justifyContent={"center"}
+            justifyContent={"space-evenly"}
           >
             {buying.map((buyingProduct) => (
               <ProductCards {...buyingProduct} />
@@ -132,10 +146,10 @@ export default function ListingsPage(props) {
             container
             alignContent={"center"}
             display="flex"
-            justifyContent={"center"}
+            justifyContent={"space-evenly"}
           >
-            {selling.map((buyingProduct) => (
-              <ProductCards {...buyingProduct} />
+            {selling.map((sellingProduct) => (
+              <ProductCards {...sellingProduct} />
             ))}
           </Grid>
         </TabPanel>

@@ -2,6 +2,7 @@ node_modules/
 build/
 coverage/
 
+*.key
 .DS_Store
 .env
 .pnp/

@@ -6,13 +6,17 @@ import {
   IconButton,
   Typography,
   createTheme,
+  Menu,
+  MenuItem,
   ThemeProvider,
   Stack,
   Button,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import PersonIcon from "@mui/icons-material/Person";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const theme = createTheme({
   palette: {
@@ -29,26 +33,38 @@ const theme = createTheme({
 });
 
 const NavBar = () => {
+  const [login, setLogin] = React.useState(false);
   const [home, setHome] = React.useState(true);
-  const [notifications, setNotifications] = React.useState(false);
   const [listings, setListings] = React.useState(false);
   const [profile, setProfile] = React.useState(false);
+  const [logout, setLogout] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const clearAll = () => {
+    setLogin(false);
     setHome(false);
-    setNotifications(false);
     setListings(false);
     setProfile(false);
+    setLogout(false);
+  };
+
+  const handleLogin = () => {
+    clearAll();
+    handleClose();
+    setProfile(true);
   };
 
   const handleHome = () => {
     clearAll();
     setHome(true);
-  };
-
-  const handleNotifications = () => {
-    clearAll();
-    setNotifications(true);
   };
 
   const handleListings = () => {
@@ -59,6 +75,15 @@ const NavBar = () => {
   const handleProfile = () => {
     clearAll();
     setProfile(true);
+    handleClose();
+  };
+
+  const handleLogout = () => {
+    clearAll();
+    setHome(true);
+    alert("You have successfully logged out.");
+    window.location.href = "/";
+    handleClose();
   };
 
   return (
@@ -75,9 +100,14 @@ const NavBar = () => {
             onClick={handleHome}
           >
             <Typography variant="h3" color="neutral" fontStyle="helvetica">
+            <Typography variant="h3" color="neutral" fontStyle="helvetica">
               Reuse
             </Typography>
-            <Typography variant="h3" color="secondary" sx={{ flexGrow: 1, fontStyle: "helvetica"}}>
+            <Typography
+              variant="h3"
+              color="secondary"
+              sx={{ flexGrow: 1, fontStyle: "helvetica" }}
+            >
               Vandy
             </Typography>
           </IconButton>
@@ -89,23 +119,11 @@ const NavBar = () => {
               color={home === true ? "secondary" : "neutral"}
               onClick={handleHome}
               sx={{
-                textTransform: 'none',
+                textTransform: "none",
               }}
             >
               <HomeIcon sx={{ padding: 1 }} />
-              Home
-            </Button>
-            <Button
-              component={Link}
-              to="/notifications"
-              color={notifications === true ? "secondary" : "neutral"}
-              onClick={handleNotifications}
-              sx={{
-                textTransform: 'none',
-              }}
-            >
-              <NotificationsActiveIcon sx={{ padding: 1 }} />
-              Notifications
+              HOME
             </Button>
             <Button
               component={Link}
@@ -113,24 +131,51 @@ const NavBar = () => {
               color={listings === true ? "secondary" : "neutral"}
               onClick={handleListings}
               sx={{
-                textTransform: 'none',
+                textTransform: "none",
               }}
             >
-              <NotificationsActiveIcon sx={{ padding: 1 }} />
-              My Listings
+              <ShoppingCartIcon sx={{ padding: 1 }} />
+              MY LISTINGS
             </Button>
             <Button
-              component={Link}
-              to="/profile"
               color={profile === true ? "secondary" : "neutral"}
-              onClick={handleProfile}
-              sx={{
-                textTransform: 'none',
-              }}
+              aria-controls={open ? "demo-positioned-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
             >
               <PersonIcon sx={{ padding: 1 }} />
               Profile
             </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem component={Link} to="/profile" onClick={handleProfile}>
+                <PersonIcon />
+                View Profile
+              </MenuItem>
+              <MenuItem component={Link} to="/edit_profile" onClick={handleProfile}>
+                <PersonIcon />
+                Edit Profile
+              </MenuItem>
+              <MenuItem component={Link} to="/login" onClick={handleLogin}>
+                <LoginIcon />
+                Login
+              </MenuItem>
+              <MenuItem component={Link} to="/" onClick={handleLogout}>
+                <LogoutIcon />
+                Logout
+              </MenuItem>
+            </Menu>
           </Stack>
         </Toolbar>
       </AppBar>

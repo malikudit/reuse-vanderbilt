@@ -1,23 +1,48 @@
-const { DataTypes, Model } = require('sequelize');
+const _ = require('lodash');
+const { DataTypes, Model, ValidationError } = require('sequelize');
+const bcrypt = require('bcrypt');
 const validator = require('validator');
 const { nanoid } = require('nanoid/async');
 
 const sequelize = require('./database');
+const { LoginError } = require('../types/error');
+
+const defaultFields = [
+    'id',
+    'firstName',
+    'lastName',
+    'cash',
+    'venmo',
+    'zelle',
+    'otherPaymentMethod',
+    'modeOfCommunication',
+    'phoneNumber',
+    'groupMe'
+]
 
 class User extends Model {
-    displayView() {
-        return {
-            id: this.id,
-            firstName: this.firstName,
-            lastName: this.lastName,
-            cash: this.cash,
-            zelle: this.zelle,
-            venmo: this.venmo,
-            otherPaymentMethod: this.otherPaymentMethod,
-            modeOfCommunication: this.modeOfCommunication,
-            phoneNumber: this.phoneNumber,
-            groupMe: this.groupMe
-        };
+    static async authenticate(email, password) {
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            throw new LoginError('No account exists with that email address');
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (match) {
+            return user;
+        }
+
+        throw new LoginError('The provided password is incorrect');
+    }
+
+    selfView() {
+        return this.generateView(['email']);
+    }
+
+    generateView(additionalFields = []) {
+        return _.pick(this, defaultFields.concat(additionalFields));
     }
 }
 
@@ -66,27 +91,6 @@ User.init({
             }
         }
     },
-    userName: {
-        type: DataTypes.STRING(32),
-        allowNull: false,
-        unique: true,
-        validate: {
-            notNull: {
-                msg: 'Username is a required field'
-            },
-            notIn: {
-                args: [[true, false, NaN]],
-                msg: 'Username must only contain alphabets and numbers'
-            },
-            isAlphanumeric: {
-                msg: 'Username must only contain alphabets and numbers'
-            },
-            len: {
-                args: [4, 32],
-                msg: 'Username must be between 4 to 32 characters long'
-            }
-        }
-    },
     email: {
         type: DataTypes.STRING(254),
         allowNull: false,
@@ -105,6 +109,37 @@ User.init({
                 if (lower_domain !== 'vanderbilt.edu') {
                     throw new Error('Please use a vanderbilt.edu email address to sign up');
                 }
+            }
+        }
+    },
+    password: {
+        type: DataTypes.CHAR(60),
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'Password is a required field'
+            },
+            len: {
+                args: [8, 60],
+                msg: 'Password must be between 8 to 32 characters long'
+            },
+            strongPassword(value) {
+                if (!validator.isStrongPassword(value + '')) {
+                    throw new Error('Password must include at least one uppercase, one lowercase, one number and a special character');
+                }
+            }
+        }
+    },
+    state: {
+        type: DataTypes.ENUM('Unverified', 'Verified'),
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'User must be in a valid state at all times'
+            },
+            isIn: {
+                args: [['Unverified', 'Verified']],
+                msg: 'State must be either Unverified or Verified'
             }
         }
     },
@@ -215,8 +250,8 @@ User.init({
             const userId = await nanoid();
             user.setDataValue('id', userId);
         },
-        beforeSave: (user) => {
-            if (user.phoneNumber) {
+        beforeSave: async (user) => {
+            if (user.changed('phoneNumber')) {
                 const phoneNumber = (user.phoneNumber + '').replaceAll(/[+\-()]/g, '');
                 if (phoneNumber[0] === '1') {
                     user.setDataValue('phoneNumber', phoneNumber.substring(1));
@@ -224,9 +259,26 @@ User.init({
                     user.setDataValue('phoneNumber', phoneNumber);
                 }
             }
+
+            if (user.changed('password')) {
+                const password = user.getDataValue('password');
+                if ((password + '').length > 32) {
+                    throw new ValidationError('Password must be between 8 to 32 characters long');
+                }
+
+                user.setDataValue('password', await bcrypt.hash(password + '', 11));
+            }
         }
     },
     sequelize,
+    validate: {
+        minOnePaymentMethod() {
+            if (!(validator.toBoolean(this.cash + '') || validator.toBoolean(this.venmo + '') ||
+                validator.toBoolean(this.zelle + '') || validator.toBoolean(this.otherPaymentMethod + ''))) {
+                    throw new Error('Must support at least one payment method');
+            }
+        }
+    },
     paranoid: true
 });
 

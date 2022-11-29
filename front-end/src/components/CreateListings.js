@@ -55,10 +55,15 @@ export default function CreateListings() {
   const [allowBidError, setAllowBidError] = useState(false);
   const [bid, setBid] = useState("");
   const [bidError, setBidError] = useState(false);
+  const [bidIncrement, setBidIncrement] = useState("");
+  const [bidIncrementError, setBidIncrementError] = useState(false);
   const [buy, setBuy] = useState("");
   const [buyError, setBuyError] = useState("");
   const [allowBuy, setAllowBuy] = useState();
   const [allowBuyError, setAllowBuyError] = useState(false);
+  const [listingType, setListingType] = useState("");
+  const [error, setError] = useState(false);
+  const [printErr, setPrintErr] = useState("");
 
   const handleCondition = (event) => {
     setCondition(event.target.value);
@@ -72,9 +77,10 @@ export default function CreateListings() {
     setDate();
     setDateError(false);
     var now = new Date().getTime();
-    if (date - now > 12096e5 || date - now < 0) {
+    if (date - now > 12096e5 || date - now < 1.08e7) {
       setDateError(true);
     } else {
+      date = dayjs(date).toISOString();
       setDate(date);
     }
   };
@@ -101,42 +107,109 @@ export default function CreateListings() {
     setCategoryError(false);
     setBidError(false);
     setAllowBidError(false);
+    setBidIncrementError(false);
     setBuyError(false);
     setAllowBuyError(false);
     setLocationError(false);
+    setError(false);
 
     if (title === "") {
       setTitleError(true);
+      setError(true);
     }
     if (description === "") {
       setDescriptionError(true);
+      setError(true);
     }
     if (condition === "") {
       setConditionError(true);
+      setError(true);
     }
     if (location === "") {
       setLocationError(true);
+      setError(true);
     }
     if (date === "") {
       setDateError(true);
+      setError(true);
     }
     if (category === "") {
       setCategoryError(true);
+      setError(true);
     }
     if (bid === "") {
       setBidError(true);
+      setError(true);
+    }
+    if (bidIncrement === "") {
+      setBidIncrementError(true);
+      setError(true);
     }
     if (allowBid === "") {
       setAllowBidError(true);
+      setError(true);
     }
     if (buy === "") {
       setBuyError(true);
+      setError(true);
     }
     if (allowBuy === "") {
       setBuyError(true);
+      setError(true);
     }
-    if (title && description && condition && (bid || buy) && location) {
-      alert("Listing Posted Successfully!");
+
+    if (bid && buy) {
+      setListingType("Bid-And-Buy-Now");
+    } else if (bid && !buy) {
+      setListingType("Bid-Only");
+    } else if (buy && !bid) {
+      setListingType("Buy-Only");
+    }
+    const obj = {};
+    obj.title = title;
+    obj.description = description;
+    obj.category = category;
+    obj.condition = condition;
+    obj.listingType = listingType;
+    obj.listingPrice = buy;
+    obj.openBidPrice = bid;
+    obj.bidIncrement = bidIncrement;
+    obj.currentBid = bid;
+    obj.buyNow = buy;
+    obj.expirationDate = date;
+    obj.location = location;
+
+    if (!error) {
+      console.log("Object is " + obj);
+      async function postData(
+        url = "https://api.reusevandy.org/product",
+        data = obj
+      ) {
+        const response = await fetch(url, {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify({
+            product: data,
+          }),
+        });
+        console.log("Response.json " + response.json());
+        return response.json();
+      }
+
+      postData("https://api.reuse-vandy.org/product").then((data) => {
+        if (data.error) {
+          setPrintErr(data.error);
+          console.log(printErr);
+        } else {
+          alert("Listing Posted Successfully!");
+          window.location.href = "/";
+        }
+      });
     }
   };
 
@@ -177,7 +250,7 @@ export default function CreateListings() {
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
                     onChange={(e) => setTitle(e.target.value)}
-                    label="Enter Product Title"
+                    label="Enter Product Title (between 5-32 characters)"
                     variant="outlined"
                     required
                     error={titleError}
@@ -187,11 +260,10 @@ export default function CreateListings() {
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
                     onChange={(e) => setDescription(e.target.value)}
-                    label="Enter Product Description (max 300 characters)" // need some sort of validation here
+                    label="Enter Product Description (maximum 300 characters)"
                     variant="outlined"
                     rows={4}
                     multiline
-                    required
                     error={descriptionError}
                     fullWidth
                   />
@@ -211,7 +283,7 @@ export default function CreateListings() {
                         error={conditionError ? true : false}
                         onChange={handleCondition}
                       >
-                        <MenuItem value={"Brand New"}>Brand New</MenuItem>
+                        <MenuItem value={"New"}>New</MenuItem>
                         <MenuItem value={"Like New"}>Like New</MenuItem>
                         <MenuItem value={"Slightly Used"}>
                           Slightly Used
@@ -234,13 +306,13 @@ export default function CreateListings() {
                         label="Location"
                         onChange={handleLocation}
                       >
-                        <MenuItem value={"Seller Delivery"}>
+                        <MenuItem value={"Seller Delivers to Buyer"}>
                           Seller Will Deliver to Buyer
                         </MenuItem>
-                        <MenuItem value={"Buyer Pickup"}>
+                        <MenuItem value={"Buyer Comes to Seller"}>
                           Buyer Will Come to Seller
                         </MenuItem>
-                        <MenuItem value={"Meet at Common Point"}>
+                        <MenuItem value={"Exchange at Common Point"}>
                           Buyer and Seller Meet at Common Point
                         </MenuItem>
                       </Select>
@@ -262,7 +334,7 @@ export default function CreateListings() {
                           error={dateError ? true : false}
                           helperText={
                             dateError
-                              ? "Listings must be in the future and can be no longer than 14 days"
+                              ? "Listings must be at least 3 hours in the future and can be no longer than 14 days ahead"
                               : ""
                           }
                           sx={{ width: "100%" }}
@@ -313,12 +385,12 @@ export default function CreateListings() {
                         error={allowBidError ? true : false}
                         onChange={handleAllowBid}
                       >
-                        <MenuItem value={"Yes"}>Yes</MenuItem>
-                        <MenuItem value={"No"}>No</MenuItem>
+                        <MenuItem value={true}>Yes</MenuItem>
+                        <MenuItem value={false}>No</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
-                  {allowBid === "Yes" ? (
+                  {allowBid ? (
                     <Grid container>
                       <Grid item xs={6} marginBottom={2}>
                         <FormControl fullWidth>
@@ -334,12 +406,12 @@ export default function CreateListings() {
                             error={allowBuyError ? true : false}
                             onChange={handleAllowBuy}
                           >
-                            <MenuItem value={"Yes"}>Yes</MenuItem>
-                            <MenuItem value={"No"}>No</MenuItem>
+                            <MenuItem value={true}>Yes</MenuItem>
+                            <MenuItem value={false}>No</MenuItem>
                           </Select>
                         </FormControl>
                       </Grid>
-                      {allowBuy === "Yes" ? (
+                      {allowBuy ? (
                         <Grid container justifyContent={"space-between"}>
                           <Grid item xs={6} marginBottom={2}>
                             <TextField
@@ -348,6 +420,16 @@ export default function CreateListings() {
                               variant="outlined"
                               required
                               error={bidError}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6} marginBottom={2}>
+                            <TextField
+                              onChange={(e) => setBidIncrement(e.target.value)}
+                              label="Set Bid Increment"
+                              variant="outlined"
+                              required
+                              error={bidIncrementError}
                               fullWidth
                             />
                           </Grid>
@@ -363,15 +445,27 @@ export default function CreateListings() {
                           </Grid>
                         </Grid>
                       ) : (
-                        <Grid item xs={6} marginBottom={2}>
-                          <TextField
-                            onChange={(e) => setBid(e.target.value)}
-                            label="Set Starting Bid Price"
-                            variant="outlined"
-                            required
-                            error={bidError}
-                            fullWidth
-                          />
+                        <Grid container>
+                          <Grid item xs={6} marginBottom={2}>
+                            <TextField
+                              onChange={(e) => setBid(e.target.value)}
+                              label="Set Starting Bid Price"
+                              variant="outlined"
+                              required
+                              error={bidError}
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6} marginBottom={2}>
+                            <TextField
+                              onChange={(e) => setBidIncrement(e.target.value)}
+                              label="Set Bid Increment"
+                              variant="outlined"
+                              required
+                              error={bidIncrementError}
+                              fullWidth
+                            />
+                          </Grid>
                         </Grid>
                       )}
                     </Grid>

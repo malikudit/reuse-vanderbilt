@@ -35,7 +35,11 @@ const theme = createTheme({
 });
 
 export default function ReviewPage() {
-  const locImage = useLocation().state.image;
+  const locCoverImage = useLocation().state.coverImage;
+  const locSecondaryImage1 = useLocation().state.secondaryImage1;
+  const locSecondaryImage2 = useLocation().state.secondaryImage2;
+  const locSecondaryImage3 = useLocation().state.secondaryImage3;
+  const locSecondaryImage4 = useLocation().state.secondaryImage4;
   const locReviewTitle = useLocation().state.reviewTitle;
   const locReviewBody = useLocation().state.reviewBody;
   const locSeller = useLocation().state.seller;
@@ -58,14 +62,13 @@ export default function ReviewPage() {
                   height: "100%",
                   width: "100%",
                 }}
-                src={locImage}
+                src={locCoverImage}
               />
             </Grid>
             <Grid xs={7} direction="column" marginTop={2}>
               <Grid item marginBottom={2}>
                 <Typography
                   variant="h4"
-                  borderBottom={1}
                   sx={{ fontWeight: "bold" }}
                 >
                   {"Review Title: "}
@@ -115,7 +118,7 @@ export default function ReviewPage() {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container justifyContent={"space-between"} borderBottom={1}>
+              <Grid container justifyContent={"space-between"}>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography>
                     {"Location of Exchange: "}

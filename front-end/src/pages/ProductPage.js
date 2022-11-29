@@ -1,15 +1,11 @@
 import { React } from "react";
-import {
-  Box,
-  Grid,
-  Button,
-  createTheme,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
-import CountdownTimer from "../components/CountdownTimer";
+import Active from "./product_pages/Active";
+import Inactive from "./product_pages/Inactive";
+import EvaluatingOffers from "./product_pages/EvaluatingOffers";
+import Sold from "./product_pages/Sold";
 
 const theme = createTheme({
   palette: {
@@ -35,122 +31,124 @@ const theme = createTheme({
 });
 
 export default function ProductPage() {
-  const locImage = useLocation().state.image;
+  const locCoverImage = useLocation().state.coverImage;
+  const locSecondaryImage1 = useLocation().state.secondaryImage1;
+  const locSecondaryImage2 = useLocation().state.secondaryImage2;
+  const locSecondaryImage3 = useLocation().state.secondaryImage3;
+  const locSecondaryImage4 = useLocation().state.secondaryImage4;
   const locItemName = useLocation().state.itemName;
   const locDescription = useLocation().state.description;
-  const locSeller = useLocation().state.seller;
+  const locSellerName = useLocation().state.seller;
   const locCondition = useLocation().state.condition;
   const locLocation = useLocation().state.location;
-  const locCurrentBid = useLocation().state.currentBid;
-  const locBuyNow = useLocation().state.buyNow;
+  const locListingType = useLocation().state.listingType;
+  var locOpeningBid = useLocation().state.openingBid;
+  var locCurrentBid = useLocation().state.currentBid;
+  const locBidIncrement = useLocation().state.bidIncrement;
+  const locListingPrice = useLocation().state.listingPrice;
   const locTimeLeft = useLocation().state.expirationDate;
   const locCategory = useLocation().state.category;
+  const locSellerID = useLocation().state.sellerID;
+  const locRole = useLocation().state.role;
+  var locState = useLocation().state.state;
+  if (locCurrentBid === null) {
+    locCurrentBid = locOpeningBid;
+  }
+  const nextBid = locCurrentBid + " + " + locBidIncrement;
+  var timeLeft = new Date(locTimeLeft).getTime();
+  var now = new Date().getTime();
+  var expired = timeLeft - now;
+  console.log(locState);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+  if (locState === "Active") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <Active
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
+          itemName={locItemName}
+          sellerID={locSellerID}
+          sellerName={locSellerName}
+          category={locCategory}
+          condition={locCondition}
+          location={locLocation}
+          timeLeft={locTimeLeft}
+          currentBid={locCurrentBid}
+          openingBid={locOpeningBid}
+          listingType={locListingType}
+          nextBid={nextBid}
+          listingPrice={locListingPrice}
+          description={locDescription}
+        />
+      </ThemeProvider>
+    );
+  }
 
-  return (
-    <ThemeProvider theme={theme}>
-      <DefaultBanner banner={"Product Listing Page"} />
-      <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}>
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={5}>
-              <Box
-                component="img"
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                }}
-                src={locImage}
-              />
-            </Grid>
-            <Grid item xs={7} direction="column" marginTop={2}>
-              <Grid item xs={2} marginBottom={2} borderBottom={1}>
-                <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-                  {"Product Name: "}
-                  {locItemName}
-                </Typography>
-              </Grid>
-              <Grid container justifyContent="space-between">
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#4169E1" }}>
-                    {"Seller: "}
-                    {locSeller}
-                  </Typography>
-                </Grid>
-                <Grid item xs={5.9} marginBottom={2}>
-                  <Typography style={{ color: "#4169E1" }}>
-                    {"Category: "}
-                    {locCategory}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container justifyContent="space-between" borderBottom={1}>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography>
-                    {"Condition: "}
-                    {locCondition}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography>
-                    {"Location of Exchange: "}
-                    {locLocation}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid item xs={6} marginBottom={5} marginTop={2}>
-                <Typography variant="h6">
-                  {"Product Description: "}
-                  {locDescription}
-                </Typography>
-              </Grid>
-              <Grid item marginBottom={2}>
-                <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
-                  <CountdownTimer
-                    countDownDate={locTimeLeft}
-                    productPage={true}
-                  />
-                </Typography>
-              </Grid>
-              <Grid container justifyContent={"space-between"}>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
-                    {"Current Bid Price: "}
-                    {locCurrentBid}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} marginBottom={2}>
-                  <Typography style={{ color: "#228B22", fontWeight: "bold" }}>
-                    {"Buy Now Price: "}
-                    {locBuyNow}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container justifyContent={"space-around"} marginTop={4}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  type="reset"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  Place Bid
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  type="submit"
-                  sx={{ fontWeight: "bold" }}
-                >
-                  Buy Now
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-        </form>
-      </Grid>
-    </ThemeProvider>
-  );
+  if (locState === "Inactive") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <Inactive
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
+          itemName={locItemName}
+          sellerID={locSellerID}
+          description={locDescription}
+          sellerName={locSellerName}
+        />
+      </ThemeProvider>
+    );
+  }
+
+  if (locState === "Evaluating Offers") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <EvaluatingOffers
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
+          itemName={locItemName}
+          sellerID={locSellerID}
+          sellerName={locSellerName}
+          category={locCategory}
+          condition={locCondition}
+          location={locLocation}
+          description={locDescription}
+          role={locRole}
+        />
+      </ThemeProvider>
+    );
+  }
+
+  if (locState === "Sold") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <Sold
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
+          itemName={locItemName}
+          sellerID={locSellerID}
+          sellerName={locSellerName}
+          category={locCategory}
+          condition={locCondition}
+          location={locLocation}
+          description={locDescription}
+        />
+      </ThemeProvider>
+    );
+  }
 }

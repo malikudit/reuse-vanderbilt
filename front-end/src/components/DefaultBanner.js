@@ -37,7 +37,8 @@ export default function DefaultBanner(props) {
                 flexGrow: 1,
                 display: { xs: "none", sm: "block" },
                 alignContent: "center",
-                fontWeight: "bold",
+                letterSpacing: "1px",
+                fontWeight: "bold"
               }}
             >
               {props.banner}
