@@ -130,10 +130,7 @@ export default function MainRoutes(props) {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/reset" element={<ResetPasswordPage />} />
-      <Route
-        path="/product_listing/:itemName/new_review"
-        element={<NewReviewPage />}
-      />
+      <Route path="/new_review/:itemName" element={<NewReviewPage />} />
     </Routes>
   );
 }

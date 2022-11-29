@@ -8,7 +8,7 @@ import {
   FormControl,
   TextField,
   createTheme,
-  ThemeProvider
+  ThemeProvider,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -181,7 +181,10 @@ export default function CreateListings() {
 
     if (!error) {
       console.log("Object is " + obj);
-      async function postData(url = "", data = obj) {
+      async function postData(
+        url = "https://api.reusevandy.org/product",
+        data = obj
+      ) {
         const response = await fetch(url, {
           method: "POST",
           mode: "cors",
@@ -198,7 +201,7 @@ export default function CreateListings() {
         return response.json();
       }
 
-      postData("http://api.reuse-vandy.org/product").then((data) => {
+      postData("https://api.reuse-vandy.org/product").then((data) => {
         if (data.error) {
           setPrintErr(data.error);
           console.log(printErr);

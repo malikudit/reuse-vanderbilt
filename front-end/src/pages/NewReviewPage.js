@@ -102,7 +102,7 @@ export default function NewReviewPage(props) {
                   width: "100%",
                   height: "100%",
                   maxHeight: "75vh",
-                  maxWidth: "75vw"
+                  maxWidth: "75vw",
                 }}
                 src={coverImage}
               />
@@ -113,7 +113,7 @@ export default function NewReviewPage(props) {
                   variant="h4"
                   sx={{
                     textTransform: "uppercase",
-                    letterSpacing: "2px"
+                    letterSpacing: "2px",
                   }}
                 >
                   {itemName}
@@ -151,9 +151,7 @@ export default function NewReviewPage(props) {
                   />
                 </Grid>
                 <Grid xs={12} marginBottom={2}>
-                  <Typography>
-                    Rate your exchange experience!
-                  </Typography>
+                  <Typography>Rate your exchange experience!</Typography>
                   {starsError ? (
                     <Typography style={{ color: "red" }}>
                       {"Please select a rating"}

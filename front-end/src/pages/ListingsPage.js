@@ -69,7 +69,7 @@ export default function ListingsPage(props) {
     var now = new Date().getTime();
     var aDate = new Date(a.expirationDate).getTime();
     var bDate = new Date(b.expirationDate).getTime();
-    if (aDate - now < bDate - now) {
+    if (aDate - now > bDate - now) {
       return -1;
     } else {
       return 1;
@@ -113,13 +113,13 @@ export default function ListingsPage(props) {
             <Tab
               icon={<PersonAddIcon />}
               iconPosition="start"
-              label="Products I'm Buying"
+              label="Products I'm Buying/Bought"
               {...a11yProps(1)}
             />
             <Tab
               icon={<PersonRemoveIcon />}
               iconPosition="start"
-              label="Products I'm Selling"
+              label="Products I'm Selling/Sold"
               {...a11yProps(2)}
             />
           </Tabs>

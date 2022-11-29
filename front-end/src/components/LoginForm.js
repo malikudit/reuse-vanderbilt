@@ -31,17 +31,20 @@ export default function Form(props) {
       setEmailError(true);
       return;
     }
-    if (checkPassword(password)) {
-      setPasswordError(true);
-      return;
-    }
+    // if (checkPassword(password)) {
+    //   setPasswordError(true);
+    //   return;
+    // }
 
     if (emailError === false && passwordError === false) {
       var obj = {};
       obj.email = email;
       obj.password = password;
 
-      async function postData(url = "", data = obj) {
+      async function postData(
+        url = "http://localhost:8080/users/login",
+        data = obj
+      ) {
         const response = await fetch(url, {
           method: "POST",
           mode: "cors",
@@ -49,18 +52,19 @@ export default function Form(props) {
           headers: {
             "Content-Type": "application/json",
           },
-          redirect: "follow",
           body: JSON.stringify({
-            user: data,
+            email: data.email,
+            password: data.password,
           }),
         });
 
         return response.json();
       }
 
-      postData("http://api.reuse-vandy.org/users/login").then((data) => {
+      postData("http://localhost:8080/users/login").then((data) => {
         if (data.error) {
           setPrintErr(data.error);
+          console.log(data.error);
         } else {
           window.location.href = "/";
         }
@@ -141,23 +145,33 @@ export default function Form(props) {
               fullWidth
               label="Password"
               size="small"
+              type={"password"}
               onChange={(event) => {
                 setPassword(event.target.value);
-                checkPassword(event.target.value)
-                  ? setPasswordError(true)
-                  : setPasswordError(false);
+                // checkPassword(event.target.value)
+                //   ? setPasswordError(true)
+                //   : setPasswordError(false);
               }}
               value={password}
-              error={passwordError}
-              helperText={passwordError ? "Error with password" : ""}
+              // error={passwordError}
+              // helperText={passwordError ? "Error with password" : ""}
             />
             <Button className="btn" type="submit" variant="contained">
               Login
             </Button>
+            {printErr ? <small className="errorPara">{printErr}</small> : null}
             <small>
-              <a href="#" onClick={forgotPassword}>
-                Forgot Password?
-              </a>
+              Forgot Password?{" "}
+              <Typography
+                variant="h8"
+                noWrap
+                component="Typography"
+                onClick={forgotPassword}
+                sx={{ color: "blue" }}
+              >
+                Click Here
+              </Typography>
+              .
             </small>
             <small>
               Don't have an account?{" "}

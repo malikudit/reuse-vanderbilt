@@ -2,8 +2,10 @@ import { React } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
-import ExchangeInfo from "../components/ExchangeInfo";
-import LiveSale from "../components/LiveSale";
+import Active from "./product_pages/Active";
+import Inactive from "./product_pages/Inactive";
+import EvaluatingOffers from "./product_pages/EvaluatingOffers";
+import Sold from "./product_pages/Sold";
 
 const theme = createTheme({
   palette: {
@@ -40,37 +42,29 @@ export default function ProductPage() {
   const locCondition = useLocation().state.condition;
   const locLocation = useLocation().state.location;
   const locListingType = useLocation().state.listingType;
-  const locCurrentBid = useLocation().state.currentBid;
+  var locOpeningBid = useLocation().state.openingBid;
+  var locCurrentBid = useLocation().state.currentBid;
   const locBidIncrement = useLocation().state.bidIncrement;
-  const locBuyNow = useLocation().state.buyNow;
   const locListingPrice = useLocation().state.listingPrice;
   const locTimeLeft = useLocation().state.expirationDate;
   const locCategory = useLocation().state.category;
   const locSellerID = useLocation().state.sellerID;
+  const locRole = useLocation().state.role;
+  var locState = useLocation().state.state;
+  if (locCurrentBid === null) {
+    locCurrentBid = locOpeningBid;
+  }
   const nextBid = locCurrentBid + " + " + locBidIncrement;
   var timeLeft = new Date(locTimeLeft).getTime();
   var now = new Date().getTime();
   var expired = timeLeft - now;
+  console.log(locState);
 
-  return (
-    <ThemeProvider theme={theme}>
-      <DefaultBanner banner={"Product Listing Page"} />
-      {console.log(timeLeft)}
-      {console.log(now)}
-      {console.log(timeLeft - now)}
-      {expired <= 0 ? (
-        <ExchangeInfo
-          coverImage={locCoverImage}
-          itemName={locItemName}
-          sellerID={locSellerID}
-          sellerName={locSellerName}
-          category={locCategory}
-          condition={locCondition}
-          location={locLocation}
-          description={locDescription}
-        />
-      ) : (
-        <LiveSale
+  if (locState === "Active") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <Active
           coverImage={locCoverImage}
           secondaryImage1={locSecondaryImage1}
           secondaryImage2={locSecondaryImage2}
@@ -84,13 +78,77 @@ export default function ProductPage() {
           location={locLocation}
           timeLeft={locTimeLeft}
           currentBid={locCurrentBid}
-          buyNow={locBuyNow}
+          openingBid={locOpeningBid}
           listingType={locListingType}
           nextBid={nextBid}
           listingPrice={locListingPrice}
           description={locDescription}
         />
-      )}
-    </ThemeProvider>
-  );
+      </ThemeProvider>
+    );
+  }
+
+  if (locState === "Inactive") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <Inactive
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
+          itemName={locItemName}
+          sellerID={locSellerID}
+          description={locDescription}
+          sellerName={locSellerName}
+        />
+      </ThemeProvider>
+    );
+  }
+
+  if (locState === "Evaluating Offers") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <EvaluatingOffers
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
+          itemName={locItemName}
+          sellerID={locSellerID}
+          sellerName={locSellerName}
+          category={locCategory}
+          condition={locCondition}
+          location={locLocation}
+          description={locDescription}
+          role={locRole}
+        />
+      </ThemeProvider>
+    );
+  }
+
+  if (locState === "Sold") {
+    return (
+      <ThemeProvider theme={theme}>
+        <DefaultBanner banner={"Product Listing Page"} />
+        <Sold
+          coverImage={locCoverImage}
+          secondaryImage1={locSecondaryImage1}
+          secondaryImage2={locSecondaryImage2}
+          secondaryImage3={locSecondaryImage3}
+          secondaryImage4={locSecondaryImage4}
+          itemName={locItemName}
+          sellerID={locSellerID}
+          sellerName={locSellerName}
+          category={locCategory}
+          condition={locCondition}
+          location={locLocation}
+          description={locDescription}
+        />
+      </ThemeProvider>
+    );
+  }
 }
