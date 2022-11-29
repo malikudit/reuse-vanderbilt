@@ -7,7 +7,7 @@ const router = express.Router();
 const validation = function (err, _req, res, next) {
     if (err instanceof ValidationError) {
         console.log(err);
-        const error = err.errors.pop(0).message;
+        const error = err.errors[0].message;
 
         res.status(404).send({ error });
     } else {
@@ -18,7 +18,7 @@ const validation = function (err, _req, res, next) {
 const login = function (err, _req, res, next) {
     if (err instanceof LoginError) {
         const error = err.message;
-        res.status(403).send({ error });
+        res.status(401).send({ error });
     } else {
         next(err);
     }
@@ -29,7 +29,7 @@ const serverError = function (err, _req, res, _next) {
     res.sendStatus(500);
 }
 
-const clientError = function (req, res) {
+const clientError = function (_req, res, _next) {
     res.sendStatus(404);
 }
 

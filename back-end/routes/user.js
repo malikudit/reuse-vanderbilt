@@ -82,10 +82,15 @@ router.post('/logout', async (req, res, _next) => {
 
 router.use(authenticateUser);
     
-router.get('/me', async (req, res, _next) => {
-    res.send(
-        req.user.generateView(['email'])
-    );
+router.get('/me', async (req, res, next) => {
+    try {
+        const user = await User.findByPk(req.userId);
+        res.send(
+            user.selfView()
+        );
+    } catch (err) {
+        next(err);
+    }
 });
 
 const editableFields = [
@@ -102,10 +107,19 @@ const editableFields = [
 
 router.put('/me', async (req, res, next) => {
     const edits = _.pick(req.body, editableFields);
+
+    // Send bad request if no edits need to be made
+    if (!Object.keys(edits).length) {
+        return res.sendStatus(400);
+    }
     
     try {
-        const user = await req.user.update(edits);
-        res.send(user);
+        const user = await User.findByPk(req.userId);
+        await user.update(edits);
+
+        res.send(
+            user.selfView()
+        );
     } catch (err) {
         next(err);
     }
@@ -118,7 +132,9 @@ router.get('/:userId', async (req, res, next) => {
         if (!user) {
             res.sendStatus(404);
         } else {
-            res.send(user.generateView());
+            res.send(
+                user.generateView()
+            );
         }
     } catch (err) {
         next(err);

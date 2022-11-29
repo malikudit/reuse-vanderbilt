@@ -10,6 +10,7 @@ const user = require('./user');
 const product = require('./product');
 const error = require('./error');
 
+// Security measures
 app.enable('trust proxy');
 app.disable('x-powered-by');
 app.use(helmet());
@@ -44,7 +45,7 @@ app.use(session({
     
     maxAge: 24 * 60 * 60 * 1000,
     sameSite: 'none',
-    secure: true, // change this to true in prod
+    secure: true,
     httpOnly: true,
     signed: true,
 

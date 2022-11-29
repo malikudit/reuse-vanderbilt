@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes, Model, ValidationError } = require('sequelize');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 const { nanoid } = require('nanoid/async');
@@ -34,7 +34,7 @@ class User extends Model {
             return user;
         }
 
-        throw new LoginError('Password is incorrect');
+        throw new LoginError('The provided password is incorrect');
     }
 
     selfView() {
@@ -120,7 +120,7 @@ User.init({
                 msg: 'Password is a required field'
             },
             len: {
-                args: [8, 32],
+                args: [8, 60],
                 msg: 'Password must be between 8 to 32 characters long'
             },
             strongPassword(value) {
@@ -131,31 +131,20 @@ User.init({
         }
     },
     state: {
-        type: DataTypes.ENUM('Unverified', 'Verified', 'Complete'),
+        type: DataTypes.ENUM('Unverified', 'Verified'),
         allowNull: false,
         validate: {
             notNull: {
                 msg: 'User must be in a valid state at all times'
             },
             isIn: {
-                args: [['Unverified', 'Verified', 'Complete']],
-                msg: 'State must be either Unverified, Verified or Complete'
-            },
-            completeProfile(value) {
-                if (value === 'Complete' && !this.modeOfCommunication) {
-                    throw new Error('Must specify a preferred mode of communication');
-                }
-
-                if (value === 'Complete' && 
-                    !(this.cash || this.venmo || this.zelle || this.otherPaymentMethod)) {
-                    throw new Error('Must support at least one payment method');
-                }
+                args: [['Unverified', 'Verified']],
+                msg: 'State must be either Unverified or Verified'
             }
         }
     },
     cash: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -170,7 +159,6 @@ User.init({
     },
     venmo: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -185,7 +173,6 @@ User.init({
     },
     zelle: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -200,7 +187,6 @@ User.init({
     },
     otherPaymentMethod: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -215,10 +201,14 @@ User.init({
     },
     modeOfCommunication: {
         type: DataTypes.ENUM('Phone', 'GroupMe'),
+        allowNull: false,
         validate: {
             isIn: {
                 args: [['Phone', 'GroupMe']],
                 msg: 'Preferred mode of communication must be either Phone or GroupMe'
+            },
+            notNull: {
+                msg: 'Must specify a preferred mode of communication'
             },
             notNullIfPreferred(value) {
                 if (value === 'Phone' && !this.phoneNumber) {
@@ -259,12 +249,9 @@ User.init({
         beforeCreate: async (user) => {
             const userId = await nanoid();
             user.setDataValue('id', userId);
-
-            const password = user.getDataValue('password');
-            user.setDataValue('password', await bcrypt.hash(password + '', 11))
         },
-        beforeSave: (user) => {
-            if (user.phoneNumber) {
+        beforeSave: async (user) => {
+            if (user.changed('phoneNumber')) {
                 const phoneNumber = (user.phoneNumber + '').replaceAll(/[+\-()]/g, '');
                 if (phoneNumber[0] === '1') {
                     user.setDataValue('phoneNumber', phoneNumber.substring(1));
@@ -272,9 +259,26 @@ User.init({
                     user.setDataValue('phoneNumber', phoneNumber);
                 }
             }
+
+            if (user.changed('password')) {
+                const password = user.getDataValue('password');
+                if ((password + '').length > 32) {
+                    throw new ValidationError('Password must be between 8 to 32 characters long');
+                }
+
+                user.setDataValue('password', await bcrypt.hash(password + '', 11));
+            }
         }
     },
     sequelize,
+    validate: {
+        minOnePaymentMethod() {
+            if (!(validator.toBoolean(this.cash + '') || validator.toBoolean(this.venmo + '') ||
+                validator.toBoolean(this.zelle + '') || validator.toBoolean(this.otherPaymentMethod + ''))) {
+                    throw new Error('Must support at least one payment method');
+            }
+        }
+    },
     paranoid: true
 });
 

@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const jwt = require('jsonwebtoken');
 const privateKey = process.env.JWT_KEY;
 
@@ -13,11 +11,7 @@ async function authenticateUser(req, res, next) {
         }
 
         const id = await validateToken(req.session.authToken);
-        req.user = await User.findByPk(id);
-        
-        if (!req.user) {
-            throw new LoginError('You need to be logged in to view this page');
-        }
+        req.userId = id;
 
         // extend the user session every 10 mins
         req.session.nowInMinutes = Math.floor(Date.now() / 60e4)

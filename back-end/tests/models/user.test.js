@@ -10,6 +10,13 @@ const unverifiedUser = {
     'email': 'jake.paul@vanderbilt.edu',
     'password': 'r$H7RY2@4&$vGpQ3Fe!K',
     'state': 'Unverified',
+    'cash': true,
+    'zelle': true,
+    'venmo': false,
+    'otherPaymentMethod': false,
+    'modeOfCommunication': 'GroupMe',
+    'phoneNumber': '6154206909',
+    'groupMe': 'https://groupme.com/contact/83940935/QjgzriQe'
 }
 
 const verifiedUser = {
@@ -17,15 +24,7 @@ const verifiedUser = {
     'lastName': 'Paul',
     'email': 'jake.paul@vanderbilt.edu',
     'password': 'r$H7RY2@4&$vGpQ3Fe!K',
-    'state': 'Verified'
-}
-
-const completeUser = {
-    'firstName': 'Jake',
-    'lastName': 'Paul',
-    'email': 'jake.paul@vanderbilt.edu',
-    'password': 'r$H7RY2@4&$vGpQ3Fe!K',
-    'state': 'Complete',
+    'state': 'Verified',
     'cash': true,
     'zelle': true,
     'venmo': false,
@@ -534,7 +533,7 @@ describe('password', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Password must be between 8 to 32 characters long');
+            expect(e.message).toBe('Password must be between 8 to 32 characters long');
         }
     });
 
@@ -649,7 +648,7 @@ describe('password', () => {
         try {
             const user = _.clone(unverifiedUser);
 
-            const created = await User.create(user);
+            let created = await User.create(user);
             const password = created.password;
 
             await created.update({ firstName: 'Bean' });
@@ -681,6 +680,29 @@ describe('password', () => {
 
             const match = await bcrypt.compare(user.password, created.password);
 
+            expect(match).toBe(true);
+        } catch (e) {
+            throw e;
+        }
+    });
+
+    test('remains hashed when changed', async () => {
+        expect.assertions(4);
+        try {
+            const user = _.clone(unverifiedUser);
+            const created = await User.create(user);
+
+            expect(created.password).not.toEqual(user.password);
+
+            const oldPasswordHash = created.password;
+            const newPassword = '5JHp4*QM*G5J^@F4e9tk%qJAseNWEjyW';
+
+            await created.update({ password: newPassword });
+
+            expect(created.password).not.toEqual(oldPasswordHash);
+            expect(created.password).not.toEqual(newPassword);
+
+            const match = await bcrypt.compare(newPassword, created.password);
             expect(match).toBe(true);
         } catch (e) {
             throw e;
@@ -758,37 +780,11 @@ describe('state', () => {
         }
     });
 
-    test('can be complete', async () => {
-        expect.assertions(1);
-        try {
-            const user = _.clone(completeUser);
-
-            const created = await User.create(user);
-            delete user.password;
-            expect(created).toMatchObject(user);
-        } catch (e) {
-            throw e;
-        }
-    });
-
-    test('must specify preferred mode of communication when complete', async () => {
-        expect.assertions(2);
-        try {
-            const user = _.clone(completeUser);
-            user.modeOfCommunication = undefined;
-
-            await User.create(user);
-        } catch (e) {
-            expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Must specify a preferred mode of communication');
-        }
-    });
-
-    test('must support at least one payment method when complete', async () => {
+    test('must support at least one payment method', async () => {
         expect.assertions(2);
         try {
             const user = { cash: false, venmo: false, zelle: false, otherPaymentMethod: false };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1099,98 +1095,81 @@ describe('modeOfCommunication', () => {
         await sequelize.sync({ force: true });
     });
 
-    test('is not required for unverified users', async () => {
-        expect.assertions(1);
+    test('is required for unverified users', async () => {
+        expect.assertions(2);
         try {
             const user = _.clone(unverifiedUser);
             delete user.modeOfCommunication;
 
-            const created = await User.create(user);
-            delete user.password;
-            expect(created).toMatchObject(user);
+            await User.create(user);
         } catch (e) {
-            throw e;
+            expect(e).toBeInstanceOf(Sequelize.ValidationError);
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
-    test('is not required for verified users', async () => {
-        expect.assertions(1);
+    test('is required for verified users', async () => {
+        expect.assertions(2);
         try {
             const user = _.clone(verifiedUser);
             delete user.modeOfCommunication;
 
-            const created = await User.create(user);
-            delete user.password;
-            expect(created).toMatchObject(user);
-        } catch (e) {
-            throw e;
-        }
-    });
-
-    test('is required for complete users', async () => {
-        expect.assertions(2);
-        try {
-            const user = _.clone(completeUser);
-            delete user.modeOfCommunication;
-
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Must specify a preferred mode of communication');
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
-    test('can be null for unverified users', async () => {
-        expect.assertions(1);
+    test('should not be null for unverified users', async () => {
+        expect.assertions(2);
         try {
             const user = { modeOfCommunication: null };
             _.defaults(user, unverifiedUser);
 
-            const created = await User.create(user);
-            delete user.password;
-            expect(created).toMatchObject(user);
+            await User.create(user);
         } catch (e) {
-            throw e;
+            expect(e).toBeInstanceOf(Sequelize.ValidationError);
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
-    test('should not be null for complete users', async () => {
+    test('should not be null for verified users', async () => {
         expect.assertions(2);
         try {
             const user = { modeOfCommunication: null };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Must specify a preferred mode of communication');
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
-    test('can be undefined for unverified users', async () => {
-        expect.assertions(1);
-        try {
-            const user = _.clone(unverifiedUser)
-            user.modeOfCommunication = undefined;
-
-            const created = await User.create(user);
-            delete user.password;
-            expect(created).toMatchObject(user);
-        } catch (e) {
-            throw e;
-        }
-    });
-
-    test('should not be undefined for complete users', async () => {
+    test('should not be undefined for unverified users', async () => {
         expect.assertions(2);
         try {
-            const user = _.clone(completeUser)
+            const user = _.clone(unverifiedUser);
             user.modeOfCommunication = undefined;
 
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Must specify a preferred mode of communication');
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
+        }
+    });
+
+    test('should not be undefined for verified users', async () => {
+        expect.assertions(2);
+        try {
+            const user = _.clone(verifiedUser);
+            user.modeOfCommunication = undefined;
+
+            await User.create(user);
+        } catch (e) {
+            expect(e).toBeInstanceOf(Sequelize.ValidationError);
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
@@ -1211,7 +1190,7 @@ describe('modeOfCommunication', () => {
         expect.assertions(1);
         try {
             const user = { modeOfCommunication: 'Phone' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             const created = await User.create(user);
             delete user.password;
@@ -1225,7 +1204,7 @@ describe('modeOfCommunication', () => {
         expect.assertions(1);
         try {
             const user = { modeOfCommunication: 'GroupMe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             const created = await User.create(user);
             delete user.password;
@@ -1245,7 +1224,7 @@ describe('phoneNumber', () => {
         expect.assertions(1);
         try {
             const user = { modeOfCommunication: 'GroupMe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             delete user.phoneNumber;
 
             const created = await User.create(user);
@@ -1260,7 +1239,7 @@ describe('phoneNumber', () => {
         expect.assertions(1);
         try {
             const user = { modeOfCommunication: 'GroupMe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             user.phoneNumber = undefined;
 
             const created = await User.create(user);
@@ -1275,7 +1254,7 @@ describe('phoneNumber', () => {
         expect.assertions(2);
         try {
             const user = { modeOfCommunication: 'Phone' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             delete user.phoneNumber;
 
             await User.create(user);
@@ -1289,7 +1268,7 @@ describe('phoneNumber', () => {
         expect.assertions(2);
         try {
             const user = { modeOfCommunication: 'Phone', phoneNumber: null };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1302,7 +1281,7 @@ describe('phoneNumber', () => {
         expect.assertions(2);
         try {
             const user = { modeOfCommunication: 'Phone' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             user.phoneNumber = undefined;
 
             await User.create(user);
@@ -1316,7 +1295,7 @@ describe('phoneNumber', () => {
         expect.assertions(2);
         try {
             const user = { phoneNumber: '115-420-690' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1329,7 +1308,7 @@ describe('phoneNumber', () => {
         expect.assertions(2);
         try {
             const user = { phoneNumber: '115-420-6909' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1342,7 +1321,7 @@ describe('phoneNumber', () => {
         expect.assertions(1);
         try {
             const user = { phoneNumber: '6154206909' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             const created = await User.create(user);
             delete user.password;
@@ -1356,7 +1335,7 @@ describe('phoneNumber', () => {
         expect.assertions(1);
         try {
             const user = { phoneNumber: '(615)-420-6909' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             const created = await User.create(user);
             delete user.password;
@@ -1372,7 +1351,7 @@ describe('phoneNumber', () => {
         expect.assertions(1);
         try {
             const user = { phoneNumber: '+1-(615)-420-6909' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             const created = await User.create(user);
             delete user.password;
@@ -1394,7 +1373,7 @@ describe('groupMe', () => {
         expect.assertions(1);
         try {
             const user = { modeOfCommunication: 'Phone' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             delete user.groupMe;
 
             const created = await User.create(user);
@@ -1409,7 +1388,7 @@ describe('groupMe', () => {
         expect.assertions(1);
         try {
             const user = { modeOfCommunication: 'Phone' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             user.groupMe = undefined;
 
             const created = await User.create(user);
@@ -1424,7 +1403,7 @@ describe('groupMe', () => {
         expect.assertions(2);
         try {
             const user = { modeOfCommunication: 'GroupMe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             delete user.groupMe;
 
             await User.create(user);
@@ -1438,7 +1417,7 @@ describe('groupMe', () => {
         expect.assertions(2);
         try {
             const user = { modeOfCommunication: 'GroupMe', groupMe: null };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1451,7 +1430,7 @@ describe('groupMe', () => {
         expect.assertions(2);
         try {
             const user = { modeOfCommunication: 'GroupMe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
             user.groupMe = undefined;
 
             await User.create(user);
@@ -1465,7 +1444,7 @@ describe('groupMe', () => {
         expect.assertions(2);
         try {
             const user = { groupMe: 'https://groupme' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1478,7 +1457,7 @@ describe('groupMe', () => {
         expect.assertions(2);
         try {
             const user = { groupMe: 'https://google.com/contact/83940935/QjgzriQe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1491,7 +1470,7 @@ describe('groupMe', () => {
         expect.assertions(2);
         try {
             const user = { groupMe: 'http://groupme.com/contact/83940935/QjgzriQe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             await User.create(user);
         } catch (e) {
@@ -1504,7 +1483,7 @@ describe('groupMe', () => {
         expect.assertions(1);
         try {
             const user = { groupMe: 'https://www.groupme.com/contact/83940935/QjgzriQe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             const created = await User.create(user);
             delete user.password;
@@ -1518,7 +1497,7 @@ describe('groupMe', () => {
         expect.assertions(1);
         try {
             const user = { groupMe: 'https://groupme.com/contact/83940935/QjgzriQe' };
-            _.defaults(user, completeUser);
+            _.defaults(user, verifiedUser);
 
             const created = await User.create(user);
             delete user.password;

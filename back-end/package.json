@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.202.0",
+    "@aws-sdk/client-ses": "^3.218.0",
     "bcrypt": "^5.1.0",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
