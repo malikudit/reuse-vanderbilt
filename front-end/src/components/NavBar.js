@@ -6,6 +6,8 @@ import {
   IconButton,
   Typography,
   createTheme,
+  Menu,
+  MenuItem,
   ThemeProvider,
   Stack,
   Button,
@@ -36,6 +38,15 @@ const NavBar = () => {
   const [listings, setListings] = React.useState(false);
   const [profile, setProfile] = React.useState(false);
   const [logout, setLogout] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const clearAll = () => {
     setLogin(false);
@@ -47,7 +58,8 @@ const NavBar = () => {
 
   const handleLogin = () => {
     clearAll();
-    setLogin(true);
+    handleClose();
+    setProfile(true);
   };
 
   const handleHome = () => {
@@ -63,13 +75,15 @@ const NavBar = () => {
   const handleProfile = () => {
     clearAll();
     setProfile(true);
+    handleClose();
   };
 
   const handleLogout = () => {
     clearAll();
-    setLogout(true);
+    setHome(true);
     alert("You have successfully logged out.");
     window.location.href = "/";
+    handleClose();
   };
 
   return (
@@ -100,18 +114,6 @@ const NavBar = () => {
           <Stack direction="row" spacing={0}>
             <Button
               component={Link}
-              to="/login"
-              color={login === true ? "secondary" : "neutral"}
-              onClick={handleLogin}
-              sx={{
-                textTransform: "none",
-              }}
-            >
-              <LoginIcon sx={{ padding: 1 }} />
-              Login
-            </Button>
-            <Button
-              component={Link}
               to="/"
               color={home === true ? "secondary" : "neutral"}
               onClick={handleHome}
@@ -120,7 +122,7 @@ const NavBar = () => {
               }}
             >
               <HomeIcon sx={{ padding: 1 }} />
-              Home
+              HOME
             </Button>
             <Button
               component={Link}
@@ -132,30 +134,47 @@ const NavBar = () => {
               }}
             >
               <ShoppingCartIcon sx={{ padding: 1 }} />
-              My Listings
+              MY LISTINGS
             </Button>
             <Button
-              component={Link}
-              to="/profile"
               color={profile === true ? "secondary" : "neutral"}
-              onClick={handleProfile}
-              sx={{
-                textTransform: "none",
-              }}
+              aria-controls={open ? "demo-positioned-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
             >
               <PersonIcon sx={{ padding: 1 }} />
               Profile
             </Button>
-            <Button
-              color={"neutral"}
-              onClick={handleLogout}
-              sx={{
-                textTransform: "none",
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
               }}
             >
-              <LogoutIcon sx={{ padding: 1 }} />
-              Logout
-            </Button>
+              <MenuItem component={Link} to="/profile" onClick={handleProfile}>
+                <PersonIcon />
+                View Profile
+              </MenuItem>
+              <MenuItem component={Link} to="/edit_profile" onClick={handleProfile}>
+                <PersonIcon />
+                Edit Profile
+              </MenuItem>
+              <MenuItem component={Link} to="/login" onClick={handleLogin}>
+                <LoginIcon />
+                Login
+              </MenuItem>
+              <MenuItem component={Link} to="/" onClick={handleLogout}>
+                <LogoutIcon />
+                Logout
+              </MenuItem>
+            </Menu>
           </Stack>
         </Toolbar>
       </AppBar>

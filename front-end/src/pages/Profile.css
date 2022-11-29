@@ -1,5 +1,149 @@
-.img-wrapper {
-  border-radius: 50%;
-  width: 200px;
-  height: 200px;
+.container-profile {
+  background: #F1F3FA;
+  width: 100%;
+  height: auto;
+}
+
+.profile {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100vw;
+}
+
+.profile-sidebar {
+  padding: 20px 0 10px 0;
+  background: #fff;
+  width: 30vw;
+  margin-left: 2vw;
+}
+
+.profile-userpic img {
+  float: none;
+  margin-left: 25%;
+  width: 30vh;
+  height: 30vh;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  border-radius: 50% !important;
+}
+
+.profile-usertitle {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-usertitle-name {
+  color: #5a7391;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.profile-content {
+  margin-left: 2vw;
+  background: #fff;
+  min-height: 460px;
+  width: 30vw;
+}
+
+.centered {
+  text-align: center;
+  justify-content: center;
+}
+
+
+a,
+button,
+code,
+div,
+img,
+input,
+label,
+li,
+p,
+pre,
+select,
+span,
+svg,
+table,
+td,
+textarea,
+th,
+ul {
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+}
+
+.dashboard-stat,
+.portlet {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.portlet {
+  margin-top: 0;
+  margin-bottom: 25px;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.portlet.bordered {
+  border-left: 2px solid #e6e9ec !important;
+}
+
+.portlet.light {
+  padding: 12px 20px 15px;
+  background-color: #fff;
+}
+
+.portlet.light.bordered {
+  border: 1px solid #e7ecf1 !important;
+}
+
+.profile-stat-title {
+  color: #7f90a4;
+  font-size: 25px;
+  text-align: center;
+  margin: 5px;
+}
+
+.uppercase {
+  text-transform: uppercase !important;
+}
+
+.profile-stat-text {
+  color: #5b9bd1;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-align: center;
+}
+
+.profile-desc-title {
+  color: #7f90a4;
+  font-weight: 600;
+  justify-content: center;
+  text-align: center;
+
+}
+
+.profile-desc-text {
+  color: #7e8c9e;
+  font-size: 14px;
+  text-align: center;
+}
+
+[class*=" fa-"]:not(.fa-stack),
+[class*=" glyphicon-"],
+[class*=" icon-"],
+[class^=fa-]:not(.fa-stack),
+[class^=glyphicon-],
+[class^=icon-] {
+  display: inline-block;
+  line-height: 14px;
+  -webkit-font-smoothing: antialiased;
 }

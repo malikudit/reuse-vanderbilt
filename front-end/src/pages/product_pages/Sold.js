@@ -2,16 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Grid, Box, Typography, Button } from "@mui/material";
 
-export default function ExchangeInfo(props) {
+export default function Sold(props) {
   return (
-    <Grid align={"center"} padding={4} marginLeft={2} marginRight={2}
-      sx = {{
+    <Grid
+      align={"center"}
+      padding={4}
+      marginLeft={2}
+      marginRight={2}
+      sx={{
         boxShadow: "0 0 5px #ccc",
         margin: "10vh",
         width: "90vw",
         height: "auto",
-        paddingBottom: "7vh"
-      }}>
+        paddingBottom: "7vh",
+      }}
+    >
       <form noValidate autoComplete="off">
         <Grid container spacing={2}>
           <Grid item xs={5}>
@@ -21,7 +26,7 @@ export default function ExchangeInfo(props) {
                 width: "100%",
                 height: "100%",
                 maxHeight: "75vh",
-                maxWidth: "75vw"
+                maxWidth: "75vw",
               }}
               src={props.coverImage}
             />
@@ -56,7 +61,7 @@ export default function ExchangeInfo(props) {
                 <Button
                   variant="contained"
                   type="submit"
-                  sx={{ 
+                  sx={{
                     background: "white",
                     text: "black",
                     outline: "none",
@@ -66,10 +71,14 @@ export default function ExchangeInfo(props) {
                   }}
                 >
                   <Link
-                    to="new_review"
+                    to={{ pathname: `/new_review/${props.itemName}` }}
                     state={{
                       itemName: props.itemName,
-                      image: props.image,
+                      coverImage: props.coverImage,
+                      secondaryImage1: props.secondaryImage1,
+                      secondaryImage2: props.secondaryImage2,
+                      secondaryImage3: props.secondaryImage3,
+                      secondaryImage4: props.secondaryImage4,
                       sellerID: props.sellerID,
                       sellerName: props.sellerName,
                       category: props.category,
@@ -85,16 +94,23 @@ export default function ExchangeInfo(props) {
               </Grid>
             </Grid>
             <Grid item xs={2} marginTop={2} marginBottom={2}>
-              <Typography variant="h5" sx={{
-                textTransform: "uppercase",
-                letterSpacing: "2px"
-              }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  textTransform: "uppercase",
+                  letterSpacing: "2px",
+                }}
+              >
                 {props.itemName}
               </Typography>
             </Grid>
-            <Grid container marginBottom={1} sx = {{
-              maxWidth: "40vw"
-            }}>
+            <Grid
+              container
+              marginBottom={1}
+              sx={{
+                maxWidth: "40vw",
+              }}
+            >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
                 <Typography style={{ color: "#4169E1" }} variant="p">
                   {"Seller: "}
@@ -102,24 +118,29 @@ export default function ExchangeInfo(props) {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container marginBottom={1} sx = {{
-              maxWidth: "40vw"
-            }}>
+            <Grid
+              container
+              marginBottom={1}
+              sx={{
+                maxWidth: "40vw",
+              }}
+            >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
                 <Typography variant="p">
                   {"Exchange location: "}
                   {props.location}
                 </Typography>
-                </Grid>
+              </Grid>
             </Grid>
-            <Grid container marginBottom={1}
-             sx = {{
-              maxWidth: "40vw",
-             }}>
+            <Grid
+              container
+              marginBottom={1}
+              sx={{
+                maxWidth: "40vw",
+              }}
+            >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
-                <Typography variant="p">
-                  {props.description}
-                </Typography>
+                <Typography variant="p">{props.description}</Typography>
               </Grid>
             </Grid>
           </Grid>

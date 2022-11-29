@@ -16,14 +16,15 @@ const ProductCards = ({
   condition = "",
   location = "",
   listingType = "",
+  openingBid = "$",
   currentBid = "$",
   bidIncrement = "$",
-  buyNow = "$",
   listingPrice = "$",
-  openBidPrice = "$",
   expirationDate = "",
   category = "",
   sellerID = "",
+  state = "",
+  role = "",
 }) => (
   <Link
     to={{
@@ -44,12 +45,13 @@ const ProductCards = ({
       listingType: listingType,
       currentBid: currentBid,
       bidIncrement: bidIncrement,
-      buyNow: buyNow,
+      openingBid: openingBid,
       listingPrice: listingPrice,
-      openBidPrice: openBidPrice,
       expirationDate: expirationDate,
       category: category,
       sellerID: sellerID,
+      state: state,
+      role: role,
     }}
     style={{ textDecoration: "none" }}
   >
@@ -69,30 +71,30 @@ const ProductCards = ({
         </div>
         <div className="title">{itemName}</div>
         <div className="price">
-          {listingType === "Bid-And-Buy-Now" ? (
+          {listingType === "Bid Only" ? (
             <React.Fragment>
-              <div className="item">
-                <div className="value">{currentBid}</div>
-                <div className="label">Current Bid</div>
-              </div>
-              <div className="item">
-                <div className="value">{buyNow}</div>
-                <div className="label">Buy Now</div>
-              </div>
+              {currentBid === null ? (
+                <React.Fragment>
+                  <div className="item">
+                    <div className="value">{openingBid}</div>
+                    <div className="label">Starting Bid</div>
+                  </div>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <div className="item">
+                    <div className="value">{currentBid}</div>
+                    <div className="label">Current Bid</div>
+                  </div>
+                </React.Fragment>
+              )}
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {listingType === "Bid-Only" ? (
-                <div className="item">
-                  <div className="value">{currentBid}</div>
-                  <div className="label">Current Bid</div>
-                </div>
-              ) : (
-                <div className="item">
-                  <div className="value">{listingPrice}</div>
-                  <div className="label">Listing Price</div>
-                </div>
-              )}
+              <div className="item">
+                <div className="value">{listingPrice}</div>
+                <div className="label">Listing Price</div>
+              </div>
             </React.Fragment>
           )}
         </div>

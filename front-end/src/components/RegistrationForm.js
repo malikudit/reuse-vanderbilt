@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../assets/VanderbiltLogo.jpg";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./Form.css";
 import swal from "sweetalert";
@@ -15,13 +16,13 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
+  Typography,
 } from "@mui/material";
 import { paymentMethods, formsOfContact } from "../content/ProfilePreferences";
 import { Container } from "@mui/system";
 
 export default function Form(props) {
   const {
-    register,
     formState: {},
   } = useForm();
 
@@ -167,7 +168,7 @@ export default function Form(props) {
         obj.groupMe = groupMe;
       }
 
-      async function postData(url = "", data = obj) {
+      async function postData(url = "http://localhost:8080/users", data = obj) {
         const response = await fetch(url, {
           method: "POST",
           mode: "cors",
@@ -180,11 +181,11 @@ export default function Form(props) {
             user: data,
           }),
         });
-
+        console.log(obj);
         return response.json(); // parses JSON response into native JavaScript objects
       }
 
-      postData("http://api.reuse-vandy.org/users", obj).then((data) => {
+      postData("http://localhost:8080/users", obj).then((data) => {
         if (data.error) {
           swal("Oops!", data.error, "error");
         } else {
@@ -465,7 +466,18 @@ export default function Form(props) {
                 </Button>
               </Grid>
               <small>
-                Already have an account? <a href="/login">Login</a> here.
+                Already have an account?{" "}
+                <Typography
+                  variant="h8"
+                  noWrap
+                  component={Link}
+                  to="/login"
+                  underline="none"
+                  sx={{ color: "blue" }}
+                >
+                  Login
+                </Typography>{" "}
+                here.
               </small>
             </div>
           </form>
