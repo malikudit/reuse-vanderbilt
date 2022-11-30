@@ -17,7 +17,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import QuizIcon from '@mui/icons-material/Quiz';
+import QuizIcon from "@mui/icons-material/Quiz";
 
 const theme = createTheme({
   palette: {
@@ -92,7 +92,7 @@ const NavBar = () => {
     clearAll();
     setfaq(true);
     handleClose();
-  }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -170,7 +170,11 @@ const NavBar = () => {
                 <PersonIcon />
                 View Profile
               </MenuItem>
-              <MenuItem component={Link} to="/edit_profile" onClick={handleProfile}>
+              <MenuItem
+                component={Link}
+                to="/edit_profile"
+                onClick={handleProfile}
+              >
                 <PersonIcon />
                 Edit Profile
               </MenuItem>
@@ -181,10 +185,6 @@ const NavBar = () => {
               <MenuItem component={Link} to="/" onClick={handleLogout}>
                 <LogoutIcon />
                 Logout
-              </MenuItem>
-              <MenuItem component={Link} to="/faq" onClick={handleFAQ}>
-                <QuizIcon />
-                FAQ
               </MenuItem>
             </Menu>
           </Stack>
