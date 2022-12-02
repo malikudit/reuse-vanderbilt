@@ -1,10 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Grid, Box, Typography, Button } from "@mui/material";
-import BuyerEvaluation from "../../components/BuyerEvaluation";
-import SellerEvaluation from "../../components/SellerEvaluation";
+import { Grid, Box, Typography } from "@mui/material";
+import BuyerEvaluation from "../../components/product_states/BuyerEvaluation";
+import SellerEvaluation from "../../components/product_states/SellerEvaluation";
+import OtherEvaluation from "../../components/product_states/OtherEvaluations";
 
 export default function EvaluatingOffers(props) {
+  // TODO Highest bidder logic
+  var role = "";
+
   return (
     <Grid
       align={"center"}
@@ -34,10 +37,13 @@ export default function EvaluatingOffers(props) {
             />
           </Grid>
           <Grid item xs={7} direction="column" marginTop={2}>
-            {props.role === "Buyer" ? (
+            {role === "Highest-Bidder" ? (
+              // EDIT
               <BuyerEvaluation sellerName={props.sellerName} />
-            ) : (
+            ) : role === "Seller" ? (
               <SellerEvaluation />
+            ) : (
+              <OtherEvaluation role={role} />
             )}
             <Grid item xs={2} marginTop={2} marginBottom={2}>
               <Typography

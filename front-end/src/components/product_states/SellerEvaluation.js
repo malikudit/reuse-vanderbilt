@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Typography, Button, Box } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 
 export default function BuyerEvaluation(props) {
   // TODO Highest bidder logic
-  // Missing buyer logic
   var message = "Congrats! You have received an offer(s)!";
 
   return (

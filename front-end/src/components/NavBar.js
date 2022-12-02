@@ -100,7 +100,6 @@ const NavBar = () => {
             onClick={handleHome}
           >
             <Typography variant="h3" color="neutral" fontStyle="helvetica">
-            <Typography variant="h3" color="neutral" fontStyle="helvetica">
               Reuse
             </Typography>
             <Typography
@@ -163,7 +162,11 @@ const NavBar = () => {
                 <PersonIcon />
                 View Profile
               </MenuItem>
-              <MenuItem component={Link} to="/edit_profile" onClick={handleProfile}>
+              <MenuItem
+                component={Link}
+                to="/edit_profile"
+                onClick={handleProfile}
+              >
                 <PersonIcon />
                 Edit Profile
               </MenuItem>

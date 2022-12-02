@@ -158,7 +158,7 @@ export default function Form(props) {
         obj.otherPaymentMethod = true;
       }
 
-      obj.preferredCommunication = preferredCommunication;
+      obj.modeOfCommunication = preferredCommunication;
 
       if (phoneNumber !== "") {
         obj.phoneNumber = phoneNumber;

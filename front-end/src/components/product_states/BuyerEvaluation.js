@@ -1,9 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Typography, Button, Box } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 export default function BuyerEvaluation(props) {
-  // TODO Highest bidder logic
   var message = "Congrats! You are the highest bidder!";
 
   return (
