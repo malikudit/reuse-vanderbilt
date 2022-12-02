@@ -145,6 +145,7 @@ User.init({
     },
     cash: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -159,6 +160,7 @@ User.init({
     },
     venmo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -173,6 +175,7 @@ User.init({
     },
     zelle: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
@@ -187,6 +190,7 @@ User.init({
     },
     otherPaymentMethod: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         validate: {
             notNull: {
