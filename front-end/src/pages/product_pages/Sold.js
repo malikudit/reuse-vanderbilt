@@ -3,6 +3,22 @@ import { Link } from "react-router-dom";
 import { Grid, Box, Typography, Button } from "@mui/material";
 
 export default function Sold(props) {
+  // TODO Highest bidder logic
+  var role = "";
+  var message = "";
+
+  if (role === "Buyer" || role === "Seller") {
+    message =
+      "Sale completed! You are welcome to leave a review if you would like to share your purchase experience.";
+  }
+  if (role === "Unsuccessful-Bidder") {
+    message = "Unfortunately, your bid was rejected.";
+  }
+
+  if (role === "Other") {
+    message = "This product has been sold.";
+  }
+
   return (
     <Grid
       align={"center"}
@@ -33,28 +49,11 @@ export default function Sold(props) {
           </Grid>
           <Grid item xs={7} direction="column" marginTop={2}>
             <Grid item xs={12} marginBottom={2} marginTop={2}>
-              <Typography
-                variant="h6"
-                style={{ color: "#228B22", fontWeight: "bold" }}
-              >
-                Sale completed!
-              </Typography>
-              <Typography
-                variant="h6"
-                style={{ color: "#228B22", fontWeight: "bold" }}
-              >
-                Contact the individual you are exchanging with at the following:
-              </Typography>
-            </Grid>
-            <Grid item xs={12} marginBottom={2} marginTop={2}>
-              <Typography variant="h6">
-                Person exchanging with:
-                {" " + props.sellerName}
-              </Typography>
-              <Typography variant="h6">
-                Contact information:
-                {" Insert Phone/GroupMe"}
-              </Typography>
+              <Grid item xs={12} marginBottom={2}>
+                <Typography style={{ color: "#4169E1", fontWeight: "bold" }}>
+                  {message}
+                </Typography>
+              </Grid>
             </Grid>
             <Grid container justifyContent={"center"}>
               <Grid marginBottom={2}>

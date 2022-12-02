@@ -1,29 +1,45 @@
 import React from "react";
-import { Grid, Box, Typography, TextField, Button } from "@mui/material";
+import { Grid, Box, Typography, Button } from "@mui/material";
 import CountdownTimer from "../../components/CountdownTimer";
 
 export default function Active(props) {
   const oneDay = 24 * 60 * 60 * 1000;
   var timeLeft = new Date(props.timeLeft).getTime() - new Date().getTime();
-  var deleteListing = false;
+  var displayDeleteListing = false;
+  var displayWithdraw = false;
+
   var currentBid = props.currentBid;
+
   if (currentBid === null) {
     currentBid = "N/A";
   }
-  var role = "";
 
   // TODO Highest bidder logic
-  // if user is highest bidder
-  // role = "Highest-Bidder";
+  var role = "Other";
+  var message = "";
 
-  // if user has been outbid
-  // role = "Outbid";
+  if (role === "Highest-Bidder") {
+    message = "You are currently the highest bidder!";
+    displayWithdraw = true;
+  }
 
-  // if user has bid
-  // withdraw bid
+  if (role === "Outbid") {
+    message = "You have been outbid!";
+    displayWithdraw = true;
+  }
+
+  if (role === "Already Bid") {
+    message =
+      "You have already made an offer on the product. Come back to the listing when the clock runs out.";
+    displayWithdraw = true;
+  }
+
+  if (role === "Other") {
+    message = "You can make an offer on the product!";
+  }
 
   if (timeLeft > oneDay) {
-    deleteListing = true;
+    displayDeleteListing = true;
   }
   const handleBid = (e) => {
     // e.preventDefault();
@@ -180,13 +196,36 @@ export default function Active(props) {
                 </Grid>
               </div>
             )}
+            <Grid item xs={12} marginBottom={2}>
+              <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
+                {message}
+              </Typography>
+            </Grid>
             <Grid container justifyContent="space-between" marginBottom={2}>
               {props.sellerID !== "Parwaz" ? (
+                // EDIT LATER
                 <Grid
                   container
                   justifyContent={"space-evenly"}
                   marginBottom={2}
                 >
+                  {displayWithdraw === true ? (
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleBid()}
+                      sx={{
+                        background: "#333",
+                        color: "white",
+                        outline: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: "10px 25px",
+                      }}
+                    >
+                      Withdraw Bid/Offer
+                    </Button>
+                  ) : null}
                   {props.listingType === "Bid-Only" ? (
                     <Button
                       variant="contained"
@@ -227,7 +266,7 @@ export default function Active(props) {
                   justifyContent={"space-evenly"}
                   marginBottom={2}
                 >
-                  {deleteListing ? (
+                  {displayDeleteListing ? (
                     <Grid
                       container
                       justifyContent={"space-evenly"}

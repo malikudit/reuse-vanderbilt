@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Grid, Typography, Button, Box } from "@mui/material";
 
 export default function Inactive(props) {
+  // TODO Highest bidder logic
+  var role = "";
+
   return (
     <Grid
       align={"center"}
@@ -96,28 +99,50 @@ export default function Inactive(props) {
                 {props.description}
               </Typography>
             </Grid>
-            <Typography variant="p" sx={{ lineHeight: "1.5" }}>
-              Your product is inactive. You either de-listed your product or it
-              received no offers. Would you like to relist your product?
-            </Typography>
-          </Grid>
-          <Grid container justifyContent={"space-evenly"} marginBottom={2}>
-            <Button
-              component={Link}
-              to="/listings"
-              variant="contained"
-              color="success"
-              sx={{
-                background: "error",
-                color: "white",
-                outline: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "10px 25px",
-              }}
-            >
-              Relist Product
-            </Button>
+            {role === "Seller" ? (
+              <React.Fragment>
+                <Grid>
+                  <Typography variant="p" sx={{ lineHeight: "1.5" }}>
+                    Your product is inactive. You either de-listed your product
+                    or it received no offers. Would you like to relist your
+                    product?
+                  </Typography>
+                </Grid>
+                <Grid
+                  container
+                  justifyContent={"space-evenly"}
+                  marginBottom={2}
+                >
+                  <Button
+                    component={Link}
+                    to="/listings"
+                    variant="contained"
+                    color="success"
+                    sx={{
+                      background: "error",
+                      color: "white",
+                      outline: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: "10px 25px",
+                    }}
+                  >
+                    Relist Product
+                  </Button>
+                </Grid>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Grid container justifyContent={"center"}>
+                  <Typography
+                    variant="p"
+                    sx={{ lineHeight: "1.5", color: "#FF0000" }}
+                  >
+                    This listing is inactive.
+                  </Typography>
+                </Grid>
+              </React.Fragment>
+            )}
           </Grid>
         </Grid>
       </Grid>
