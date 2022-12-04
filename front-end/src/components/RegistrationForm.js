@@ -3,7 +3,7 @@ import Logo from "../assets/VanderbiltLogo.jpg";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "./Form.css";
+import "../css/Form.css";
 import swal from "sweetalert";
 import isMobilePhone from "validator/es/lib/isMobilePhone";
 import isURL from "validator/es/lib/isURL";
@@ -158,7 +158,7 @@ export default function Form(props) {
         obj.otherPaymentMethod = true;
       }
 
-      obj.preferredCommunication = preferredCommunication;
+      obj.modeOfCommunication = preferredCommunication;
 
       if (phoneNumber !== "") {
         obj.phoneNumber = phoneNumber;
@@ -181,7 +181,6 @@ export default function Form(props) {
             user: data,
           }),
         });
-        console.log(obj);
         return response.json(); // parses JSON response into native JavaScript objects
       }
 

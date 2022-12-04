@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import swal from "sweetalert";
 
 const theme = createTheme({
   palette: {
@@ -153,14 +154,19 @@ export default function CreateListings() {
     obj.category = category;
     obj.condition = condition;
     obj.listingType = listingType;
-    obj.bidIncrement = bidIncrement;
+    if (listingType === "Bid Only") {
+      obj.openingBid = openingBid;
+      obj.bidIncrement = bidIncrement;
+    } else {
+      obj.listingPrice = listingPrice;
+    }
     obj.expirationDate = date;
     obj.location = location;
+    console.log(obj);
 
     if (!error) {
-      console.log("Object is " + obj);
       async function postData(
-        url = "https://api.reusevandy.org/product",
+        url = "http://localhost:8080/product",
         data = obj
       ) {
         const response = await fetch(url, {
@@ -179,13 +185,14 @@ export default function CreateListings() {
         return response.json();
       }
 
-      postData("https://api.reuse-vandy.org/product").then((data) => {
+      postData("http://localhost:8080/product").then((data) => {
         if (data.error) {
           setPrintErr(data.error);
           console.log(printErr);
         } else {
-          alert("Listing Posted Successfully!");
-          window.location.href = "/";
+          swal("Success", "Profile updated", "success").then(function () {
+            window.location.href = "/";
+          });
         }
       });
     }
@@ -298,7 +305,7 @@ export default function CreateListings() {
                   </Grid>
                 </Grid>
                 <Grid container marginBottom={2} justifyContent="space-between">
-                  <Grid item xs={5.9} marginBottom={2}>
+                  <Grid item xs={5.9}>
                     <DateTimePicker
                       label="Date Sale Expires"
                       value={date}
@@ -348,71 +355,67 @@ export default function CreateListings() {
                     </FormControl>
                   </Grid>
                 </Grid>
-                <Grid container justifyContent="space-between">
-                  <Grid container justifyContent={"space-between"}>
-                    <Grid item xs={5.9} marginBottom={2}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Listing Type?
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={listingType}
-                          label="Allow Buy Now"
-                          required
-                          error={listingTypeError ? true : false}
-                          onChange={handleListingType}
-                        >
-                          <MenuItem value={"Bid Only"}>Bid Only</MenuItem>
-                          <MenuItem value={"Listing Price"}>
-                            Listing Only
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    {listingType === "Bid Only" ? (
-                      <Grid container justifyContent="space-between">
-                        <Grid item xs={5.9} marginBottom={2}>
-                          <TextField
-                            onChange={(e) => setOpeningBid(e.target.value)}
-                            label="Set Opening Bid"
-                            variant="outlined"
-                            required
-                            error={openingBidError}
-                            fullWidth
-                          >
-                            Opening Bid
-                          </TextField>
-                        </Grid>
-                        <Grid item xs={6} marginBottom={2}>
-                          <TextField
-                            onChange={(e) => setBidIncrement(e.target.value)}
-                            label="Set Bid Increment"
-                            variant="outlined"
-                            required
-                            error={bidIncrementError}
-                            fullWidth
-                          >
-                            Bid Increment
-                          </TextField>
-                        </Grid>
-                      </Grid>
-                    ) : (
-                      <Grid item xs={6} marginBottom={2}>
+                <Grid container justifyContent={"space-between"}>
+                  <Grid item xs={5.9} marginBottom={2}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Listing Type?
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={listingType}
+                        label="Allow Buy Now"
+                        required
+                        error={listingTypeError ? true : false}
+                        onChange={handleListingType}
+                      >
+                        <MenuItem value={"Bid-Only"}>Bid Only</MenuItem>
+                        <MenuItem value={"Listing-Only"}>Buy Now Only</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  {listingType === "Bid Only" ? (
+                    <Grid container justifyContent="space-between">
+                      <Grid item xs={5.9} marginBottom={2}>
                         <TextField
-                          onChange={(e) => setListingPrice(e.target.value)}
-                          label="Set Listing Price"
+                          onChange={(e) => setOpeningBid(e.target.value)}
+                          label="Set Opening Bid"
                           variant="outlined"
                           required
-                          error={listingPriceError}
+                          error={openingBidError}
+                          fullWidth
+                        >
+                          Opening Bid
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={6} marginBottom={2}>
+                        <TextField
+                          onChange={(e) => setBidIncrement(e.target.value)}
+                          label="Set Bid Increment"
+                          variant="outlined"
+                          required
+                          error={bidIncrementError}
                           fullWidth
                         >
                           Bid Increment
                         </TextField>
                       </Grid>
-                    )}
-                  </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid item xs={6} marginBottom={2}>
+                      <TextField
+                        onChange={(e) => setListingPrice(e.target.value)}
+                        label="Set Listing Price"
+                        variant="outlined"
+                        required
+                        error={listingPriceError}
+                        fullWidth
+                      >
+                        Bid Increment
+                      </TextField>
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid container justifyContent={"space-around"}>
                   <Button

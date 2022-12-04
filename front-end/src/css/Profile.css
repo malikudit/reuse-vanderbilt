@@ -1,5 +1,5 @@
 .container-profile {
-  background: #F1F3FA;
+  background: #f1f3fa;
   width: 100%;
   height: auto;
 }
@@ -44,14 +44,13 @@
   margin-left: 2vw;
   background: #fff;
   min-height: 460px;
-  width: 30vw;
+  width: 60vw;
 }
 
 .centered {
   text-align: center;
   justify-content: center;
 }
-
 
 a,
 button,
@@ -128,7 +127,6 @@ ul {
   font-weight: 600;
   justify-content: center;
   text-align: center;
-
 }
 
 .profile-desc-text {
@@ -140,9 +138,9 @@ ul {
 [class*=" fa-"]:not(.fa-stack),
 [class*=" glyphicon-"],
 [class*=" icon-"],
-[class^=fa-]:not(.fa-stack),
-[class^=glyphicon-],
-[class^=icon-] {
+[class^="fa-"]:not(.fa-stack),
+[class^="glyphicon-"],
+[class^="icon-"] {
   display: inline-block;
   line-height: 14px;
   -webkit-font-smoothing: antialiased;

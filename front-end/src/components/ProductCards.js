@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./ProductCards.css";
+import "../css/ProductCards.css";
 import CountdownTimer from "./CountdownTimer";
 
 const ProductCards = ({
@@ -10,7 +10,7 @@ const ProductCards = ({
   secondaryImage3 = "",
   secondaryImage4 = "",
   productID = "",
-  itemName = "",
+  title = "",
   description = "",
   seller = "",
   condition = "",
@@ -28,7 +28,7 @@ const ProductCards = ({
 }) => (
   <Link
     to={{
-      pathname: `/product_listing/${itemName}`,
+      pathname: `/product_listing/${title}`,
     }}
     state={{
       coverImage: coverImage,
@@ -37,7 +37,7 @@ const ProductCards = ({
       secondaryImage3: secondaryImage3,
       secondaryImage4: secondaryImage4,
       productID: productID,
-      itemName: itemName,
+      title: title,
       description: description,
       seller: seller,
       condition: condition,
@@ -69,21 +69,27 @@ const ProductCards = ({
             <CountdownTimer countDownDate={expirationDate} />
           </div>
         </div>
-        <div className="title">{itemName}</div>
+        <div className="title">{title}</div>
         <div className="price">
           {listingType === "Bid Only" ? (
             <React.Fragment>
               {currentBid === null ? (
                 <React.Fragment>
                   <div className="item">
-                    <div className="value">{openingBid}</div>
+                    <div className="value">
+                      {"$"}
+                      {openingBid}
+                    </div>
                     <div className="label">Starting Bid</div>
                   </div>
                 </React.Fragment>
               ) : (
                 <React.Fragment>
                   <div className="item">
-                    <div className="value">{currentBid}</div>
+                    <div className="value">
+                      {"$"}
+                      {currentBid}
+                    </div>
                     <div className="label">Current Bid</div>
                   </div>
                 </React.Fragment>
@@ -92,7 +98,10 @@ const ProductCards = ({
           ) : (
             <React.Fragment>
               <div className="item">
-                <div className="value">{listingPrice}</div>
+                <div className="value">
+                  {"$"}
+                  {listingPrice}
+                </div>
                 <div className="label">Listing Price</div>
               </div>
             </React.Fragment>

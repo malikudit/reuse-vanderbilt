@@ -17,8 +17,9 @@ export default function ReviewCards(props) {
   return (
     <Link
       to={{
-        pathname: `/product_review/${props.category.toLowerCase()}/${props.reviewTitle
-          }`,
+        pathname: `/product_review/${props.category.toLowerCase()}/${
+          props.reviewTitle
+        }`,
       }}
       state={{
         coverImage: props.coverImage,
@@ -33,12 +34,12 @@ export default function ReviewCards(props) {
       }}
       style={{ textDecoration: "none" }}
     >
-      <Box padding={2} marginLeft={3}>
+      <Box padding={2} alignItems="center" justifyContent={"center"}>
         <Grid container alignItems="center" justifyContent={"center"}>
           <Card
             variant="outlined"
             sx={{
-              width: 300,
+              width: "100%",
               height: 350,
               borderRadius: "16px",
             }}
@@ -53,7 +54,7 @@ export default function ReviewCards(props) {
                   readOnly
                   align="center"
                   sx={{
-                    marginTop: "2vh"
+                    marginTop: "2vh",
                   }}
                 />
               </CardActions>
@@ -84,7 +85,9 @@ export default function ReviewCards(props) {
             </CardActionArea>
             <Grid container alignItems={"center"} justifyContent={"center"}>
               <CardActions>
-                <Button size="small" color="info"
+                <Button
+                  size="small"
+                  color="info"
                   sx={{
                     background: "#333",
                     color: "white",
@@ -92,7 +95,8 @@ export default function ReviewCards(props) {
                     border: "none",
                     cursor: "pointer",
                     padding: "10px 25px",
-                  }}>
+                  }}
+                >
                   Read more
                 </Button>
               </CardActions>

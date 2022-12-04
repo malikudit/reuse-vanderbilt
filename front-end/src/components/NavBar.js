@@ -170,14 +170,6 @@ const NavBar = () => {
                 <PersonIcon />
                 View Profile
               </MenuItem>
-              <MenuItem
-                component={Link}
-                to="/edit_profile"
-                onClick={handleProfile}
-              >
-                <PersonIcon />
-                Edit Profile
-              </MenuItem>
               <MenuItem component={Link} to="/login" onClick={handleLogin}>
                 <LoginIcon />
                 Login

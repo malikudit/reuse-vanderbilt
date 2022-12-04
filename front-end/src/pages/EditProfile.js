@@ -1,11 +1,9 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import {
   Grid,
   TextField,
   MenuItem,
   Button,
-  Typography,
-  Box,
   ThemeProvider,
   createTheme,
   Chip,
@@ -14,11 +12,8 @@ import {
   FormControl,
 } from "@mui/material";
 import DefaultBanner from "../components/DefaultBanner";
-import ReviewCards from "../components/ReviewCards";
-import { SampleReviews } from "../content/SampleReviews";
-import "./EditProfile.css";
+import "../css/EditProfile.css";
 import { paymentMethods, formsOfContact } from "../content/ProfilePreferences";
-import Parwaz from "../assets/Parwaz.png";
 import Bike from "../assets/Bike.jpg";
 import isMobilePhone from "validator/es/lib/isMobilePhone";
 import isURL from "validator/es/lib/isURL";
@@ -49,17 +44,73 @@ const theme = createTheme({
 
 export default function EditProfile() {
   const [saved, setSaved] = useState(true);
-  const [firstName, setFirstName] = useState("Parwaz");
+  const [profile, setProfile] = useState([]);
+  const [firstName, setFirstName] = useState("");
   var [firstNameError, setFirstNameError] = useState(false);
-  const [lastName, setLastName] = useState("Gill");
+  const [lastName, setLastName] = useState("");
   var [lastNameError, setLastNameError] = useState(false);
-  const [preferredPayment, setPreferredPayment] = useState(["Venmo"]);
-  const [contact, setContact] = useState("Phone");
-  const [phoneNumber, setPhoneNumber] = useState("2022022020");
+  const [email, setEmail] = useState("");
+  var [emailError, setEmailError] = useState(false);
+  const [preferredPayment, setPreferredPayment] = useState([]);
+  const [contact, setContact] = useState([]);
+  const [phoneNumber, setPhoneNumber] = useState("");
   var [phoneNumberError, setPhoneNumberError] = useState(false);
   const [groupMe, setGroupMe] = useState("");
   var [groupMeError, setGroupMeError] = useState(false);
   var [error, setError] = useState(false);
+  let payments = [];
+  let contacts = [];
+
+  async function getData(url = "http://localhost:8080/users/me") {
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProfile(d);
+        setFirstName(d.firstName);
+        setLastName(d.lastName);
+        setEmail(d.email);
+
+        if (d.modeOfCommunication === "Phone") {
+          contacts.push("Phone");
+          setPhoneNumber(d.phoneNumber);
+        }
+        if (d.modeOfCommunication === "GroupMe") {
+          contacts.push("GroupMe");
+          setGroupMe(d.groupMe);
+        }
+        if (d.modeOfCommunication === "Any") {
+          contacts.push("Phone");
+          contacts.push("GroupMe");
+          setPhoneNumber(d.phoneNumber);
+          setGroupMe(d.groupMe);
+        }
+        setContact(contacts);
+        if (profile.cash) {
+          payments.push("Cash");
+        }
+        if (profile.venmo) {
+          payments.push("Venmo");
+        }
+        if (profile.zelle) {
+          payments.push("Zelle");
+        }
+        setPreferredPayment(payments);
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const contactHandler = (event) => {
+    setContact(event.target.value);
+  };
 
   const preferredPaymentHandler = (event) => {
     setPreferredPayment(event.target.value);
@@ -102,23 +153,98 @@ export default function EditProfile() {
       (contact === "Phone" || contact === "Any") &&
       checkPhoneNumber(phoneNumber)
     ) {
+      setPhoneNumberError(true);
       phoneNumberError = true;
     }
     if (
       (contact === "GroupMe" || contact === "Any") &&
       checkGroupMeURL(groupMe)
     ) {
+      setGroupMeError(true);
       groupMeError = true;
     }
     if (firstNameError || lastNameError || phoneNumberError || groupMeError) {
+      setError(true);
       error = true;
     }
     if (!error) {
-      setSaved(true);
-      swal("Success", "Profile saved!", "success");
+      var obj = {};
+      console.log(firstName);
+      obj.firstName = firstName;
+      console.log(obj.firstName);
+      obj.lastName = lastName;
+
+      if (contact.includes("Phone") && contact.includes("GroupMe")) {
+        obj.modeOfCommunication = "Any";
+      } else if (contact.includes("Phone")) {
+        obj.modeOfCommunication = "Phone";
+      } else if (contact.includes("GroupMe")) {
+        obj.modeOfCommunication = "GroupMe";
+      }
+
+      if (preferredPayment.includes("Cash")) {
+        obj.cash = true;
+      }
+      if (preferredPayment.includes("Venmo")) {
+        obj.venmo = true;
+      }
+      if (preferredPayment.includes("Zelle")) {
+        obj.zelle = true;
+      }
+      if (preferredPayment.includes("Other Payment Method")) {
+        obj.otherPaymentMethod = true;
+      }
+
+      if (phoneNumber !== "") {
+        obj.phoneNumber = phoneNumber;
+      }
+
+      if (groupMe !== "") {
+        obj.groupMe = groupMe;
+      }
+
+      async function patchData(
+        url = "http://localhost:8080/users/me",
+        data = obj
+      ) {
+        const response = await fetch(url, {
+          method: "PUT",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          body: JSON.stringify({
+            firstName: obj.firstName,
+            lastName: obj.lastName,
+            modeOfCommunication: obj.modeOfCommunication,
+            cash: obj.cash,
+            venmo: obj.venmo,
+            zelle: obj.zelle,
+            otherPaymentMethod: obj.otherPaymentMethod,
+            phoneNumber: obj.phoneNumber,
+            groupMe: obj.groupMe,
+          }),
+        });
+        console.log(data);
+
+        return response.json();
+      }
+
+      patchData("http://localhost:8080/users/me").then((data) => {
+        if (data.error) {
+          swal("Oops!", data.error, "error");
+        } else {
+          setSaved(true);
+          // swal("Success", "Profile updated", "success").then(function () {
+          //   window.location.href = "/";
+          // });
+          console.log(data);
+        }
+      });
     }
   };
-
   return (
     <div class="container-edit-profile">
       <ThemeProvider theme={theme}>
@@ -136,8 +262,8 @@ export default function EditProfile() {
                 <div class="edit-profile-usertitle">
                   <div class="edit-profile-usertitle-name">
                     <TextField
-                      width="auto"
                       label="First Name"
+                      width="auto"
                       variant={saved ? "standard" : "standard"}
                       disabled={saved}
                       onChange={(event) => {
@@ -164,8 +290,8 @@ export default function EditProfile() {
 
                   <div class="edit-profile-usertitle-name">
                     <TextField
-                      width="auto"
                       label="Last Name"
+                      width="auto"
                       variant={saved ? "standard" : "standard"}
                       disabled={saved}
                       onChange={(event) => {
@@ -233,7 +359,7 @@ export default function EditProfile() {
                             label="Email"
                             variant="standard"
                             disabled
-                            value="udit.malik@vanderbilt.edu"
+                            value={email}
                             sx={{
                               marginTop: "1vh",
                             }}
@@ -243,28 +369,46 @@ export default function EditProfile() {
 
                       <div class="col-md-4 col-sm-4 col-xs-6">
                         <div class="edit-profile-stat-title">
-                          <TextField
+                          <FormControl
                             fullWidth
-                            select
-                            label="Preferred form of contact"
-                            variant="standard"
-                            disabled={saved}
-                            onChange={(event) => {
-                              setContact(event.target.value);
-                            }}
-                            value={contact}
                             sx={{
                               marginTop: "1vh",
                             }}
                           >
-                            {formsOfContact.map((option) => (
-                              <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-
-                          {contact === "Any" ? (
+                            <InputLabel
+                              id="demo-simple-select-label"
+                              sx={{
+                                marginLeft: "-1vw",
+                                marginTop: "1vh",
+                              }}
+                            >
+                              Preferred form of contact
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              multiple
+                              label="Preferred form of contact"
+                              variant="standard"
+                              disabled={saved}
+                              onChange={contactHandler}
+                              value={contact}
+                              sx={{
+                                marginTop: "1vh",
+                              }}
+                            >
+                              {formsOfContact.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                          {contact.includes("Phone") &&
+                          contact.includes("GroupMe") ? (
                             <Grid>
                               <TextField
                                 fullWidth
@@ -314,7 +458,7 @@ export default function EditProfile() {
                                 }}
                               />
                             </Grid>
-                          ) : contact === "Phone" ? (
+                          ) : contact.includes("Phone") ? (
                             <TextField
                               fullWidth
                               label="Phone Number"
@@ -338,7 +482,7 @@ export default function EditProfile() {
                               }}
                               value={phoneNumber}
                             />
-                          ) : contact === "GroupMe" ? (
+                          ) : contact.includes("GroupMe") ? (
                             <TextField
                               fullWidth
                               label="GroupMe URL"
@@ -395,13 +539,6 @@ export default function EditProfile() {
                               sx={{
                                 marginTop: "1vh",
                               }}
-                              renderValue={(preferredPayment) => (
-                                <div>
-                                  {preferredPayment.map((value) => (
-                                    <Chip key={value} label={value} />
-                                  ))}
-                                </div>
-                              )}
                             >
                               {paymentMethods.map((option) => (
                                 <MenuItem

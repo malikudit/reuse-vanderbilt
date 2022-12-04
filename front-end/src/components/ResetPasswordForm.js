@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import "./Form.css";
+import "../css/Form.css";
 import swal from "sweetalert";
 
 export default function Form(props) {
