@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import "./Form.css";
+import "../css/Form.css";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import swal from "sweetalert";
 import emailjs from "emailjs-com";
@@ -31,10 +31,6 @@ export default function Form(props) {
       setEmailError(true);
       return;
     }
-    // if (checkPassword(password)) {
-    //   setPasswordError(true);
-    //   return;
-    // }
 
     if (emailError === false && passwordError === false) {
       var obj = {};

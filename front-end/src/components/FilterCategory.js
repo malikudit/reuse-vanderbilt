@@ -1,10 +1,35 @@
+import { React, useState, useEffect } from "react";
 import { SampleProducts } from "../content/SampleProducts";
 import { Grid } from "@mui/material";
 import ProductCards from "./ProductCards";
-import "./ProductCards.css";
+import "../css/ProductCards.css";
 
 export default function FilterCategory(props) {
+  const [products, setProducts] = useState([]);
+
+  async function getData(url = "http://localhost:8080/product") {
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+      });
+
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   function compare(a, b) {
+    if (a === null || b === null) {
+      return 0;
+    }
     var now = new Date().getTime();
     var aDate = new Date(a.expirationDate).getTime();
     var bDate = new Date(b.expirationDate).getTime();
@@ -16,7 +41,8 @@ export default function FilterCategory(props) {
   }
 
   // Sort items in ascending chronological order
-  var filtered = SampleProducts.sort(compare);
+  var filtered = products.sort(compare);
+  // var filtered = SampleProducts.sort(compare);
 
   // We are in any category other than home
   if (props.categoryProduct !== "Home") {
@@ -33,7 +59,7 @@ export default function FilterCategory(props) {
   if (props.searchProduct[0] !== "") {
     filtered = filtered.filter(function (entry) {
       return (
-        entry.itemName.toLowerCase().includes(props.searchProduct) ||
+        entry.title.toLowerCase().includes(props.searchProduct) ||
         entry.description.toLowerCase().includes(props.searchProduct)
       );
     });
@@ -50,7 +76,7 @@ export default function FilterCategory(props) {
       {filtered.map((searchedCategory) => (
         <ProductCards
           {...searchedCategory}
-          key={searchedCategory.itemName}
+          key={searchedCategory.title}
           searchProduct={props.searchProduct}
         />
       ))}

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import "./FAQ.css";
+import "../css/FAQ.css";
 
 var questions = [
   {

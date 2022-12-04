@@ -316,4 +316,4 @@ export default function SearchBar(props) {
       </Box>
     </ThemeProvider>
   );
-};
+}

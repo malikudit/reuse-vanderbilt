@@ -17,8 +17,7 @@ export default function ReviewCards(props) {
   return (
     <Link
       to={{
-        pathname: `/product_review/${props.category.toLowerCase()}/${props.reviewTitle
-          }`,
+        pathname: `/product_listing/${props.itemName}`,
       }}
       state={{
         coverImage: props.coverImage,
@@ -33,17 +32,23 @@ export default function ReviewCards(props) {
       }}
       style={{ textDecoration: "none" }}
     >
-      <Box padding={2} marginLeft={3}>
+      <Box padding={2}>
         <Grid container alignItems="center" justifyContent={"center"}>
           <Card
             variant="outlined"
             sx={{
-              width: 300,
-              height: 350,
+              width: "100%",
+              height: 200,
               borderRadius: "16px",
             }}
           >
             <Grid container alignItems={"center"} justifyContent={"center"}>
+              <CardContent>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {props.reviewTitle}
+                </Typography>
+                <Box sx={{ borderBottom: 3 }}></Box>
+              </CardContent>
               <CardActions>
                 <Rating
                   name="read-only"
@@ -52,39 +57,38 @@ export default function ReviewCards(props) {
                   precision={0.5}
                   readOnly
                   align="center"
-                  sx={{
-                    marginTop: "2vh"
-                  }}
                 />
               </CardActions>
             </Grid>
             <CardActionArea>
-              <Grid container alignItems={"center"} justifyContent={"center"}>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  coverImage={props.coverImage}
-                  alt={props.alt}
-                  sx={{
-                    borderRadius: "50% 50% 50% 50%",
-                    backgroundSize: "100% 100%",
-                    backgroundPosition: "center",
-                    height: 120,
-                    width: 120,
-                    border: "6px solid white",
-                    filter: "drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1))",
-                  }}
-                />
-              </Grid>
-              <Grid container alignItems={"center"} justifyContent={"center"}>
-                <CardContent>
-                  <Typography variant="h6">{props.reviewTitle}</Typography>
-                </CardContent>
-              </Grid>
+              {/*<Grid container alignItems={"center"} justifyContent={"center"}>
+              <CardMedia
+                component="img"
+                height="140"
+                coverImage={props.coverImage}
+                alt={props.alt}
+                sx = {{
+                  borderRadius: "50% 50% 50% 50%",
+                  backgroundSize: "100% 100%",
+                  backgroundPosition: "center",
+                  height: 120,
+                  width: 120,  
+                  border: "6px solid white",
+                  filter: "drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1))",
+                }}
+              />
+              </Grid> */}
             </CardActionArea>
             <Grid container alignItems={"center"} justifyContent={"center"}>
+              <CardContent>
+                <Typography variant="h7">{props.reviewBody}</Typography>
+              </CardContent>
+            </Grid>
+            <Grid container alignItems={"center"} justifyContent={"center"}>
               <CardActions>
-                <Button size="small" color="info"
+                <Button
+                  size="small"
+                  color="info"
                   sx={{
                     background: "#333",
                     color: "white",
@@ -92,8 +96,9 @@ export default function ReviewCards(props) {
                     border: "none",
                     cursor: "pointer",
                     padding: "10px 25px",
-                  }}>
-                  Read more
+                  }}
+                >
+                  View orginal listing
                 </Button>
               </CardActions>
             </Grid>

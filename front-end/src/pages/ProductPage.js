@@ -36,7 +36,7 @@ export default function ProductPage() {
   const locSecondaryImage2 = useLocation().state.secondaryImage2;
   const locSecondaryImage3 = useLocation().state.secondaryImage3;
   const locSecondaryImage4 = useLocation().state.secondaryImage4;
-  const locItemName = useLocation().state.itemName;
+  const locItemName = useLocation().state.title;
   const locDescription = useLocation().state.description;
   const locSellerName = useLocation().state.seller;
   const locCondition = useLocation().state.condition;
@@ -58,7 +58,7 @@ export default function ProductPage() {
   var timeLeft = new Date(locTimeLeft).getTime();
   var now = new Date().getTime();
   var expired = timeLeft - now;
-  console.log(locState);
+  locState = "Active";
 
   if (locState === "Active") {
     return (
