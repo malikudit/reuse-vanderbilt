@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -8,6 +9,7 @@ import {
   Tab,
   Typography,
   ThemeProvider,
+  getListSubheaderUtilityClass,
 } from "@mui/material";
 import CreateListings from "../components/CreateListings";
 import { SampleProducts } from "../content/SampleProducts";
@@ -33,7 +35,6 @@ const theme = createTheme({
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tab-panel"
@@ -65,6 +66,44 @@ function a11yProps(index) {
 }
 
 export default function ListingsPage(props) {
+  const [products, setProducts] = useState([]);
+  const [profile, setProfile] = useState();
+
+  async function getProducts(url = "http://localhost:8080/product") {
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+      });
+
+    return response;
+  }
+
+  async function getUser(url = "http://localhost:8080/users/me") {
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProfile(d);
+      });
+
+    return response;
+  }
+
+  useEffect(() => {
+    getProducts();
+    getUser();
+  }, []);
+
   function compare(a, b) {
     var now = new Date().getTime();
     var aDate = new Date(a.expirationDate).getTime();
@@ -76,14 +115,15 @@ export default function ListingsPage(props) {
     }
   }
 
-  var buying = SampleProducts.sort(compare);
+  var buying = products.sort(compare);
   buying = buying.filter(function (entry) {
-    return entry.sellerID !== "Parwaz";
+    console.log(entry.sellerID);
+    return entry.sellerID !== profile.id;
   });
 
-  var selling = SampleProducts.sort(compare);
+  var selling = products.sort(compare);
   selling = selling.filter(function (entry) {
-    return entry.sellerID === "Parwaz";
+    return entry.sellerID === profile.id;
   });
   const [value, setValue] = React.useState(0);
 

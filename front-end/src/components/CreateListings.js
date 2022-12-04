@@ -162,7 +162,6 @@ export default function CreateListings() {
     }
     obj.expirationDate = date;
     obj.location = location;
-    console.log(obj);
 
     if (!error) {
       async function postData(
@@ -181,16 +180,14 @@ export default function CreateListings() {
             product: data,
           }),
         });
-        console.log("Response.json " + response.json());
         return response.json();
       }
 
-      postData("http://localhost:8080/product").then((data) => {
+      postData("http://localhost:8080/product", obj).then((data) => {
         if (data.error) {
-          setPrintErr(data.error);
-          console.log(printErr);
+          swal("Oops!", data.error, "error");
         } else {
-          swal("Success", "Profile updated", "success").then(function () {
+          swal("Success", "Product listed", "success").then(function () {
             window.location.href = "/";
           });
         }
@@ -375,7 +372,7 @@ export default function CreateListings() {
                       </Select>
                     </FormControl>
                   </Grid>
-                  {listingType === "Bid Only" ? (
+                  {listingType === "Bid-Only" ? (
                     <Grid container justifyContent="space-between">
                       <Grid item xs={5.9} marginBottom={2}>
                         <TextField
