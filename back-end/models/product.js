@@ -18,9 +18,9 @@ const defaultFields = [
   "openBidPrice",
   "bidIncrement",
   "currentBid",
-  "buyNow",
   "expirationDate",
   "location",
+  "state,",
 ];
 
 class Product extends Model {

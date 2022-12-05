@@ -17,7 +17,7 @@ export default function ReviewCards(props) {
   return (
     <Link
       to={{
-        pathname: `/product_listing/${props.itemName}`,
+        pathname: `/product_listing/${props.id}`,
       }}
       state={{
         coverImage: props.coverImage,
@@ -38,7 +38,7 @@ export default function ReviewCards(props) {
             variant="outlined"
             sx={{
               width: "100%",
-              height: 200,
+              height: 250,
               borderRadius: "16px",
             }}
           >

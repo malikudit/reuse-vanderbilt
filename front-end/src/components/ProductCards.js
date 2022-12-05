@@ -5,16 +5,9 @@ import CountdownTimer from "./CountdownTimer";
 
 const ProductCards = ({
   coverImage = "",
-  secondaryImage1 = "",
-  secondaryImage2 = "",
-  secondaryImage3 = "",
-  secondaryImage4 = "",
-  productID = "",
+  id = "",
   title = "",
-  description = "",
-  seller = "",
   condition = "",
-  location = "",
   listingType = "",
   openingBid = "$",
   currentBid = "$",
@@ -24,24 +17,16 @@ const ProductCards = ({
   category = "",
   sellerID = "",
   state = "",
-  role = "",
 }) => (
   <Link
     to={{
-      pathname: `/product_listing/${title}`,
+      pathname: `/product_listing/${id}`,
     }}
     state={{
       coverImage: coverImage,
-      secondaryImage1: secondaryImage1,
-      secondaryImage2: secondaryImage2,
-      secondaryImage3: secondaryImage3,
-      secondaryImage4: secondaryImage4,
-      productID: productID,
+      id: id,
       title: title,
-      description: description,
-      seller: seller,
       condition: condition,
-      location: location,
       listingType: listingType,
       currentBid: currentBid,
       bidIncrement: bidIncrement,
@@ -51,7 +36,6 @@ const ProductCards = ({
       category: category,
       sellerID: sellerID,
       state: state,
-      role: role,
     }}
     style={{ textDecoration: "none" }}
   >
