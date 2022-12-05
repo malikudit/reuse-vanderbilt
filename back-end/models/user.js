@@ -145,6 +145,7 @@ User.init({
     },
     cash: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         defaultValue: false,
         validate: {
@@ -160,6 +161,7 @@ User.init({
     },
     venmo: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         defaultValue: false,
         validate: {
@@ -175,6 +177,7 @@ User.init({
     },
     zelle: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         defaultValue: false,
         validate: {
@@ -190,6 +193,7 @@ User.init({
     },
     otherPaymentMethod: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
         defaultValue: false,
         validate: {
@@ -205,14 +209,10 @@ User.init({
     },
     modeOfCommunication: {
         type: DataTypes.ENUM('Phone', 'GroupMe'),
-        allowNull: false,
         validate: {
             isIn: {
                 args: [['Phone', 'GroupMe']],
                 msg: 'Preferred mode of communication must be either Phone or GroupMe'
-            },
-            notNull: {
-                msg: 'Must specify a preferred mode of communication'
             },
             notNullIfPreferred(value) {
                 if (value === 'Phone' && !this.phoneNumber) {
@@ -253,6 +253,9 @@ User.init({
         beforeCreate: async (user) => {
             const userId = await nanoid();
             user.setDataValue('id', userId);
+
+            const password = user.getDataValue('password');
+            user.setDataValue('password', await bcrypt.hash(password + '', 11))
         },
         beforeSave: async (user) => {
             if (user.changed('phoneNumber')) {

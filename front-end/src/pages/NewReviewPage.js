@@ -22,16 +22,17 @@ export default function NewReviewPage(props) {
 
   const itemName = useLocation().state.itemName;
   const coverImage = useLocation().state.coverImage;
-  const secondaryImage1 = useLocation.state.secondaryImage1;
-  const secondaryImage2 = useLocation.state.secondaryImage2;
-  const secondaryImage3 = useLocation.state.secondaryImage3;
-  const secondaryImage4 = useLocation.state.secondaryImage4;
+  // const secondaryImage1 = useLocation.state.secondaryImage1;
+  // const secondaryImage2 = useLocation.state.secondaryImage2;
+  // const secondaryImage3 = useLocation.state.secondaryImage3;
+  // const secondaryImage4 = useLocation.state.secondaryImage4;
   const sellerID = useLocation().state.sellerID;
   const sellerName = useLocation().state.sellerName;
   const category = useLocation().state.category;
   const condition = useLocation().state.condition;
   const location = useLocation().state.location;
   const salePrice = useLocation().state.salePrice;
+  console.log(reviewStars);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -160,7 +161,7 @@ export default function NewReviewPage(props) {
                   <Rating
                     precision={0.5}
                     onChange={(newValue) => {
-                      setReviewStars(newValue);
+                      setReviewStars(newValue.target.value);
                     }}
                     error={starsError}
                   />

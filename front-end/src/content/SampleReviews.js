@@ -14,6 +14,7 @@ export const SampleReviews = [
     condition: "Brand New",
     location: "Seller Delivery",
     salePrice: "$250",
+    id: 1,
   },
   {
     coverImage: Bike,
@@ -25,16 +26,19 @@ export const SampleReviews = [
     condition: "Slightly Used",
     location: "Buyer and Seller Meet at Common Point",
     salePrice: "$200",
+    id: 2,
   },
   {
     coverImage: iPad,
     reviewTitle: "Thanks Parwaz!",
     rating: "5",
-    reviewBody: "Parwaz gave me a fire iPad",
+    reviewBody:
+      "Parwaz gave me a fire iPadParwaz gave me a fire iPadParwaz gave me a fire iPadParwaz gave me a fire iPadParwaz gave me a fire iPadParwaz gave me a fire iPadParwaz gave me a fire iPadParwaz gave me a fire iPadParwaz gave me a fire iPad",
     seller: "Parwaz Gill",
     category: "Electronics",
     condition: "Used",
     location: "Buyer Will Come to Seller",
     salePrice: "$700",
+    id: 3,
   },
 ];

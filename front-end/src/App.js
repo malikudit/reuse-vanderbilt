@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import NavBar from "./components/NavBar.js";
+import Footer from "./components/Footer.js";
 import MainRoutes from "./MainRoutes.js";
 import "./App.css";
 
@@ -16,6 +17,7 @@ function App() {
         categoryProduct={categoryProduct}
         setCategoryProduct={setCategoryProduct}
       />
+      <Footer />
     </>
   );
 }

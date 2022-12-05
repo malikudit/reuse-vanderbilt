@@ -33,6 +33,10 @@ export default function BuyerEvaluation(props) {
           Buyer Contact Information:
           {" Insert Phone/GroupMe"}
         </Typography>
+        <Typography variant="h6">
+          Buyer Preferred Form of Payment:
+          {" Insert Form of Payment"}
+        </Typography>
         <Typography variant="h9" sx={{ color: "#FF0000" }}>
           Note: You can still reject the offer if the buyer is unable to
           coordinate the exchange in a timely manner or if they do not meet your
