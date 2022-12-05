@@ -44,7 +44,6 @@ export default function ProductPage() {
       .then((data) => {
         var d = data;
         setProducts(d);
-        console.log(d);
       });
     return response;
   }
@@ -86,28 +85,7 @@ export default function ProductPage() {
     return (
       <ThemeProvider theme={theme}>
         <DefaultBanner banner={"Product Listing Page"} />
-        <Active
-          coverImage={coverImage}
-          secondaryImage1={secondaryImage1}
-          secondaryImage2={secondaryImage2}
-          secondaryImage3={secondaryImage3}
-          secondaryImage4={secondaryImage4}
-          itemName={title}
-          sellerID={sellerId}
-          sellerName={sellerName}
-          category={category}
-          condition={condition}
-          location={location}
-          timeLeft={timeLeft}
-          currentBid={currentBid}
-          openingBid={openingBid}
-          listingType={listingType}
-          nextBid={nextBid}
-          listingPrice={listingPrice}
-          description={description}
-          role={role}
-          id={id}
-        />
+        <Active sellerID={sellerId} id={id} />
       </ThemeProvider>
     );
   }
@@ -168,7 +146,7 @@ export default function ProductPage() {
           secondaryImage3={secondaryImage3}
           secondaryImage4={secondaryImage4}
           itemName={title}
-          sellerID={sellerId}
+          sellerId={sellerId}
           sellerName={sellerName}
           category={category}
           condition={condition}

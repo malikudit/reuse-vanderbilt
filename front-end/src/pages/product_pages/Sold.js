@@ -1,8 +1,18 @@
-import React from "react";
+import { React } from "react";
 import { Link } from "react-router-dom";
 import { Grid, Box, Typography, Button } from "@mui/material";
 
 export default function Sold(props) {
+  // fetch if a user has left a review or not
+  const leftReview = false;
+  const role = "Seller";
+  var userID;
+  if (role === "Buyer") {
+    userID = props.buyerId;
+  } else {
+    userID = props.sellerId;
+  }
+
   return (
     <Grid
       align={"center"}
@@ -70,27 +80,36 @@ export default function Sold(props) {
                     padding: "10px 25px",
                   }}
                 >
-                  <Link
-                    to={{ pathname: `/new_review/${props.id}` }}
-                    state={{
-                      itemName: props.itemName,
-                      coverImage: props.coverImage,
-                      // secondaryImage1: props.secondaryImage1,
-                      // secondaryImage2: props.secondaryImage2,
-                      // secondaryImage3: props.secondaryImage3,
-                      // secondaryImage4: props.secondaryImage4,
-                      sellerID: props.sellerID,
-                      sellerName: props.sellerName,
-                      category: props.category,
-                      condition: props.condition,
-                      location: props.location,
-                      salePrice: props.salePrice,
-                      id: props.id,
-                    }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    Leave a Review
-                  </Link>
+                  {leftReview ? (
+                    <Link
+                      to={{ pathname: `/profile/${userID}` }}
+                      style={{ textDecoration: "none" }}
+                    >
+                      View Profile of {role}
+                    </Link>
+                  ) : (
+                    <Link
+                      to={{ pathname: `/new_review/${props.id}` }}
+                      state={{
+                        itemName: props.itemName,
+                        coverImage: props.coverImage,
+                        // secondaryImage1: props.secondaryImage1,
+                        // secondaryImage2: props.secondaryImage2,
+                        // secondaryImage3: props.secondaryImage3,
+                        // secondaryImage4: props.secondaryImage4,
+                        sellerID: props.sellerID,
+                        sellerName: props.sellerName,
+                        category: props.category,
+                        condition: props.condition,
+                        location: props.location,
+                        salePrice: props.salePrice,
+                        id: props.id,
+                      }}
+                      style={{ textDecoration: "none" }}
+                    >
+                      Leave a Review
+                    </Link>
+                  )}
                 </Button>
               </Grid>
             </Grid>

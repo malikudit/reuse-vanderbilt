@@ -20,7 +20,7 @@ const defaultFields = [
   "currentBid",
   "expirationDate",
   "location",
-  "state,",
+  "state",
 ];
 
 class Product extends Model {

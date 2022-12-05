@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage.js";
 import ResetPasswordPage from "./pages/ResetPassword.js";
 import NewReviewPage from "./pages/NewReviewPage.js";
 import EditProfile from "./pages/EditProfile.js";
+import OtherProfile from "./pages/OtherProfile.js";
 import FAQ from "./pages/FAQ.js";
 
 export default function MainRoutes(props) {
@@ -125,6 +126,7 @@ export default function MainRoutes(props) {
         element={<NotificationsSettings />}
       />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/:userID" element={<OtherProfile />} />
       <Route path="/edit_profile" element={<EditProfile />} />
       <Route path="/create_listing" element={<CreateListings />} />
       <Route path="/register" element={<RegisterPage />} />
