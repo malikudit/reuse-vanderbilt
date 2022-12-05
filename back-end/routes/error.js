@@ -1,5 +1,5 @@
 const { ValidationError } = require('sequelize');
-const { LoginError } = require('../types/error');
+const { LoginError, BidError } = require('../types/error');
 
 const express = require('express');
 const router = express.Router();
@@ -24,6 +24,15 @@ const login = function (err, _req, res, next) {
     }
 }
 
+const bidding = function (err, _req, res, next) {
+    if (err instanceof BidError) {
+        const error = err.message;
+        res.status(403).send({ error });
+    } else {
+        next(err);
+    }
+}
+
 const serverError = function (err, _req, res, _next) {
     console.log(err);
     res.sendStatus(500);
@@ -36,6 +45,7 @@ const clientError = function (_req, res, _next) {
 module.exports = [
     validation,
     login,
+    bidding,
     serverError,
     clientError
 ];

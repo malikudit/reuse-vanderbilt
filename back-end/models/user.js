@@ -145,8 +145,8 @@ User.init({
     },
     cash: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
+        defaultValue: false,
         validate: {
             notNull: {
                 msg: 'You must specify whether Cash is a supported payment type'
@@ -160,8 +160,8 @@ User.init({
     },
     venmo: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
+        defaultValue: false,
         validate: {
             notNull: {
                 msg: 'You must specify whether Venmo is a supported payment type'
@@ -175,8 +175,8 @@ User.init({
     },
     zelle: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
+        defaultValue: false,
         validate: {
             notNull: {
                 msg: 'You must specify whether Zelle is a supported payment type'
@@ -190,8 +190,8 @@ User.init({
     },
     otherPaymentMethod: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: false,
+        defaultValue: false,
         validate: {
             notNull: {
                 msg: 'You must specify whether Other payment methods are supported'
@@ -256,7 +256,7 @@ User.init({
         },
         beforeSave: async (user) => {
             if (user.changed('phoneNumber')) {
-                const phoneNumber = (user.phoneNumber + '').replaceAll(/[+\-()]/g, '');
+                const phoneNumber = (user.getDataValue('phoneNumber') + '').replaceAll(/[+\-()]/g, '');
                 if (phoneNumber[0] === '1') {
                     user.setDataValue('phoneNumber', phoneNumber.substring(1));
                 } else {
