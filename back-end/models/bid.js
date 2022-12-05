@@ -5,7 +5,12 @@ const { nanoid } = require('nanoid/async');
 const sequelize = require('./database');
 
 class Bid extends Model {
-
+    static async productInactive(productId) {
+        await Bid.update({ state: 'Product Delisted' }, { where: {
+            productId,
+            state: 'Active'
+        }});
+    }
 }
 
 Bid.init({
@@ -30,20 +35,20 @@ Bid.init({
             },
             dollarIncrements(value) {
                 if (!validator.isDivisibleBy(value + '', '1')) {
-                    throw new Error('Listing price must be set in $1 increments');
+                    throw new Error('Bid amount must be set in $1 increments');
                 }
             }
         }
     },
     state: {
-        type: DataTypes.ENUM('Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Booked', 'Out-bid', 'Other Bid Accepted'),
+        type: DataTypes.ENUM('Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted'),
         allowNull: false,
         validate: {
             notNull: {
                 msg: 'Bid must be in a valid state at all times'
             },
             isIn: {
-                args: [['Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Booked', 'Out-bid', 'Other Bid Accepted']],
+                args: [['Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted']],
                 msg: 'State of bid is not a valid option'
             }
         }
@@ -55,6 +60,14 @@ Bid.init({
             bid.setDataValue('id', bidId);
         }
     },
+    indexes: [
+        {
+            fields: ['productId', 'bidderId']
+        },
+        {
+            fields: ['bidderId']
+        }
+    ],
     sequelize,
     paranoid: true
 });

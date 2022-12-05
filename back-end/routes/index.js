@@ -8,6 +8,8 @@ const Keygrip = require('keygrip');
 
 const user = require('./user');
 const product = require('./product');
+const bid = require('./bid');
+const review = require('./review');
 const error = require('./error');
 
 // Security measures
@@ -31,7 +33,9 @@ app.use((req, _res, next) => {
 const keys = new Keygrip([process.env.COOKIE_KEY_1, process.env.COOKIE_KEY_2, process.env.COOKIE_KEY_3], 'sha256');
 
 const corsOptions = {
-    origin: /(www.)?reusevandy\.org/,
+    // origin: /(www.)?reusevandy\.org/,
+    // origin: 'http://localhost:3000',
+    origin: 'http://localhost:8080',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 }
@@ -44,18 +48,22 @@ app.use(session({
     keys: keys,
     
     maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'none',
-    secure: true,
+    // sameSite: 'none',
+    // secure: true,
+    sameSite: true,
+    secure: false,
     httpOnly: true,
     signed: true,
 
-    domain: 'api.reusevandy.org'
+    // domain: 'api.reusevandy.org'
 }));
 
 app.use(express.json());
 
 app.use('/users', user);
 app.use('/product', product);
+app.use('/bid', bid);
+app.use('/review', review);
 
 app.use(error);
 

@@ -105,7 +105,7 @@ const editableFields = [
     'groupMe'
 ]
 
-router.put('/me', async (req, res, next) => {
+router.patch('/me', async (req, res, next) => {
     const edits = _.pick(req.body, editableFields);
 
     // Send bad request if no edits need to be made
