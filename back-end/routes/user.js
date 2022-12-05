@@ -43,12 +43,15 @@ router.post('/forgot-password', async (req, res, next) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            res.status(404).send({ error: 'No account exists with that email address' });
+            res.status(404).send({
+                error: 'No account exists with that email address',
+            });
         } else {
-            
             // TO DO
             // send password reset email here
-            res.send('Thanks! We have just sent you an email with a link to set a new password');
+            res.send(
+                'Thanks! We have just sent you an email with a link to set a new password'
+            );
         }
     } catch (err) {
         next(err);
@@ -63,16 +66,13 @@ router.post('/reset-password', async (_req, _res, _next) => {
             const err = {
                 field: 'email',
                 value: email,
-                msg: 'That email address is not registered'
-            }
+                msg: 'That email address is not registered',
+            };
 
-            res.status(404).send({ errors: [ err ] });
+            res.status(404).send({ errors: [err] });
         } else {
-            
         }
-    } catch (err) {
-
-    }
+    } catch (err) {}
 });
 
 router.post('/logout', async (req, res, _next) => {
@@ -81,13 +81,11 @@ router.post('/logout', async (req, res, _next) => {
 });
 
 router.use(authenticateUser);
-    
+
 router.get('/me', async (req, res, next) => {
     try {
         const user = await User.findByPk(req.userId);
-        res.send(
-            user.selfView()
-        );
+        res.send(user.selfView());
     } catch (err) {
         next(err);
     }
@@ -102,8 +100,8 @@ const editableFields = [
     'otherPaymentMethod',
     'modeOfCommunication',
     'phoneNumber',
-    'groupMe'
-]
+    'groupMe',
+];
 
 router.patch('/me', async (req, res, next) => {
     const edits = _.pick(req.body, editableFields);
@@ -112,14 +110,12 @@ router.patch('/me', async (req, res, next) => {
     if (!Object.keys(edits).length) {
         return res.sendStatus(400);
     }
-    
+
     try {
         const user = await User.findByPk(req.userId);
         await user.update(edits);
 
-        res.send(
-            user.selfView()
-        );
+        res.send(user.selfView());
     } catch (err) {
         next(err);
     }
@@ -132,9 +128,7 @@ router.get('/:userId', async (req, res, next) => {
         if (!user) {
             res.sendStatus(404);
         } else {
-            res.send(
-                user.generateView()
-            );
+            res.send(user.generateView());
         }
     } catch (err) {
         next(err);

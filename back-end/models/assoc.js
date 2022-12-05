@@ -5,56 +5,66 @@ const Review = require('./review');
 const Photo = require('./photo');
 
 // a user can sell zero to many products but each product can only have one seller
-User.hasMany(Product, { as: 'productsSold', foreignKey: {
-    name: 'sellerId',
-    allowNull: false
-}});
+User.hasMany(Product, {
+    as: 'productsSold',
+    foreignKey: {
+        name: 'sellerId',
+        allowNull: false,
+    },
+});
 Product.belongsTo(User, { as: 'seller' });
 
 // a user can buy zero to many products but each product can only have one buyer
 User.hasMany(Product, { as: 'productsPurchased', foreignKey: 'buyerId' });
 Product.belongsTo(User, { as: 'buyer' });
 
-Product.hasMany(Bid, { foreignKey: {
-    name: 'productId',
-    allowNull: false
-}});
+Product.hasMany(Bid, {
+    foreignKey: {
+        name: 'productId',
+        allowNull: false,
+    },
+});
 Bid.belongsTo(Product, { as: 'product' });
 
-User.hasMany(Bid, { foreignKey: {
-    name: 'bidderId',
-    allowNull: false
-}});
+User.hasMany(Bid, {
+    foreignKey: {
+        name: 'bidderId',
+        allowNull: false,
+    },
+});
 Bid.belongsTo(User, { as: 'bidder' });
 
 Product.hasOne(Review, {
     scope: {
-        reviewType: 'Buyer'
+        reviewType: 'Buyer',
     },
     as: 'buyerReview',
     foreignKey: {
         name: 'productId',
-        allowNull: false
-    }
+        allowNull: false,
+    },
 });
 
 Product.hasOne(Review, {
     scope: {
-        reviewType: 'Seller'
+        reviewType: 'Seller',
     },
     as: 'sellerReview',
     foreignKey: {
         name: 'productId',
-        allowNull: false
-    }
+        allowNull: false,
+    },
 });
 
 Review.belongsTo(Product, { as: 'product' });
 
-User.hasMany(Review, { as: 'reviewsGiven', foreignKey: {
-    name: 'reviewerId',
-    allowNull: false
-}});
+User.hasMany(Review, {
+    as: 'reviewsGiven',
+    foreignKey: {
+        name: 'reviewerId',
+        allowNull: false,
+    },
+});
 Review.belongsTo(User, { as: 'reviewer' });
 
 // Each user can receive many reviews for products they have sold
@@ -62,13 +72,13 @@ Review.belongsTo(User, { as: 'reviewer' });
 // from the user's perspective it is a review for them as a seller
 User.hasMany(Review, {
     scope: {
-        reviewType: 'Buyer'
+        reviewType: 'Buyer',
     },
     as: 'sellerReviews',
     foreignKey: {
         name: 'revieweeId',
-        allowNull: false
-    }
+        allowNull: false,
+    },
 });
 
 // Each user can receive many reviews for products they have bought
@@ -76,51 +86,51 @@ User.hasMany(Review, {
 // from the user's perspective it is a review for them as a buyer
 User.hasMany(Review, {
     scope: {
-        reviewType: 'Seller'
+        reviewType: 'Seller',
     },
     as: 'buyerReviews',
     foreignKey: {
         name: 'revieweeId',
-        allowNull: false
-    }
+        allowNull: false,
+    },
 });
 
 Review.belongsTo(User, { as: 'reviewee' });
 
 User.hasOne(Photo, {
     scope: {
-        photoType: 'User'
+        photoType: 'User',
     },
     as: 'profilePicture',
     foreignKey: {
         name: 'parentId',
-        allowNull: false
+        allowNull: false,
     },
-    constraints: false
+    constraints: false,
 });
 
 Product.hasOne(Photo, {
     scope: {
-        photoType: 'Product - Cover'
+        photoType: 'Product - Cover',
     },
     as: 'coverPhoto',
     foreignKey: {
         name: 'parentId',
-        allowNull: false
+        allowNull: false,
     },
-    constraints: false
+    constraints: false,
 });
 
 Product.hasMany(Photo, {
     scope: {
-        photoType: 'Product - Other'
+        photoType: 'Product - Other',
     },
     as: 'otherPhotos',
     foreignKey: {
         name: 'parentId',
-        allowNull: false
+        allowNull: false,
     },
-    constraints: false
+    constraints: false,
 });
 
 module.exports = {
@@ -128,5 +138,5 @@ module.exports = {
     Product,
     Bid,
     Review,
-    Photo
+    Photo,
 };

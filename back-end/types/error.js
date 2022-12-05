@@ -1,18 +1,18 @@
 class LoginError extends Error {
     constructor(message) {
         super(message);
-        this.name = "LoginError";
+        this.name = 'LoginError';
     }
 }
 
 class BidError extends Error {
     constructor(message) {
         super(message);
-        this.name = "BidError";
+        this.name = 'BidError';
     }
 }
 
 module.exports = {
     LoginError,
-    BidError
-}
+    BidError,
+};

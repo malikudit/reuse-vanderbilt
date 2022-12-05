@@ -9,21 +9,24 @@ function AESKey(bytes) {
             resolve(privateKey);
         }
 
-        crypto.scrypt(process.env.AES_256_PASSWORD, process.env.AES_256_SALT, bytes, (err, key) => {
-            if (err)
-                reject(err);
+        crypto.scrypt(
+            process.env.AES_256_PASSWORD,
+            process.env.AES_256_SALT,
+            bytes,
+            (err, key) => {
+                if (err) reject(err);
 
-            privateKey = key;
-            resolve(key);
-        });
+                privateKey = key;
+                resolve(key);
+            }
+        );
     });
 }
 
 function randomBuffer(bytes) {
     return new Promise((resolve, reject) => {
         crypto.randomFill(new Uint8Array(bytes), (err, iv) => {
-            if (err)
-                reject(err);
+            if (err) reject(err);
 
             resolve(iv);
         });
@@ -53,7 +56,7 @@ async function decrypt(data, ivBytes = 16) {
     const key = await AESKey(32);
 
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
-    
+
     let decrypted = decipher.update(encrypted, 'base64url', 'utf-8');
     decrypted += decipher.final('utf-8');
 
@@ -72,5 +75,5 @@ async function decryptJSON(obj) {
 
 module.exports = {
     encryptJSON,
-    decryptJSON
-}
+    decryptJSON,
+};

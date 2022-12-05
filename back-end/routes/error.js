@@ -13,7 +13,7 @@ const validation = function (err, _req, res, next) {
     } else {
         next(err);
     }
-}
+};
 
 const login = function (err, _req, res, next) {
     if (err instanceof LoginError) {
@@ -22,7 +22,7 @@ const login = function (err, _req, res, next) {
     } else {
         next(err);
     }
-}
+};
 
 const bidding = function (err, _req, res, next) {
     if (err instanceof BidError) {
@@ -31,21 +31,15 @@ const bidding = function (err, _req, res, next) {
     } else {
         next(err);
     }
-}
+};
 
 const serverError = function (err, _req, res, _next) {
     console.log(err);
     res.sendStatus(500);
-}
+};
 
 const clientError = function (_req, res, _next) {
     res.sendStatus(404);
-}
+};
 
-module.exports = [
-    validation,
-    login,
-    bidding,
-    serverError,
-    clientError
-];
+module.exports = [validation, login, bidding, serverError, clientError];

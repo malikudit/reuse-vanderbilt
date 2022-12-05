@@ -11,5 +11,5 @@ const models = require('./assoc');
 
 module.exports = {
     ...models,
-    sequelize
+    sequelize,
 };
