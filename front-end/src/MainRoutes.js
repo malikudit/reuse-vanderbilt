@@ -12,6 +12,8 @@ import LoginPage from "./pages/LoginPage.js";
 import ResetPasswordPage from "./pages/ResetPassword.js";
 import NewReviewPage from "./pages/NewReviewPage.js";
 import EditProfile from "./pages/EditProfile.js";
+import OtherProfile from "./pages/OtherProfile.js";
+import FAQ from "./pages/FAQ.js";
 
 export default function MainRoutes(props) {
   return (
@@ -115,11 +117,8 @@ export default function MainRoutes(props) {
           />
         }
       />
-      <Route path="/product_listing/:itemName" element={<ProductPage />} />
-      <Route
-        path="/product_review/:category/:itemName"
-        element={<ReviewPage />}
-      />
+      <Route path="/product_listing/:id" element={<ProductPage />} />
+      <Route path="/product_review/:id" element={<ReviewPage />} />
       <Route path="/listings" element={<ListingsPage />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route
@@ -127,12 +126,14 @@ export default function MainRoutes(props) {
         element={<NotificationsSettings />}
       />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/:userID" element={<OtherProfile />} />
       <Route path="/edit_profile" element={<EditProfile />} />
       <Route path="/create_listing" element={<CreateListings />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/reset" element={<ResetPasswordPage />} />
-      <Route path="/new_review/:itemName" element={<NewReviewPage />} />
+      <Route path="/new_review/:id" element={<NewReviewPage />} />
+      <Route path="/faq" element={<FAQ />} />
     </Routes>
   );
 }

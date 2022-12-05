@@ -17,6 +17,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import QuizIcon from "@mui/icons-material/Quiz";
 
 const theme = createTheme({
   palette: {
@@ -39,6 +40,7 @@ const NavBar = () => {
   const [profile, setProfile] = React.useState(false);
   const [logout, setLogout] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [faq, setfaq] = React.useState(false);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -86,6 +88,12 @@ const NavBar = () => {
     handleClose();
   };
 
+  const handleFAQ = () => {
+    clearAll();
+    setfaq(true);
+    handleClose();
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
@@ -99,7 +107,6 @@ const NavBar = () => {
             aria-label="logo"
             onClick={handleHome}
           >
-            <Typography variant="h3" color="neutral" fontStyle="helvetica">
             <Typography variant="h3" color="neutral" fontStyle="helvetica">
               Reuse
             </Typography>
@@ -162,10 +169,6 @@ const NavBar = () => {
               <MenuItem component={Link} to="/profile" onClick={handleProfile}>
                 <PersonIcon />
                 View Profile
-              </MenuItem>
-              <MenuItem component={Link} to="/edit_profile" onClick={handleProfile}>
-                <PersonIcon />
-                Edit Profile
               </MenuItem>
               <MenuItem component={Link} to="/login" onClick={handleLogin}>
                 <LoginIcon />

@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.heading-faq {
+    color: #212943;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+
+.faq-container {
+    margin: 0 auto;
+    margin-top: 2%;
+    padding: 2rem;
+    text-align: center;
+}
+
+.form-faq {
+    display: flex;
+    width: 50rem;
+    background-color: #fff;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 1rem;
+}
+
+.form-faq svg {
+    height: 1rem;
+    fill: #9EA6AE;
+    width: 4rem;
+}
+
+.searchbar-faq {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    padding: 1rem;
+    padding-left: 4rem;
+    width: 100%;
+    box-shadow: 0px 5px 13px 0px #DEE4F1;
+    border-radius: 0.8rem;
+}
+
+.searchbar-faq:focus {
+    outline: none;
+    box-shadow: 0 0 0 1.5px #DEE4F1, 0px 5px 13px 0px #DEE4F1;
+}
+
+.faq {
+    margin: 3rem 0;
+}
+
+.h3-faq {
+    font-weight: 500;
+}
+
+.question-wrapper {
+    width: 50rem;
+    border-bottom: 1px solid #DEE4F1;
+    margin: 0 auto;
+    padding: 1rem;
+    transition: 1s;
+}
+
+.question {
+    display: flex;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #212943;
+    display: flex;
+    justify-content: space-between;
+}
+
+.question svg {
+    width: 1rem;
+    height: 1.5rem;
+    fill: #9EA6AE;
+}
+
+.question svg.active {
+    transform: rotate(180deg);
+}
+
+.question svg:hover {
+    opacity: 0.8;
+}
+
+.button-faq {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.button-faq:focus {
+    outline: none;
+}
+
+.answer {
+    display: none;
+}
+
+.answer.active {
+    display: block;
+    text-align: left;
+    padding-top: 1.5rem;
+    font-weight: light;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #9EA6AE;
+    height: 0%;
+    animation: slidein 0.4s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes slidein {
+    from {
+        opacity: 0.3;
+        transform: translateY(-20%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}

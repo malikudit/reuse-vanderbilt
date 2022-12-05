@@ -41,8 +41,4 @@ export const formsOfContact = [
     value: "GroupMe",
     label: "GroupMe",
   },
-  // {
-  //   value: "Any",
-  //   label: "Any",
-  // },
 ];

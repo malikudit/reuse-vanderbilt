@@ -1,17 +1,40 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { Grid, Box, Typography, TextField, Button } from "@mui/material";
 import CountdownTimer from "../../components/CountdownTimer";
 
 export default function Active(props) {
+  const [products, setProducts] = useState([]);
+  const [bid, setBid] = useState();
+  const role = "Buyer";
+  const madeBid = true;
+
+  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+        console.log(d);
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   const oneDay = 24 * 60 * 60 * 1000;
-  var timeLeft = new Date(props.timeLeft).getTime() - new Date().getTime();
-  var deleteListing = false;
+  var timeLeft =
+    new Date(products.expirationDate).getTime() - new Date().getTime();
+  var delListing = false;
   var currentBid = props.currentBid;
   if (currentBid === null) {
     currentBid = "N/A";
   }
-  var role = "";
-
   // TODO Highest bidder logic
   // if user is highest bidder
   // role = "Highest-Bidder";
@@ -23,14 +46,65 @@ export default function Active(props) {
   // withdraw bid
 
   if (timeLeft > oneDay) {
-    deleteListing = true;
+    delListing = true;
   }
-  const handleBid = (e) => {
-    // e.preventDefault();
+
+  async function putBidorOffer(
+    url = `http://localhost:8080/bid/${products.id}`
+  ) {
+    const response = await fetch(url, {
+      method: "PUT",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+      body: JSON.stringify({
+        bidAmount: bid,
+      }),
+    });
+    return response.json();
+  }
+
+  async function deleteWithdrawBid(
+    url = `http://localhost:8080/bid/${products.id}`
+  ) {
+    const response = await fetch(url, {
+      method: "DELETE",
+      mode: "cors",
+      credentials: "include",
+    });
+    return response.json();
+  }
+
+  async function deleteListing(
+    url = `http://localhost:8080/product/${products.id}`
+  ) {
+    const response = await fetch(url, {
+      method: "DELETE",
+      mode: "cors",
+      credentials: "include",
+    });
+    return response.json();
+  }
+
+  const handleBidorOffer = () => {
+    if (products.currentBid === null) {
+      setBid(products.openingBid);
+    } else {
+      const newBid = products.currentBid + products.bidIncrement;
+      setBid(newBid);
+    }
+    putBidorOffer();
   };
 
-  const handleBuyNow = (e) => {
-    // e.preventDefault();
+  const handleWithdrawBid = () => {
+    deleteWithdrawBid();
+  };
+
+  const handleDeleteListing = () => {
+    deleteListing();
   };
 
   return (
@@ -66,7 +140,7 @@ export default function Active(props) {
                 overflow: "hidden",
                 display: "block",
               }}
-              src={props.coverImage}
+              src={products.coverImage}
             />
           </Grid>
           <Grid
@@ -98,20 +172,20 @@ export default function Active(props) {
                   letterSpacing: "2px",
                 }}
               >
-                {props.itemName}
+                {products.title}
               </Typography>
             </Grid>
             <Grid container justifyContent="space-between">
               <Grid item xs={6} marginBottom={2}>
                 <Typography style={{ color: "#4169E1" }}>
                   {"Seller: "}
-                  {props.sellerName}
+                  {products.sellerName}
                 </Typography>
               </Grid>
               <Grid item xs={5.9} marginBottom={2}>
                 <Typography style={{ color: "#4169E1" }}>
                   {"Category: "}
-                  {props.category}
+                  {products.category}
                 </Typography>
               </Grid>
             </Grid>
@@ -119,13 +193,13 @@ export default function Active(props) {
               <Grid item xs={6} marginBottom={2}>
                 <Typography>
                   {"Condition: "}
-                  {props.condition}
+                  {products.condition}
                 </Typography>
               </Grid>
               <Grid item xs={6} marginBottom={2}>
                 <Typography>
                   {"Location of Exchange: "}
-                  {props.location}
+                  {products.location}
                 </Typography>
               </Grid>
             </Grid>
@@ -143,30 +217,30 @@ export default function Active(props) {
                 }}
               >
                 <Typography variant="p" sx={{ lineHeight: "1.5" }}>
-                  {props.description}
+                  {products.description}
                 </Typography>
               </Grid>
               <Grid item xs={12} marginBottom={2}>
                 <Typography style={{ color: "#FF0000", fontWeight: "bold" }}>
                   <CountdownTimer
-                    countDownDate={props.timeLeft}
+                    countDownDate={products.expirationDate}
                     productPage={true}
                   />
                 </Typography>
               </Grid>
             </Grid>
-            {props.listingType === "Bid Only" ? (
+            {products.listingType === "Bid Only" ? (
               <Grid container>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#4169E1", fontWeight: "bold" }}>
-                    {"Current Bid Placed: "}
+                    {"Current Bid Placed: $"}
                     {currentBid}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#4169E1", fontWeight: "bold" }}>
-                    {"Next Bid: "}
-                    {props.nextBid}
+                    {"Next Bid: $"}
+                    {products.nextBid}
                   </Typography>
                 </Grid>
               </Grid>
@@ -174,40 +248,58 @@ export default function Active(props) {
               <div>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#228B22", fontWeight: "bold" }}>
-                    {"Listing Price: "}
-                    {props.listingPrice}
+                    {"Listing Price: $"}
+                    {products.listingPrice}
                   </Typography>
                 </Grid>
               </div>
             )}
             <Grid container justifyContent="space-between" marginBottom={2}>
-              {props.sellerID !== "Parwaz" ? (
+              {products.sellerId !== "Parwaz" ? (
                 <Grid
                   container
                   justifyContent={"space-evenly"}
                   marginBottom={2}
                 >
-                  {props.listingType === "Bid-Only" ? (
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={handleBid()}
-                      sx={{
-                        background: "#333",
-                        color: "white",
-                        outline: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        padding: "10px 25px",
-                      }}
-                    >
-                      Place Bid
-                    </Button>
+                  {products.listingType === "Bid-Only" ? (
+                    <React.Fragment>
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={handleBidorOffer()}
+                        sx={{
+                          background: "#333",
+                          color: "white",
+                          outline: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: "10px 25px",
+                        }}
+                      >
+                        Place Bid
+                      </Button>
+                      {madeBid ? (
+                        <Button
+                          variant="contained"
+                          color="info"
+                          sx={{
+                            background: "#333",
+                            color: "white",
+                            outline: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "10px 25px",
+                          }}
+                          onClick={handleWithdrawBid()}
+                        >
+                          Withdraw Bid
+                        </Button>
+                      ) : null}
+                    </React.Fragment>
                   ) : (
                     <Button
                       variant="contained"
                       color="success"
-                      onClick={handleBuyNow()}
                       sx={{
                         background: "#333",
                         color: "white",
@@ -216,6 +308,7 @@ export default function Active(props) {
                         cursor: "pointer",
                         padding: "10px 25px",
                       }}
+                      onClick={handleBidorOffer()}
                     >
                       Make Offer
                     </Button>
@@ -244,6 +337,7 @@ export default function Active(props) {
                           cursor: "pointer",
                           padding: "10px 25px",
                         }}
+                        onClick={handleDeleteListing()}
                       >
                         Delete Listing
                       </Button>

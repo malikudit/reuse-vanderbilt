@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useLocation } from "react";
 import { Link } from "react-router-dom";
 import { Grid, Button, ThemeProvider, createTheme } from "@mui/material";
 import DefaultBanner from "../components/DefaultBanner";
@@ -30,11 +30,14 @@ const theme = createTheme({
   },
 });
 
-export default function Profile() {
+export default function OtherProfile(props) {
   const [profile, setProfile] = useState([]);
   let preferredPayment = [];
+  const url = window.location.href;
+  const array = url.split("/");
+  const userID = array[array.length - 1];
 
-  async function getData(url = "http://localhost:8080/users/me") {
+  async function getData(url = `http://localhost:8080/users/${userID}`) {
     const response = await fetch(url, {
       method: "GET",
       mode: "cors",
@@ -52,7 +55,6 @@ export default function Profile() {
   useEffect(() => {
     getData();
   }, []);
-
   if (profile.cash) {
     preferredPayment.push("Cash");
   }
@@ -119,10 +121,6 @@ export default function Profile() {
                         <h3 class="profile-desc-title">{profile.groupMe}</h3>
                       </div>
                     ) : null}
-
-                    <Button component={Link} to="/edit_profile">
-                      Edit Profile / View Profile Preferences
-                    </Button>
                   </div>
                 </div>
               </div>
@@ -148,51 +146,3 @@ export default function Profile() {
     </div>
   );
 }
-
-// <Grid>
-//   <div class="profile-content">
-//     <div>
-//       <h2 class="profile-desc-title">Usage History</h2>
-//       <div class="portlet light bordered">
-//         <div class="row list-separated profile-stat">
-//           <div class="col-md-4 col-sm-4 col-xs-6">
-//             <div class="uppercase profile-stat-title"> 37 </div>
-//             <div class="uppercase profile-stat-text"> Listings </div>
-//           </div>
-//           <div class="col-md-4 col-sm-4 col-xs-6">
-//             <div class="uppercase profile-stat-title"> 51 </div>
-//             <div class="uppercase profile-stat-text">
-//               {" "}
-//               Products Sold{" "}
-//             </div>
-//           </div>
-//           <div class="col-md-4 col-sm-4 col-xs-6">
-//             <div class="uppercase profile-stat-title"> 61 </div>
-//             <div class="uppercase profile-stat-text">
-//               {" "}
-//               Products Bought{" "}
-//             </div>
-//           </div>
-//           <div class="col-md-4 col-sm-4 col-xs-6">
-//             <div class="uppercase profile-stat-title"> 3.77 </div>
-//             <div class="uppercase profile-stat-text">
-//               {" "}
-//               Average Rating{" "}
-//             </div>
-//           </div>
-//           <div class="col-md-4 col-sm-4 col-xs-6">
-//             <div class="uppercase profile-stat-title">
-//               <Button
-//                 sx={{
-//                   marginTop: "5vh",
-//                 }}
-//               >
-//                 View All Reviews
-//               </Button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// </Grid>
