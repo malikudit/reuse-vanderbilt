@@ -237,9 +237,9 @@ export default function EditProfile() {
           swal("Oops!", data.error, "error");
         } else {
           setSaved(true);
-          // swal("Success", "Profile updated", "success").then(function () {
-          //   window.location.href = "/";
-          // });
+          swal("Success", "Profile updated", "success").then(function () {
+            window.location.href = "#/profile";
+          });
           console.log(data);
         }
       });

@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import DefaultBanner from "../components/DefaultBanner";
@@ -31,122 +31,149 @@ const theme = createTheme({
 });
 
 export default function ProductPage() {
-  const locCoverImage = useLocation().state.coverImage;
-  const locSecondaryImage1 = useLocation().state.secondaryImage1;
-  const locSecondaryImage2 = useLocation().state.secondaryImage2;
-  const locSecondaryImage3 = useLocation().state.secondaryImage3;
-  const locSecondaryImage4 = useLocation().state.secondaryImage4;
-  const locItemName = useLocation().state.title;
-  const locDescription = useLocation().state.description;
-  const locSellerName = useLocation().state.seller;
-  const locCondition = useLocation().state.condition;
-  const locLocation = useLocation().state.location;
-  const locListingType = useLocation().state.listingType;
-  var locOpeningBid = useLocation().state.openingBid;
-  var locCurrentBid = useLocation().state.currentBid;
-  const locBidIncrement = useLocation().state.bidIncrement;
-  const locListingPrice = useLocation().state.listingPrice;
-  const locTimeLeft = useLocation().state.expirationDate;
-  const locCategory = useLocation().state.category;
-  const locSellerID = useLocation().state.sellerID;
-  const locRole = useLocation().state.role;
-  var locState = useLocation().state.state;
-  if (locCurrentBid === null) {
-    locCurrentBid = locOpeningBid;
+  const [products, setProducts] = useState({});
+  const id = useLocation().state.id;
+
+  async function getData(url = `http://localhost:8080/product/${id}`) {
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+        console.log(d);
+      });
+    return response;
   }
-  const nextBid = locCurrentBid + " + " + locBidIncrement;
-  var timeLeft = new Date(locTimeLeft).getTime();
+
+  useEffect(() => {
+    getData();
+  }, []);
+  var currentBid = products.currentBid;
+  const coverImage = products.coverImage;
+  const secondaryImage1 = products.coverImage;
+  const secondaryImage2 = products.coverImage;
+  const secondaryImage3 = products.coverImage;
+  const secondaryImage4 = products.coverImage;
+  const title = products.title;
+  const description = products.description;
+  const condition = products.condition;
+  const category = products.category;
+  const status = products.status;
+  const sellerName = products.sellerName;
+  const sellerId = products.sellerId;
+  const listingType = products.listingType;
+  const location = products.location;
+  const openingBid = products.openingBid;
+  const bidIncrement = products.bidIncrement;
+  const listingPrice = products.listingPrice;
+  const timeLeft = new Date(products.expirationDate).getTime();
+  var state = products.state;
+  const role = products.role;
+  state = "Active";
+
+  if (currentBid === null) {
+    currentBid = openingBid;
+  }
+  const nextBid = currentBid + " + " + bidIncrement;
   var now = new Date().getTime();
   var expired = timeLeft - now;
-  locState = "Active";
 
-  if (locState === "Active") {
+  if (state === "Active") {
     return (
       <ThemeProvider theme={theme}>
         <DefaultBanner banner={"Product Listing Page"} />
         <Active
-          coverImage={locCoverImage}
-          secondaryImage1={locSecondaryImage1}
-          secondaryImage2={locSecondaryImage2}
-          secondaryImage3={locSecondaryImage3}
-          secondaryImage4={locSecondaryImage4}
-          itemName={locItemName}
-          sellerID={locSellerID}
-          sellerName={locSellerName}
-          category={locCategory}
-          condition={locCondition}
-          location={locLocation}
-          timeLeft={locTimeLeft}
-          currentBid={locCurrentBid}
-          openingBid={locOpeningBid}
-          listingType={locListingType}
+          coverImage={coverImage}
+          secondaryImage1={secondaryImage1}
+          secondaryImage2={secondaryImage2}
+          secondaryImage3={secondaryImage3}
+          secondaryImage4={secondaryImage4}
+          itemName={title}
+          sellerID={sellerId}
+          sellerName={sellerName}
+          category={category}
+          condition={condition}
+          location={location}
+          timeLeft={timeLeft}
+          currentBid={currentBid}
+          openingBid={openingBid}
+          listingType={listingType}
           nextBid={nextBid}
-          listingPrice={locListingPrice}
-          description={locDescription}
+          listingPrice={listingPrice}
+          description={description}
+          role={role}
+          id={id}
         />
       </ThemeProvider>
     );
   }
 
-  if (locState === "Inactive") {
+  if (state === "Inactive") {
     return (
       <ThemeProvider theme={theme}>
         <DefaultBanner banner={"Product Listing Page"} />
         <Inactive
-          coverImage={locCoverImage}
-          secondaryImage1={locSecondaryImage1}
-          secondaryImage2={locSecondaryImage2}
-          secondaryImage3={locSecondaryImage3}
-          secondaryImage4={locSecondaryImage4}
-          itemName={locItemName}
-          sellerID={locSellerID}
-          description={locDescription}
-          sellerName={locSellerName}
+          coverImage={coverImage}
+          secondaryImage1={secondaryImage1}
+          secondaryImage2={secondaryImage2}
+          secondaryImage3={secondaryImage3}
+          secondaryImage4={secondaryImage4}
+          itemName={title}
+          sellerID={sellerId}
+          description={description}
+          sellerName={sellerName}
+          id={id}
         />
       </ThemeProvider>
     );
   }
 
-  if (locState === "Evaluating Offers") {
+  if (state === "Evaluating Offers") {
     return (
       <ThemeProvider theme={theme}>
         <DefaultBanner banner={"Product Listing Page"} />
         <EvaluatingOffers
-          coverImage={locCoverImage}
-          secondaryImage1={locSecondaryImage1}
-          secondaryImage2={locSecondaryImage2}
-          secondaryImage3={locSecondaryImage3}
-          secondaryImage4={locSecondaryImage4}
-          itemName={locItemName}
-          sellerID={locSellerID}
-          sellerName={locSellerName}
-          category={locCategory}
-          condition={locCondition}
-          location={locLocation}
-          description={locDescription}
-          role={locRole}
+          coverImage={coverImage}
+          secondaryImage1={secondaryImage1}
+          secondaryImage2={secondaryImage2}
+          secondaryImage3={secondaryImage3}
+          secondaryImage4={secondaryImage4}
+          itemName={title}
+          sellerID={sellerId}
+          sellerName={sellerName}
+          category={category}
+          condition={condition}
+          location={location}
+          description={description}
+          role={role}
+          id={id}
         />
       </ThemeProvider>
     );
   }
 
-  if (locState === "Sold") {
+  if (state === "Sold") {
     return (
       <ThemeProvider theme={theme}>
         <DefaultBanner banner={"Product Listing Page"} />
         <Sold
-          coverImage={locCoverImage}
-          secondaryImage1={locSecondaryImage1}
-          secondaryImage2={locSecondaryImage2}
-          secondaryImage3={locSecondaryImage3}
-          secondaryImage4={locSecondaryImage4}
-          itemName={locItemName}
-          sellerID={locSellerID}
-          sellerName={locSellerName}
-          category={locCategory}
-          condition={locCondition}
-          location={locLocation}
-          description={locDescription}
+          id={id}
+          coverImage={coverImage}
+          secondaryImage1={secondaryImage1}
+          secondaryImage2={secondaryImage2}
+          secondaryImage3={secondaryImage3}
+          secondaryImage4={secondaryImage4}
+          itemName={title}
+          sellerID={sellerId}
+          sellerName={sellerName}
+          category={category}
+          condition={condition}
+          location={location}
+          description={description}
         />
       </ThemeProvider>
     );

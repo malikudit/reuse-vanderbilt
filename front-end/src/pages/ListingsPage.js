@@ -69,7 +69,7 @@ export default function ListingsPage(props) {
   const [products, setProducts] = useState([]);
   const [profile, setProfile] = useState();
 
-  async function getProducts(url = "http://localhost:8080/product") {
+  async function getProducts(url = `http://localhost:8080/product`) {
     const response = await fetch(url, {
       method: "GET",
       mode: "cors",
@@ -118,12 +118,12 @@ export default function ListingsPage(props) {
   var buying = products.sort(compare);
   buying = buying.filter(function (entry) {
     console.log(entry.sellerID);
-    return entry.sellerID !== profile.id;
+    return entry.sellerID !== "Parwaz";
   });
 
   var selling = products.sort(compare);
   selling = selling.filter(function (entry) {
-    return entry.sellerID === profile.id;
+    return entry.sellerID === "Parwaz";
   });
   const [value, setValue] = React.useState(0);
 

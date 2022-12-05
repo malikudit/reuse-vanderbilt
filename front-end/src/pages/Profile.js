@@ -132,11 +132,13 @@ export default function Profile() {
           <Grid>
             <div class="profile-content">
               <div>
-                <h3 class="profile-desc-title">Reviews for Parwaz Gill</h3>
+                <h3 class="profile-desc-title">
+                  Reviews for {profile.firstName} {profile.lastName}
+                </h3>
                 <span class="profile-desc-text">
-                 {SampleReviews.map((review) => (
-                    <ReviewCards {...review} key={review.itemName} />
-                 ))}
+                  {SampleReviews.map((review) => (
+                    <ReviewCards {...review} key={review.id} />
+                  ))}
                 </span>
               </div>
             </div>

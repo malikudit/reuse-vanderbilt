@@ -71,20 +71,21 @@ export default function Sold(props) {
                   }}
                 >
                   <Link
-                    to={{ pathname: `/new_review/${props.itemName}` }}
+                    to={{ pathname: `/new_review/${props.id}` }}
                     state={{
                       itemName: props.itemName,
                       coverImage: props.coverImage,
-                      secondaryImage1: props.secondaryImage1,
-                      secondaryImage2: props.secondaryImage2,
-                      secondaryImage3: props.secondaryImage3,
-                      secondaryImage4: props.secondaryImage4,
+                      // secondaryImage1: props.secondaryImage1,
+                      // secondaryImage2: props.secondaryImage2,
+                      // secondaryImage3: props.secondaryImage3,
+                      // secondaryImage4: props.secondaryImage4,
                       sellerID: props.sellerID,
                       sellerName: props.sellerName,
                       category: props.category,
                       condition: props.condition,
                       location: props.location,
                       salePrice: props.salePrice,
+                      id: props.id,
                     }}
                     style={{ textDecoration: "none" }}
                   >

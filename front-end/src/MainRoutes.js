@@ -116,11 +116,8 @@ export default function MainRoutes(props) {
           />
         }
       />
-      <Route path="/product_listing/:itemName" element={<ProductPage />} />
-      <Route
-        path="/product_review/:category/:itemName"
-        element={<ReviewPage />}
-      />
+      <Route path="/product_listing/:id" element={<ProductPage />} />
+      <Route path="/product_review/:id" element={<ReviewPage />} />
       <Route path="/listings" element={<ListingsPage />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route
@@ -133,7 +130,7 @@ export default function MainRoutes(props) {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/reset" element={<ResetPasswordPage />} />
-      <Route path="/new_review/:itemName" element={<NewReviewPage />} />
+      <Route path="/new_review/:id" element={<NewReviewPage />} />
       <Route path="/faq" element={<FAQ />} />
     </Routes>
   );

@@ -159,13 +159,13 @@ export default function Active(props) {
               <Grid container>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#4169E1", fontWeight: "bold" }}>
-                    {"Current Bid Placed: "}
+                    {"Current Bid Placed: $"}
                     {currentBid}
                   </Typography>
                 </Grid>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#4169E1", fontWeight: "bold" }}>
-                    {"Next Bid: "}
+                    {"Next Bid: $"}
                     {props.nextBid}
                   </Typography>
                 </Grid>
@@ -174,7 +174,7 @@ export default function Active(props) {
               <div>
                 <Grid item xs={6} marginBottom={2}>
                   <Typography style={{ color: "#228B22", fontWeight: "bold" }}>
-                    {"Listing Price: "}
+                    {"Listing Price: $"}
                     {props.listingPrice}
                   </Typography>
                 </Grid>
