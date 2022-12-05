@@ -42,7 +42,7 @@ const keys = new Keygrip(
 const corsOptions = {
   // origin: /(www.)?reusevandy\.org/,
   // origin: 'http://localhost:3000',
-  origin: 'http://localhost:8080',
+  origin: 'http://localhost:3000',
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
