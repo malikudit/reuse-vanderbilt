@@ -134,9 +134,9 @@ export default function Profile() {
               <div>
                 <h3 class="profile-desc-title">Reviews for Parwaz Gill</h3>
                 <span class="profile-desc-text">
-                  {SampleReviews.map((review) => (
+                 {SampleReviews.map((review) => (
                     <ReviewCards {...review} key={review.itemName} />
-                  ))}
+                 ))}
                 </span>
               </div>
             </div>

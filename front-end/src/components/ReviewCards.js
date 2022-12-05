@@ -42,6 +42,12 @@ export default function ReviewCards(props) {
               borderRadius: "16px",
             }}
           >
+          <Grid container alignItems={"center"} justifyContent={"center"}>
+              <CardContent>
+                <Typography variant="h6">{props.reviewTitle}</Typography>
+                <Box sx={{ borderBottom: 3 }}></Box>
+              </CardContent>
+              </Grid>
             <Grid container alignItems={"center"} justifyContent={"center"}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
