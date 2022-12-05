@@ -1,31 +1,31 @@
-import { React, useEffect, useState } from "react";
-import { createTheme, ThemeProvider } from "@mui/material";
-import { useLocation } from "react-router-dom";
-import DefaultBanner from "../components/DefaultBanner";
-import Active from "./product_pages/Active";
-import Inactive from "./product_pages/Inactive";
-import EvaluatingOffers from "./product_pages/EvaluatingOffers";
-import Sold from "./product_pages/Sold";
+import { React, useEffect, useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import DefaultBanner from '../components/DefaultBanner';
+import Active from './product_pages/Active';
+import Inactive from './product_pages/Inactive';
+import EvaluatingOffers from './product_pages/EvaluatingOffers';
+import Sold from './product_pages/Sold';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#DAA520",
+      main: '#DAA520',
     },
     secondary: {
-      main: "#212121",
+      main: '#212121',
     },
     neutral: {
-      main: "#ffffff",
+      main: '#ffffff',
     },
     info: {
-      main: "#4169E1",
+      main: '#4169E1',
     },
     success: {
-      main: "#228B22",
+      main: '#228B22',
     },
     background: {
-      default: "#696969",
+      default: '#696969',
     },
   },
 });
@@ -36,9 +36,9 @@ export default function ProductPage() {
 
   async function getData(url = `http://localhost:8080/product/${id}`) {
     const response = await fetch(url, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
@@ -72,28 +72,28 @@ export default function ProductPage() {
   const timeLeft = new Date(products.expirationDate).getTime();
   var state = products.state;
   const role = products.role;
-  state = "Active";
+  state = 'Active';
 
   if (currentBid === null) {
     currentBid = openingBid;
   }
-  const nextBid = currentBid + " + " + bidIncrement;
+  const nextBid = currentBid + ' + ' + bidIncrement;
   var now = new Date().getTime();
   var expired = timeLeft - now;
 
-  if (state === "Active") {
+  if (state === 'Active') {
     return (
       <ThemeProvider theme={theme}>
-        <DefaultBanner banner={"Product Listing Page"} />
+        <DefaultBanner banner={'Product Listing Page'} />
         <Active sellerID={sellerId} id={id} />
       </ThemeProvider>
     );
   }
 
-  if (state === "Inactive") {
+  if (state === 'Inactive') {
     return (
       <ThemeProvider theme={theme}>
-        <DefaultBanner banner={"Product Listing Page"} />
+        <DefaultBanner banner={'Product Listing Page'} />
         <Inactive
           coverImage={coverImage}
           secondaryImage1={secondaryImage1}
@@ -110,10 +110,10 @@ export default function ProductPage() {
     );
   }
 
-  if (state === "Evaluating Offers") {
+  if (state === 'Evaluating Offers') {
     return (
       <ThemeProvider theme={theme}>
-        <DefaultBanner banner={"Product Listing Page"} />
+        <DefaultBanner banner={'Product Listing Page'} />
         <EvaluatingOffers
           coverImage={coverImage}
           secondaryImage1={secondaryImage1}
@@ -134,10 +134,10 @@ export default function ProductPage() {
     );
   }
 
-  if (state === "Sold") {
+  if (state === 'Sold') {
     return (
       <ThemeProvider theme={theme}>
-        <DefaultBanner banner={"Product Listing Page"} />
+        <DefaultBanner banner={'Product Listing Page'} />
         <Sold
           id={id}
           coverImage={coverImage}
