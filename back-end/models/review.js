@@ -26,6 +26,27 @@ Review.init({
             }
         }
     },
+    title: {
+        type: DataTypes.STRING(32),
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'Review title is a required field'
+            },
+            notIn: {
+                args: [[true, false, NaN]],
+                msg: 'Review title must be alphanumeric'
+            },
+            is: {
+                args: '[a-zA-Z0-9 ]*',
+                msg: 'Review title must be alphanumeric'
+            },
+            len: {
+                args: [5, 32],
+                msg: 'Review title must be between 5 to 32 characters long'
+            }
+        }
+    },
     stars: {
         type: DataTypes.DECIMAL(2, 1),
         allowNull: false,
@@ -39,10 +60,11 @@ Review.init({
             },
             max: {
                 args: 5,
-                args: 'Number of stars in a rating must be less than 5'
+                msg: 'Number of stars in a rating must be less than 5'
             },
             halfPointIncrements(value) {
-                if (!validator.isDivisibleBy(value + '', '0.5')) {
+                const decimal = validator.toFloat(value + '') * 2;
+                if (!validator.isDivisibleBy(decimal + '', '1')) {
                     throw new Error('Number of stars in a rating must in increments of 0.5');
                 }
             }

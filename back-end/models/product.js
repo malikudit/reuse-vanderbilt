@@ -6,7 +6,7 @@ const { nanoid } = require('nanoid/async');
 
 const sequelize = require('./database');
 
-const { BidError } = require('../types/error');
+const { BidError, ReviewError } = require('../types/error');
 
 const defaultFields = [
     'id',
@@ -330,6 +330,33 @@ class Product extends Model {
 
         await this.update({ currentBid: highestActiveBid });
     }
+
+    async createReview(userId, reviewInfo) {
+        const sellerId = this.get('sellerId');
+        const buyerId = this.get('buyerId');
+
+        if (sellerId !== userId && buyerId !== userId) {
+            throw new ReviewError('You are not allowed to leave a review on this product listing');
+        }
+
+        if (this.get('state') !== 'Sold') {
+            throw new ReviewError('You must wait for the product to be sold before leaving a review');
+        }
+
+        if (sellerId === userId) {
+            await this.createSellerReview({
+                ...reviewInfo,
+                revieweeId: buyerId,
+                reviewerId: sellerId
+            });
+        } else {
+            await this.createBuyerReview({
+                ...reviewInfo,
+                revieweeId: sellerId,
+                reviewerId: buyerId
+            });
+        }
+    }
 }
 
 Product.init({
@@ -354,7 +381,7 @@ Product.init({
             },
             len: {
                 args: [5, 32],
-                msg: 'Product title must be between 2 to 32 characters long'
+                msg: 'Product title must be between 5 to 32 characters long'
             }
         }
     },
