@@ -460,7 +460,24 @@ export default function Form(props) {
                 <Grid item xs={3.25} />
               </Grid>
               <Grid item xs={12} margin={1.25}>
-                <Button className="btn" type="submit" variant="contained">
+                <Button 
+                  className="btn" 
+                  type="submit" 
+                  variant="contained"
+                  sx = {{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    background: '#000000',
+                    letterSpacing: '1px',
+                    outline: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textTransform: 'none',
+                    '&:hover': {
+                      background: '#daa520',
+                      color: 'black',
+                  }}}
+                >
                   Create Account
                 </Button>
               </Grid>
@@ -472,7 +489,11 @@ export default function Form(props) {
                   component={Link}
                   to="/login"
                   underline="none"
-                  sx={{ color: "blue" }}
+                  sx={{ 
+                    color: "#daa520" ,
+                    textDecoration: "none",
+                    "&:hover": { textDecoration: "none" },
+                  }}
                 >
                   Login
                 </Typography>{" "}
@@ -482,7 +503,11 @@ export default function Form(props) {
           </form>
         </Grid>
         <Grid item xs={6}>
-          <img src={Logo} alt="" style={{ width: "100%", height: "100%" }} />
+          <img src={Logo} alt="" style={{ 
+            width: "100%", 
+            height: "80%",
+            paddingTop: "8vh",
+            }} />
         </Grid>
       </Grid>
     </Container>
