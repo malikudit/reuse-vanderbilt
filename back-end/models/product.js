@@ -43,7 +43,6 @@ class Product extends Model {
         else if (this.get('state') === 'Sold') {
             const bids = await this.getBids({
                 where: {
-                    productId: this.get('id'),
                     bidderId: userId,
                     state: {
                         [Op.in]: [
@@ -55,16 +54,41 @@ class Product extends Model {
                 }
             });
             
-            if (bids[0]) {
-                console.log(bids);
+            if (!bids.length)
+                return;
+
+            this.role = bids[0].state;
+            if (bids[0].state === 'Rejected') {
+                this.role = 'Bid Rejected';
             }
         }
         else if (this.get('state') === 'Active') {
-            
+            const bids = await this.getBids({
+                where: {
+                    bidderId: userId,
+                    state: 'Active'
+                }
+            });
+
+            if (!bids.length)
+                return;
+
+            const listingType = this.get('listingType');
+            const currentBid = this.get('currentBid');
+
+            if (listingType === 'Listing Price') {
+                this.role = 'Already Bid';
+            } 
+            else if (bids[0].get('amount') === currentBid) {
+                this.role = 'Highest bidder';
+            }
+            else {
+                this.role = 'Outbid';
+            }
         }
         else if (this.get('state') === 'Evaluating Offers') {
 
-        }   
+        }
     }
 
     async placeBid(bidderId, amount) {
