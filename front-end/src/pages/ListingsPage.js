@@ -66,10 +66,11 @@ function a11yProps(index) {
 }
 
 export default function ListingsPage(props) {
-  const [products, setProducts] = useState([]);
+  var [buyingProducts, setBuyingProducts] = useState([]);
+  var [sellingProducts, setSellingProducts] = useState([]);
   const [profile, setProfile] = useState();
 
-  async function getProducts(url = `http://localhost:8080/product`) {
+  async function getBuying(url = 'http://localhost:8080/users/buying') {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -78,9 +79,24 @@ export default function ListingsPage(props) {
       .then((res) => res.json())
       .then((data) => {
         var d = data;
-        setProducts(d);
+        setBuyingProducts(d);
+        buyingProducts = d;
       });
-    console.log(products);
+    return response;
+  }
+
+  async function getSelling(url = `http://localhost:8080/users/selling`) {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setSellingProducts(d);
+        sellingProducts = d;
+      });
     return response;
   }
 
@@ -99,7 +115,8 @@ export default function ListingsPage(props) {
   }
 
   useEffect(() => {
-    getProducts();
+    getBuying();
+    getSelling();
     getUser();
   }, []);
 
@@ -114,24 +131,10 @@ export default function ListingsPage(props) {
     }
   }
 
-  var buying = products.sort(compare);
-  buying = buying.filter(function (entry) {
-    return (
-      entry.role === 'Highest bidder' ||
-      entry.role === 'Already Bid' ||
-      entry.role === 'Out-bid' ||
-      entry.role === 'Bid rejected' ||
-      entry.role === 'Other bidder' ||
-      entry.role === 'Buyer' ||
-      entry.role === 'Other Bid Accepted' ||
-      entry.role === 'Bid Rejected'
-    );
-  });
+  var buying = buyingProducts.sort(compare);
 
-  var selling = products.sort(compare);
-  selling = selling.filter(function (entry) {
-    return entry.role === 'Seller';
-  });
+  var selling = sellingProducts.sort(compare);
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {

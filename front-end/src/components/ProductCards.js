@@ -1,47 +1,47 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "../css/ProductCards.css";
-import CountdownTimer from "./CountdownTimer";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import '../css/ProductCards.css';
+import CountdownTimer from './CountdownTimer';
 
 const ProductCards = ({
-  coverImage = "",
-  id = "",
-  title = "",
-  condition = "",
-  listingType = "",
-  openingBid = "$",
-  currentBid = "$",
-  bidIncrement = "$",
-  listingPrice = "$",
-  expirationDate = "",
-  category = "",
-  sellerID = "",
-  state = "",
+  coverPhoto = '',
+  id = '',
+  title = '',
+  condition = '',
+  listingType = '',
+  openBidPrice = '$',
+  currentBid = '$',
+  bidIncrement = '$',
+  listingPrice = '$',
+  expirationDate = '',
+  category = '',
+  sellerID = '',
+  state = '',
 }) => (
   <Link
     to={{
       pathname: `/product_listing/${id}`,
     }}
     state={{
-      coverImage: coverImage,
+      coverPhoto: coverPhoto,
       id: id,
       title: title,
       condition: condition,
       listingType: listingType,
       currentBid: currentBid,
       bidIncrement: bidIncrement,
-      openingBid: openingBid,
+      openBidPrice: openBidPrice,
       listingPrice: listingPrice,
       expirationDate: expirationDate,
       category: category,
       sellerID: sellerID,
       state: state,
     }}
-    style={{ textDecoration: "none" }}
+    style={{ textDecoration: 'none' }}
   >
     <div className="card">
       <div className="top">
-        <img src={coverImage} alt="product" />
+        <img src={coverPhoto} alt="product" />
         <div className="overlay">
           <div className="condition">{condition}</div>
         </div>
@@ -55,14 +55,14 @@ const ProductCards = ({
         </div>
         <div className="title">{title}</div>
         <div className="price">
-          {listingType === "Bid Only" ? (
+          {listingType === 'Bid Only' ? (
             <React.Fragment>
               {currentBid === null ? (
                 <React.Fragment>
                   <div className="item">
                     <div className="value">
-                      {"$"}
-                      {openingBid}
+                      {'$'}
+                      {openBidPrice}
                     </div>
                     <div className="label">Starting Bid</div>
                   </div>
@@ -71,7 +71,7 @@ const ProductCards = ({
                 <React.Fragment>
                   <div className="item">
                     <div className="value">
-                      {"$"}
+                      {'$'}
                       {currentBid}
                     </div>
                     <div className="label">Current Bid</div>
@@ -83,7 +83,7 @@ const ProductCards = ({
             <React.Fragment>
               <div className="item">
                 <div className="value">
-                  {"$"}
+                  {'$'}
                   {listingPrice}
                 </div>
                 <div className="label">Listing Price</div>

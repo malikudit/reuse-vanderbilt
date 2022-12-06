@@ -38,7 +38,7 @@ var questions = [
   {
     id: 6,
     question: 'Is the site final?',
-    answer: 'No. We are still working to add updates to the page as needed.',
+    answer: 'No. We are still working to add updates to the page as needed!',
   },
 ];
 

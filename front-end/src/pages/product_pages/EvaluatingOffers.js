@@ -1,10 +1,29 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Box, Typography, Button } from '@mui/material';
 import BuyerEvaluation from '../../components/BuyerEvaluation';
 import SellerEvaluation from '../../components/SellerEvaluation';
 
 export default function EvaluatingOffers(props) {
+  const [products, setProducts] = useState([]);
+
+  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <Grid
       align={'center'}
@@ -30,14 +49,22 @@ export default function EvaluatingOffers(props) {
                 maxHeight: '75vh',
                 maxWidth: '75vw',
               }}
-              src={props.coverImage}
+              src={products.coverPhoto}
             />
           </Grid>
           <Grid item xs={7} direction="column" marginTop={2}>
-            {props.role === 'Buyer' ? (
-              <BuyerEvaluation sellerName={props.sellerName} />
+            {products.role === 'Highest bidder' ? (
+              <BuyerEvaluation
+                id={props.id}
+                sellerName={products.sellerName}
+                sellerId={products.sellerId}
+              />
             ) : (
-              <SellerEvaluation />
+              <SellerEvaluation
+                id={props.id}
+                buyerName={products.buyerName}
+                buyerId={products.buyerId}
+              />
             )}
             <Grid item xs={2} marginTop={2} marginBottom={2}>
               <Typography
@@ -47,7 +74,7 @@ export default function EvaluatingOffers(props) {
                   letterSpacing: '2px',
                 }}
               >
-                {props.itemName}
+                {products.title}
               </Typography>
             </Grid>
             <Grid
@@ -58,9 +85,14 @@ export default function EvaluatingOffers(props) {
               }}
             >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
-                <Typography style={{ color: '#4169E1' }} variant="p">
+                <Typography
+                  component={Link}
+                  to={`/profile/${products.sellerId}`}
+                  style={{ color: '#4169E1' }}
+                  variant="p"
+                >
                   {'Seller: '}
-                  {props.sellerName}
+                  {products.sellerName}
                 </Typography>
               </Grid>
             </Grid>
@@ -74,7 +106,7 @@ export default function EvaluatingOffers(props) {
               <Grid item xs={12} marginBottom={1} marginTop={1}>
                 <Typography variant="p">
                   {'Exchange location: '}
-                  {props.location}
+                  {products.location}
                 </Typography>
               </Grid>
             </Grid>
@@ -86,7 +118,7 @@ export default function EvaluatingOffers(props) {
               }}
             >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
-                <Typography variant="p">{props.description}</Typography>
+                <Typography variant="p">{products.description}</Typography>
               </Grid>
             </Grid>
           </Grid>

@@ -10,7 +10,6 @@ export default function Active(props) {
   const role = 'Buyer';
   var madeBid = false;
   var message;
-  console.log(products);
 
   async function getData(url = `http://localhost:8080/product/${props.id}`) {
     const response = await fetch(url, {
@@ -75,6 +74,7 @@ export default function Active(props) {
           var message = 'Your offer has been placed!';
         }
         swal('Success!', message, 'success');
+        window.location.reload(false);
       }
     });
     async function putBidorOffer(
@@ -106,6 +106,7 @@ export default function Active(props) {
           'You have successfully withdrawn your bid!',
           'success'
         );
+        window.location.reload(false);
       }
     });
     async function deleteWithdrawBid(
@@ -174,7 +175,7 @@ export default function Active(props) {
                 overflow: 'hidden',
                 display: 'block',
               }}
-              src={products.coverImage}
+              src={products.coverPhoto}
             />
           </Grid>
           <Grid
