@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
+const { Op } = require('sequelize');
 
 const { User, Product, Photo, sequelize } = require('../models');
 const { authenticateUser, generateToken } = require('./utils/auth');
@@ -96,8 +97,7 @@ router.get('/me', async (req, res, next) => {
 router.get('/buying', async (req, res, next) => {
     try {
         const user = await User.findByPk(req.userId);
-        
-        const products = await user.getBids({
+        const bids = await user.getBids({
             attributes: [
                 'id',
                 'amount',
@@ -122,13 +122,36 @@ router.get('/buying', async (req, res, next) => {
                     as: 'coverPhoto',
                     attributes: ['id']
                 },
+                order: [
+                    sequelize.fn('field', sequelize.col('state'), 'Evaluating Offers', 'Active', 'Sold', 'Inactive'),
+                    ['expirationDate', 'DESC']
+                ]
+            },
+            where: {
+                state: {
+                    [Op.notIn]: [
+                        'Increased Bid'
+                    ]
+                }
             }
         });
 
-        console.log(products);
-        res.send(
-            user.selfView()
-        );
+        const products = bids.map(bid => {
+            const tmp = bid.toJSON();
+            tmp.product.coverPhoto = `https://img.reusevandy.org/${tmp.product.coverPhoto.id}`;
+            return tmp.product;
+        });
+
+        const unique = new Set();
+        const newProducts = products.filter(product => {
+            if (!unique.has(product.id)) {
+                unique.add(product.id);
+                return true;
+            }
+            return false;
+        });
+
+        res.send(newProducts);
     } catch (err) {
         next(err);
     }
