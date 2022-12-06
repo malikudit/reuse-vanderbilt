@@ -19,7 +19,6 @@ export default function Active(props) {
             .then((data) => {
                 var d = data;
                 setProducts(d);
-                console.log(d);
             });
         return response;
     }
@@ -57,8 +56,13 @@ export default function Active(props) {
             const newBid = products.currentBid + products.bidIncrement;
             setBid(newBid);
         }
-
-        putBidorOffer();
+        putBidorOffer().then((data) => {
+            if (data.error) {
+                swal('Oops!', data.error, 'error');
+            } else {
+                swal('Success!', 'Your bid has been placed!', 'success');
+            }
+        });
         async function putBidorOffer(
             url = `http://localhost:8080/bid/${props.id}`
         ) {
@@ -74,11 +78,22 @@ export default function Active(props) {
                     bidAmount: bid,
                 }),
             });
-            return response.json();
+            return response;
         }
     };
 
     const handleWithdrawBid = async () => {
+        deleteWithdrawBid().then((data) => {
+            if (data.error) {
+                swal('Oops!', data.error, 'error');
+            } else {
+                swal(
+                    'Success!',
+                    'You have successfully withdrawn your bid!',
+                    'success'
+                );
+            }
+        });
         async function deleteWithdrawBid(
             url = `http://localhost:8080/bid/${props.id}`
         ) {
@@ -87,12 +102,20 @@ export default function Active(props) {
                 mode: 'cors',
                 credentials: 'include',
             });
-            return response.json();
+            return response;
         }
-        deleteWithdrawBid();
     };
 
     const handleDeleteListing = async () => {
+        deleteListing().then((data) => {
+            if (data.error) {
+                swal('Oops!', data.error, 'error');
+                console.log('error');
+            } else {
+                swal('Success!', 'You have deleted your listing!', 'success');
+                window.location.href = '/';
+            }
+        });
         async function deleteListing(
             url = `http://localhost:8080/product/${props.id}`
         ) {
@@ -101,9 +124,8 @@ export default function Active(props) {
                 mode: 'cors',
                 credentials: 'include',
             });
-            return response.json();
+            return response;
         }
-        deleteListing();
     };
 
     return (
