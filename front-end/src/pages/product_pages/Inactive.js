@@ -1,8 +1,35 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Typography, Button, Box } from '@mui/material';
 
 export default function Inactive(props) {
+  const [products, setProducts] = useState([]);
+  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  var message;
+  if (products.role === 'Seller') {
+    message =
+      'Your product is inactive. You either de-listed your product or it received no valid offers. Would you like to relist your product?';
+  } else {
+    message =
+      "This sale is inactive. The seller either de-listed the product or it didn't receive any valid offers.";
+  }
   return (
     <Grid
       align={'center'}
@@ -35,7 +62,7 @@ export default function Inactive(props) {
               overflow: 'hidden',
               display: 'block',
             }}
-            src={props.coverImage}
+            src={products.coverPhoto}
           />
         </Grid>
         <Grid
@@ -67,14 +94,19 @@ export default function Inactive(props) {
                 letterSpacing: '2px',
               }}
             >
-              {props.itemName}
+              {products.title}
             </Typography>
           </Grid>
           <Grid container justifyContent="space-between">
             <Grid item xs={12} marginBottom={2}>
-              <Typography style={{ color: '#4169E1' }}>
+              <Typography
+                component={Link}
+                to={`/profile/${products.sellerId}`}
+                variant="h6"
+                style={{ color: '#4169E1' }}
+              >
                 {'Seller: '}
-                {props.sellerName}
+                {products.sellerName}
               </Typography>
             </Grid>
           </Grid>
@@ -93,32 +125,33 @@ export default function Inactive(props) {
               }}
             >
               <Typography variant="p" sx={{ lineHeight: '1.5' }}>
-                {props.description}
+                {products.description}
               </Typography>
             </Grid>
             <Typography variant="p" sx={{ lineHeight: '1.5' }}>
-              Your product is inactive. You either de-listed your product or it
-              received no valid offers. Would you like to relist your product?
+              {message}
             </Typography>
           </Grid>
-          <Grid container justifyContent={'space-evenly'} marginBottom={2}>
-            <Button
-              component={Link}
-              to="/listings"
-              variant="contained"
-              color="success"
-              sx={{
-                background: 'error',
-                color: 'white',
-                outline: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '10px 25px',
-              }}
-            >
-              Relist Product
-            </Button>
-          </Grid>
+          {products.role === 'Seller' ? (
+            <Grid container justifyContent={'space-evenly'} marginBottom={2}>
+              <Button
+                component={Link}
+                to="/listings"
+                variant="contained"
+                color="success"
+                sx={{
+                  background: 'error',
+                  color: 'white',
+                  outline: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '10px 25px',
+                }}
+              >
+                Relist Product
+              </Button>
+            </Grid>
+          ) : null}
         </Grid>
       </Grid>
     </Grid>

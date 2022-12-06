@@ -74,8 +74,7 @@ export default function ProductPage() {
   const timeLeft = new Date(products.expirationDate).getTime();
   var state = products.state;
   const role = products.role;
-  console.log(products);
-  state = 'Evaluating Offers';
+  //   state = 'Evaluating Offers';
 
   if (currentBid === null) {
     currentBid = openingBid;
@@ -141,22 +140,7 @@ export default function ProductPage() {
     return (
       <ThemeProvider theme={theme}>
         <DefaultBanner banner={'Product Listing Page'} />
-        <Sold
-          id={id}
-          coverImage={coverImage}
-          secondaryImage1={secondaryImage1}
-          secondaryImage2={secondaryImage2}
-          secondaryImage3={secondaryImage3}
-          secondaryImage4={secondaryImage4}
-          itemName={title}
-          sellerId={sellerId}
-          sellerName={sellerName}
-          category={category}
-          condition={condition}
-          location={location}
-          description={description}
-          role={role}
-        />
+        <Sold id={id} sellerId={sellerId} />
       </ThemeProvider>
     );
   }

@@ -1,15 +1,45 @@
-import { React } from 'react';
+import { React, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Box, Typography, Button } from '@mui/material';
 
 export default function Sold(props) {
-  // fetch if a user has left a review or not
+  const [products, setProducts] = useState([]);
+  // Edit this
   const leftReview = false;
+  var exchangePartner;
+
+  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   var userID;
-  if (props.role === 'Seller') {
-    userID = props.sellerId;
+  if (products.role === 'Seller') {
+    userID = products.buyerId;
+    exchangePartner = products.buyerName;
   } else {
-    userID = props.buyerId;
+    userID = products.sellerId;
+    exchangePartner = products.sellerName;
+  }
+
+  var salePrice;
+  if (products.listingType === 'Bid Only') {
+    salePrice = products.currentBid;
+  } else {
+    salePrice = products.listingPrice;
   }
 
   return (
@@ -37,7 +67,7 @@ export default function Sold(props) {
                 maxHeight: '75vh',
                 maxWidth: '75vw',
               }}
-              src={props.coverImage}
+              src={products.coverPhoto}
             />
           </Grid>
           <Grid item xs={7} direction="column" marginTop={2}>
@@ -56,14 +86,19 @@ export default function Sold(props) {
               </Typography>
             </Grid>
             <Grid item xs={12} marginBottom={2} marginTop={2}>
-              <Typography variant="h6">
+              <Typography
+                component={Link}
+                to={`/profile/${userID}`}
+                variant="h6"
+              >
                 Person exchanging with:
-                {' ' + props.sellerName}
+                {' ' + exchangePartner}
               </Typography>
-              <Typography variant="h6">
-                Contact information:
-                {' Insert Phone/GroupMe'}
-              </Typography>
+              {products.role === 'Buyer' || products.role === 'Seller' ? (
+                <Typography variant="h6" style={{ color: '#4169E1' }}>
+                  Sale price: ${salePrice}
+                </Typography>
+              ) : null}
             </Grid>
             <Grid container justifyContent={'center'}>
               <Grid marginBottom={2}>
@@ -81,28 +116,24 @@ export default function Sold(props) {
                 >
                   {leftReview ? (
                     <Link
-                      to={{ pathname: `/profile/${userID}` }}
+                      to={{ pathname: `/profile/${products.sellerId}` }}
                       style={{ textDecoration: 'none' }}
                     >
-                      View Profile of {props.role}
+                      View Profile of {products.role}
                     </Link>
                   ) : (
                     <Link
-                      to={{ pathname: `/new_review/${props.id}` }}
+                      to={{ pathname: `/new_review/${products.id}` }}
                       state={{
-                        itemName: props.itemName,
-                        coverImage: props.coverImage,
-                        // secondaryImage1: props.secondaryImage1,
-                        // secondaryImage2: props.secondaryImage2,
-                        // secondaryImage3: props.secondaryImage3,
-                        // secondaryImage4: props.secondaryImage4,
-                        sellerID: props.sellerID,
-                        sellerName: props.sellerName,
-                        category: props.category,
-                        condition: props.condition,
-                        location: props.location,
-                        salePrice: props.salePrice,
-                        id: props.id,
+                        itemName: products.title,
+                        coverImage: products.coverImage,
+                        sellerID: products.sellerId,
+                        sellerName: products.sellerName,
+                        category: products.category,
+                        condition: products.condition,
+                        location: products.location,
+                        currentPrice: products.salePrice,
+                        id: products.id,
                       }}
                       style={{ textDecoration: 'none' }}
                     >
@@ -120,7 +151,7 @@ export default function Sold(props) {
                   letterSpacing: '2px',
                 }}
               >
-                {props.itemName}
+                {products.title}
               </Typography>
             </Grid>
             <Grid
@@ -131,9 +162,14 @@ export default function Sold(props) {
               }}
             >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
-                <Typography style={{ color: '#4169E1' }} variant="p">
+                <Typography
+                  component={Link}
+                  to={`/profile/${props.sellerId}`}
+                  style={{ color: '#4169E1' }}
+                  variant="p"
+                >
                   {'Seller: '}
-                  {props.sellerName}
+                  {products.sellerName}
                 </Typography>
               </Grid>
             </Grid>
@@ -147,7 +183,7 @@ export default function Sold(props) {
               <Grid item xs={12} marginBottom={1} marginTop={1}>
                 <Typography variant="p">
                   {'Exchange location: '}
-                  {props.location}
+                  {products.location}
                 </Typography>
               </Grid>
             </Grid>
@@ -159,7 +195,7 @@ export default function Sold(props) {
               }}
             >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
-                <Typography variant="p">{props.description}</Typography>
+                <Typography variant="p">{products.description}</Typography>
               </Grid>
             </Grid>
           </Grid>

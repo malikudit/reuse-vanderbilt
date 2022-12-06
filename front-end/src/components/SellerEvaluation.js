@@ -1,18 +1,89 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Typography, Button, Box } from '@mui/material';
+import { Grid, Typography, Button } from '@mui/material';
+import swal from 'sweetalert';
 
-export default function BuyerEvaluation(props) {
-  const handleDecline = () => {
-    console.log('hellos');
+export default function SellerEvaluation(props) {
+  const [products, setProducts] = useState([]);
+  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleAccept = async () => {
+    acceptBid().then((data) => {
+      if (data.error) {
+        swal('Oops!', data.error, 'error');
+      } else {
+        if (products.listingPrice === 'Bid Only') {
+          var message = 'You have accepted the bid!';
+        } else {
+          var message = 'Your have accepted the offer!';
+        }
+        swal('Success!', message, 'success');
+        // window.location.reload(false);
+      }
+    });
+    async function acceptBid(
+      url = `http://localhost:8080/bid/${props.id}/accept`
+    ) {
+      const response = await fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        redirect: 'follow',
+      });
+      return response;
+    }
   };
 
-  const handleAccept = () => {
-    console.log('bye');
+  const handleReject = () => {
+    rejectBid().then((data) => {
+      if (data.error) {
+        swal('Oops!', data.error, 'error');
+      } else {
+        if (products.listingPrice === 'Bid Only') {
+          var message = 'You have rejected the bid!';
+        } else {
+          var message = 'Your have rejected the offer!';
+        }
+        swal('Success!', message, 'success');
+        // window.location.reload(false);
+      }
+    });
+    async function rejectBid(
+      url = `http://localhost:8080/bid/${props.id}/reject`
+    ) {
+      const response = await fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        redirect: 'follow',
+      });
+      return response;
+    }
   };
-  // TODO Highest bidder logic
-  // Missing buyer logic
-  var message = 'Congrats! You have received an offer(s)!';
+
+  var message = 'Congrats! You have received an offer(s)! The offer is $';
+  var price;
+  if (products.listingType === 'Bid Only') {
+    price = products.currentBid;
+  } else {
+    price = products.listingPrice;
+  }
 
   return (
     <Grid container>
@@ -22,6 +93,7 @@ export default function BuyerEvaluation(props) {
           style={{ color: '#228B22', fontWeight: 'bold' }}
         >
           {message}
+          {price}.
         </Typography>
         <Typography
           variant="h6"
@@ -32,18 +104,16 @@ export default function BuyerEvaluation(props) {
         </Typography>
       </Grid>
       <Grid item xs={12} marginBottom={2} marginTop={2} borderBottom={2}>
-        <Typography component={Link} to="/profile" variant="h6">
+        <Typography
+          component={Link}
+          to={`/profile/${products.bidderId}`}
+          variant="h6"
+        >
           Buyer Name:
-          {' ' + props.sellerName}
+          {' ' + products.bidderName}
         </Typography>
-        <Typography variant="h6">
-          Buyer Contact Information:
-          {' Insert Phone/GroupMe'}
-        </Typography>
-        <Typography variant="h6">
-          Buyer Preferred Form of Payment:
-          {' Insert Form of Payment'}
-        </Typography>
+      </Grid>
+      <Grid item xs={12} marginBottom={2} borderBottom={2}>
         <Typography variant="h9" sx={{ color: '#FF0000' }}>
           Note: You can still reject the offer if the buyer is unable to
           coordinate the exchange in a timely manner or if they do not meet your
@@ -56,7 +126,7 @@ export default function BuyerEvaluation(props) {
           marginTop={2}
           marginBottom={2}
         >
-          <Button variant="contained" color="error" onClick={handleDecline}>
+          <Button variant="contained" color="error" onClick={handleReject}>
             Decline Offer
           </Button>
           <Button variant="contained" color="success" onClick={handleAccept}>

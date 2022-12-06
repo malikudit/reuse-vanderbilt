@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from 'react';
-import Axios from 'axios';
 import {
   Grid,
   TextField,
@@ -15,7 +14,7 @@ import {
 import DefaultBanner from '../components/DefaultBanner';
 import '../css/EditProfile.css';
 import { paymentMethods, formsOfContact } from '../content/ProfilePreferences';
-import Bike from '../assets/Bike.jpg';
+import Anonymous from '../assets/Anonymous.png';
 import isMobilePhone from 'validator/es/lib/isMobilePhone';
 import isURL from 'validator/es/lib/isURL';
 import swal from 'sweetalert';
@@ -66,10 +65,6 @@ export default function EditProfile() {
     const data = new FormData();
     data.append('file', file);
     // data.append('name', name);
-
-    Axios.post('https://httpbin.org/anything', data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
   };
 
   async function getData(url = 'http://localhost:8080/users/me') {
@@ -265,30 +260,9 @@ export default function EditProfile() {
             <Grid xs={3}>
               <div class="edit-profile-sidebar">
                 <div class="edit-profile-userpic">
-                  <img src={Bike} alt="" />
+                  <img src={Anonymous} alt="" />
                 </div>
-                <div class="edit-profile-userbuttons">
-                  <div> Change Profile Picture</div>
-                  {saved ? null : (
-                    <Button
-                      variant="contained"
-                      component="label"
-                      sx={{
-                        backgroundColor: 'white',
-                      }}
-                    >
-                      <input
-                        type="file"
-                        accept=".jpeg, .png"
-                        onChange={(event) => {
-                          const file = event.target.files;
-                          setFile(file);
-                          console.log(file);
-                        }}
-                      />
-                    </Button>
-                  )}
-                </div>
+
                 <div class="edit-profile-usertitle">
                   <div class="edit-profile-usertitle-name">
                     <TextField
@@ -593,3 +567,26 @@ export default function EditProfile() {
     </div>
   );
 }
+
+// <div class="edit-profile-userbuttons">
+//   <div> Change Profile Picture</div>
+//   {saved ? null : (
+//     <Button
+//       variant="contained"
+//       component="label"
+//       sx={{
+//         backgroundColor: 'white',
+//       }}
+//     >
+//       <input
+//         type="file"
+//         accept=".jpeg, .png"
+//         onChange={(event) => {
+//           const file = event.target.files;
+//           setFile(file);
+//           console.log(file);
+//         }}
+//       />
+//     </Button>
+//   )}
+// </div>;

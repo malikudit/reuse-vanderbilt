@@ -1,23 +1,24 @@
-import { React, useState, useEffect } from "react";
-import { SampleProducts } from "../content/SampleProducts";
-import { Grid } from "@mui/material";
-import ProductCards from "./ProductCards";
-import "../css/ProductCards.css";
+import { React, useState, useEffect } from 'react';
+import { SampleProducts } from '../content/SampleProducts';
+import { Grid } from '@mui/material';
+import ProductCards from './ProductCards';
+import '../css/ProductCards.css';
 
 export default function FilterCategory(props) {
   const [products, setProducts] = useState([]);
 
-  async function getData(url = "http://localhost:8080/product") {
+  async function getData(url = 'http://localhost:8080/product') {
     const response = await fetch(url, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
         var d = data;
         setProducts(d);
       });
+    console.log(products);
     return response;
   }
 
@@ -44,7 +45,7 @@ export default function FilterCategory(props) {
   // var filtered = SampleProducts.sort(compare);
 
   // We are in any category other than home
-  if (props.categoryProduct !== "Home") {
+  if (props.categoryProduct !== 'Home') {
     filtered = filtered.filter(function (entry) {
       return entry.category === props.categoryProduct;
     });
@@ -55,7 +56,7 @@ export default function FilterCategory(props) {
     });
   }
   // Configure search regardless of category
-  if (props.searchProduct[0] !== "") {
+  if (props.searchProduct[0] !== '') {
     filtered = filtered.filter(function (entry) {
       return (
         entry.title.toLowerCase().includes(props.searchProduct) ||

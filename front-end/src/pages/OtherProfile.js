@@ -1,31 +1,31 @@
-import { React, useState, useEffect, useLocation } from "react";
-import { Link } from "react-router-dom";
-import { Grid, Button, ThemeProvider, createTheme } from "@mui/material";
-import DefaultBanner from "../components/DefaultBanner";
-import ReviewCards from "../components/ReviewCards";
-import { SampleReviews } from "../content/SampleReviews";
-import "../css/Profile.css";
-import Bike from "../assets/Bike.jpg";
+import { React, useState, useEffect, useLocation } from 'react';
+import { Link } from 'react-router-dom';
+import { Grid, Button, ThemeProvider, createTheme } from '@mui/material';
+import DefaultBanner from '../components/DefaultBanner';
+import ReviewCards from '../components/ReviewCards';
+import { SampleReviews } from '../content/SampleReviews';
+import '../css/Profile.css';
+import Anonymous from '../assets/Anonymous.png';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#DAA520",
+      main: '#DAA520',
     },
     secondary: {
-      main: "#212121",
+      main: '#212121',
     },
     neutral: {
-      main: "#ffffff",
+      main: '#ffffff',
     },
     info: {
-      main: "#4169E1",
+      main: '#4169E1',
     },
     success: {
-      main: "#228B22",
+      main: '#228B22',
     },
     background: {
-      default: "#696969",
+      default: '#696969',
     },
   },
 });
@@ -34,14 +34,14 @@ export default function OtherProfile(props) {
   const [profile, setProfile] = useState([]);
   let preferredPayment = [];
   const url = window.location.href;
-  const array = url.split("/");
+  const array = url.split('/');
   const userID = array[array.length - 1];
 
   async function getData(url = `http://localhost:8080/users/${userID}`) {
     const response = await fetch(url, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
@@ -56,25 +56,25 @@ export default function OtherProfile(props) {
     getData();
   }, []);
   if (profile.cash) {
-    preferredPayment.push("Cash");
+    preferredPayment.push('Cash');
   }
   if (profile.venmo) {
-    preferredPayment.push("Venmo");
+    preferredPayment.push('Venmo');
   }
   if (profile.zelle) {
-    preferredPayment.push("Zelle");
+    preferredPayment.push('Zelle');
   }
 
   return (
     <div class="container-profile">
       <ThemeProvider theme={theme}>
-        <DefaultBanner banner={"User Profile"} />
+        <DefaultBanner banner={'User Profile'} />
         <div class="row profile">
           <form autoComplete="off">
             <Grid xs={3}>
               <div class="profile-sidebar">
                 <div class="profile-userpic">
-                  <img src={Bike} alt="" />
+                  <img src={Anonymous} alt="" />
                 </div>
                 <div class="profile-usertitle">
                   <div class="profile-usertitle-name">
@@ -91,26 +91,26 @@ export default function OtherProfile(props) {
                     <br />
 
                     <div class="profile-desc-text">
-                      Preferred payment method:{" "}
+                      Preferred payment method:{' '}
                     </div>
                     <h3 class="profile-desc-title">
-                      {preferredPayment.join(", ")}
+                      {preferredPayment.join(', ')}
                     </h3>
                     <br />
 
-                    {profile.modeOfCommunication === "Phone" ? (
+                    {profile.modeOfCommunication === 'Phone' ? (
                       <div>
                         <div class="profile-desc-text">Phone number: </div>
                         <h3 class="profile-desc-title">
                           {profile.phoneNumber}
                         </h3>
                       </div>
-                    ) : profile.modeOfCommunication === "GroupMe" ? (
+                    ) : profile.modeOfCommunication === 'GroupMe' ? (
                       <div>
                         <div class="profile-desc-text">GroupMe: </div>
                         <h3 class="profile-desc-title">{profile.groupMe}</h3>
                       </div>
-                    ) : profile.modeOfCommunication === "Any" ? (
+                    ) : profile.modeOfCommunication === 'Any' ? (
                       <div>
                         <div class="profile-desc-text">Phone number: </div>
                         <h3 class="profile-desc-title">

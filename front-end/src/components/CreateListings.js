@@ -93,12 +93,6 @@ export default function CreateListings() {
     setLocation(event.target.value);
   };
 
-  // const SendCover = (event) => {
-  //   Axios.post('https://httpbin.org/anything', data)
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setTitleError(false);
@@ -110,7 +104,9 @@ export default function CreateListings() {
     setListingTypeError(false);
     setLocationError(false);
     setError(false);
-
+    if (coverImage === undefined) {
+      setError(true);
+    }
     if (title === '') {
       setTitleError(true);
       setError(true);
@@ -169,24 +165,19 @@ export default function CreateListings() {
       formData.append('listingPrice', listingPrice);
     }
     formData.append('coverImage', coverImage);
-    const obj = {};
-    obj.title = title;
-    obj.description = description;
-    obj.category = category;
-    obj.condition = condition;
-    obj.listingType = listingType;
-    if (listingType === 'Bid Only') {
-      obj.openingBid = openingBid;
-      obj.bidIncrement = bidIncrement;
-    } else {
-      obj.listingPrice = listingPrice;
-    }
-    obj.expirationDate = date;
-    obj.location = location;
-
-    obj.image = coverImage;
 
     if (!error) {
+      console.log('No errors');
+      postData('http://localhost:8080/product', formData).then((data) => {
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          swal('Success', 'Product listed', 'success').then(function () {
+            window.location.href = '/';
+          });
+        }
+      });
+
       async function postData(
         url = 'http://localhost:8080/product',
         data = formData
@@ -205,21 +196,8 @@ export default function CreateListings() {
           .then((data) => {
             console.log(data);
           });
-
-        console.log(data);
-
-        return response.json();
+        return response;
       }
-
-      postData('http://localhost:8080/product', formData).then((data) => {
-        if (data.error) {
-          swal('Oops!', data.error, 'error');
-        } else {
-          swal('Success', 'Product listed', 'success').then(function () {
-            window.location.href = '/';
-          });
-        }
-      });
     }
   };
 
@@ -228,10 +206,20 @@ export default function CreateListings() {
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid xs={4} container flex>
-                <Grid item xs={12} marginTop={1}>
-                  <Typography variant="h6">
+            <Grid container spacing={2} justifyContent="center">
+              <Grid xs={11} direction="column" marginTop={2}>
+                <Grid item xs={2} marginBottom={2}>
+                  <TextField
+                    onChange={(e) => setTitle(e.target.value)}
+                    label="Enter Product Title (between 5-32 characters)"
+                    variant="outlined"
+                    required
+                    error={titleError}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={2} marginBottom={2}>
+                  <Typography variant="h7">
                     Upload cover image (required){' '}
                   </Typography>
                   <Button
@@ -251,18 +239,6 @@ export default function CreateListings() {
                       }}
                     />
                   </Button>
-                </Grid>
-              </Grid>
-              <Grid xs={8} direction="column" marginTop={2}>
-                <Grid item xs={2} marginBottom={2}>
-                  <TextField
-                    onChange={(e) => setTitle(e.target.value)}
-                    label="Enter Product Title (between 5-32 characters)"
-                    variant="outlined"
-                    required
-                    error={titleError}
-                    fullWidth
-                  />
                 </Grid>
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
@@ -393,7 +369,9 @@ export default function CreateListings() {
                         onChange={handleListingType}
                       >
                         <MenuItem value={'Bid Only'}>Bid Only</MenuItem>
-                        <MenuItem value={'Listing Price'}>Buy Now Only</MenuItem>
+                        <MenuItem value={'Listing Price'}>
+                          Buy Now Only
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
