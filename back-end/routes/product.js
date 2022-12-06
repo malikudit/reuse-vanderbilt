@@ -2,6 +2,7 @@ const _ = require('lodash');
 const dayjs = require('dayjs');
 const express = require('express');
 const router = express.Router();
+const { Op } = require('sequelize');
 
 const { User, Product, Bid } = require('../models');
 const { authenticateUser } = require('./utils/auth');
@@ -22,7 +23,12 @@ router.get('/', async (req, res, next) => {
                 'currentBid',
                 'expirationDate'
             ],
-            where: { state: 'Active' },
+            where: { 
+                state: 'Active',
+                expirationDate: {
+                    [Op.gt]: new Date()
+                }
+            },
             order: [['expirationDate', 'ASC']]
         });
 

@@ -453,17 +453,21 @@ Product.init({
                 msg: 'State of the product must be either Active, Inactive, Evaluating Offers or Sold'
             }
         },
+        // The get method checks if the time has run out on an active listing and
+        // changes the state as a side-effect to avoid scheduling changes
         get() {
             const state = this.getDataValue('state');
-            const date = this.getDataValue('expirationDate');
+            if (state === 'Active') {
+                const date = this.getDataValue('expirationDate');
+                const duration = dayjs(date + '', 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).diff();
 
-            const duration = dayjs(date + '', 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).diff();
-            
-            if (state === 'Active' && duration <= 0) {
-                return 'Evaluating Offers';
-            } else {
-                return state;
+                if (duration <= 0) {
+                    this.update({ state: 'Evaluating Offers' });
+                    return 'Evaluating Offers';
+                }
             }
+
+            return state;    
         }
     }
 }, {
