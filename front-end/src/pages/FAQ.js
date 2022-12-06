@@ -33,7 +33,7 @@ var questions = [
     id: 5,
     question: 'Is this page only limited to Vanderbilt?',
     answer:
-      'For now yes. You must use a vanderbilt.edu email to register an account.',
+      'For now, yes. You must use a vanderbilt.edu email to register an account.',
   },
   {
     id: 6,

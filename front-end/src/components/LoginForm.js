@@ -152,7 +152,24 @@ export default function Form(props) {
               // error={passwordError}
               // helperText={passwordError ? "Error with password" : ""}
             />
-            <Button className="btn" type="submit" variant="contained">
+            <Button 
+            type="submit" 
+            sx = {{
+              color: 'white',
+              fontWeight: 'bold',
+              background: '#000000',
+              letterSpacing: '1px',
+              outline: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              textTransform: 'none',
+              padding: '10px 25px',
+              '&:hover': {
+                background: '#daa520',
+                color: 'black',
+              },
+            }}
+            >
               Login
             </Button>
             {printErr ? <small className="errorPara">{printErr}</small> : null}
@@ -163,7 +180,11 @@ export default function Form(props) {
                 noWrap
                 component="Typography"
                 onClick={forgotPassword}
-                sx={{ color: "blue" }}
+                sx={{ 
+                  color: "#daa520" ,
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
               >
                 Click Here
               </Typography>
@@ -177,7 +198,15 @@ export default function Form(props) {
                 component={Link}
                 to="/register"
                 underline="none"
-                sx={{ color: "blue" }}
+                sx={{ 
+                  color: "#daa520",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                  // no underline
+                  "&:hover": {
+                    textDecoration: "none",
+                  },
+                }}
               >
                 Register
               </Typography>{" "}

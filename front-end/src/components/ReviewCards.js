@@ -77,6 +77,10 @@ export default function ReviewCards(props) {
                     border: 'none',
                     cursor: 'pointer',
                     padding: '10px 25px',
+                    '&:hover': {
+                      background: '#daa520',
+                      color: 'black',
+                    },
                   }}
                 >
                   View original listing

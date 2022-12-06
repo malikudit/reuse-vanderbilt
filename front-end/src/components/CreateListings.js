@@ -207,7 +207,7 @@ export default function CreateListings() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <Grid container spacing={2} justifyContent="center">
-              <Grid xs={11} direction="column" marginTop={2}>
+              <Grid xs={8} direction="column" marginTop={2}>
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
                     onChange={(e) => setTitle(e.target.value)}
