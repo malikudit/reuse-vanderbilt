@@ -63,6 +63,10 @@ router.post('/:productId',  async (req, res, next) => {
             ]
         });
 
+        if (!product) {
+            return res.sendStatus(404);
+        }
+
         const reviewInfo = _.defaultTo(_.pick(req.body, [ 'title', 'stars', 'body' ]), {});
         await product.createReview(req.userId, reviewInfo);
         res.sendStatus(200);
