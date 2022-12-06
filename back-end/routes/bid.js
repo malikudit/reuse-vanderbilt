@@ -37,7 +37,18 @@ router.post('/:productId/accept', async (req, res, next) => {
 });
 
 router.post('/:productId/reject', async (req, res, next) => {
-    
+    try {
+        const product = await Product.findByPk(req.params.productId);
+
+        if (!product) {
+            return res.sendStatus(404);
+        }
+        
+        await product.rejectBid(req.userId);
+        res.sendStatus(200);
+    } catch (err) {
+        next(err);
+    }
 });
 
 router.delete('/:productId', async (req, res, next) => {

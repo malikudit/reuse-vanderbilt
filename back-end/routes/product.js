@@ -116,11 +116,25 @@ router.get('/:productId', async (req, res, next) => {
             const user = await User.findByPk(product.bidderId);
             product.bidderName = user.firstName + ' ' + user.lastName;
         }
+        if (product.buyerId) {
+            const user = await User.findByPk(product.buyerId);
+            product.buyerName = user.firstName + ' ' + user.lastName;
+        }
         product.coverPhoto = `https://img.reusevandy.org/${product.coverPhoto.id}`;
 
-        res.send(
-            product.generateView(['sellerName', 'bidderId', 'bidderName', 'coverPhoto', 'state', 'role'])
-        );
+        if (product.role !== 'Seller') {
+            res.send(product.generateView(['sellerName', 'coverPhoto', 'role']));
+        } else {
+            res.send(product.generateView([
+                'sellerName',
+                'bidderId',
+                'bidderName',
+                'buyerId',
+                'buyerName',
+                'coverPhoto',
+                'role'
+            ]));
+        }
     } catch (err) {
         next(err);
     }

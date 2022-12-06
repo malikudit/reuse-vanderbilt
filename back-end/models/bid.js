@@ -41,14 +41,14 @@ Bid.init({
         }
     },
     state: {
-        type: DataTypes.ENUM('Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted','Accepted'),
+        type: DataTypes.ENUM('Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted', 'Accepted'),
         allowNull: false,
         validate: {
             notNull: {
                 msg: 'Bid must be in a valid state at all times'
             },
             isIn: {
-                args: [['Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted']],
+                args: [['Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted', 'Accepted']],
                 msg: 'State of bid is not a valid option'
             }
         }

@@ -298,7 +298,8 @@ class Product extends Model {
             await this.update({ state: 'Inactive', currentBid: null });
             throw new BidError('There are no more bids for your product - it is now inactive');
         } else {
-
+            const amount = highestBid[1].get('amount');
+            await this.update({ currentBid: amount });
         }
     }
 
