@@ -2,7 +2,7 @@ const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 
-const { User } = require('../models');
+const { User, Product, Photo, sequelize } = require('../models');
 const { authenticateUser, generateToken } = require('./utils/auth');
 const { decryptJSON } = require('./utils/verify');
 
@@ -88,6 +88,85 @@ router.get('/me', async (req, res, next) => {
         res.send(
             user.selfView()
         );
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/buying', async (req, res, next) => {
+    try {
+        const user = await User.findByPk(req.userId);
+        
+        const products = await user.getBids({
+            attributes: [
+                'id',
+                'amount',
+                'state'
+            ],
+            include: {
+                model: Product,
+                as: 'product',
+                attributes: [
+                    'id',
+                    'title',
+                    'category',
+                    'condition',
+                    'listingType',
+                    'listingPrice',
+                    'openBidPrice',
+                    'currentBid',
+                    'expirationDate'
+                ],
+                include: {
+                    model: Photo,
+                    as: 'coverPhoto',
+                    attributes: ['id']
+                },
+            }
+        });
+
+        console.log(products);
+        res.send(
+            user.selfView()
+        );
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/selling', async (req, res, next) => {
+    try {
+        const user = await User.findByPk(req.userId);
+        const products = await user.getProductsSold({
+            attributes: [
+                'id',
+                'title',
+                'category',
+                'condition',
+                'listingType',
+                'listingPrice',
+                'openBidPrice',
+                'currentBid',
+                'expirationDate'
+            ],
+            include: {
+                model: Photo,
+                as: 'coverPhoto',
+                attributes: ['id']
+            },
+            order: [
+                sequelize.fn('field', sequelize.col('state'), 'Evaluating Offers', 'Active', 'Sold', 'Inactive'),
+                ['expirationDate', 'DESC']
+            ]
+        })
+
+        const newProducts = products.map(product => {
+            const tmp = product.toJSON();
+            tmp.coverPhoto = `https://img.reusevandy.org/${tmp.coverPhoto.id}`;
+            return tmp;
+        });
+
+        res.send(newProducts);
     } catch (err) {
         next(err);
     }

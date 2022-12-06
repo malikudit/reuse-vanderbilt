@@ -72,18 +72,22 @@ router.post('/', upload.single('coverImage'), async (req, res, next) => {
         productInfo.sellerId = req.userId;
         productInfo.state = 'Active';
         productInfo.currentBid = null;
-        
-        const product = await Product.create(productInfo);
-        const photo = await product.createCoverPhoto({
-            id: req.file.key,
-            photoType: 'Product - Cover',
-            imageType: 'png'
-        });
-        console.log(photo)
 
-        res.send(
-            product.generateView()
-        );
+        if (req.file) {
+            const product = await Product.create(productInfo);
+            await product.createCoverPhoto({
+                id: req.file.key,
+                photoType: 'Product - Cover',
+                imageType: 'png'
+            });
+
+            res.send(
+                product.generateView()
+            );
+        }
+        else {
+            res.sendStatus(400); 
+        }
     } catch (err) {
         next(err);
     }
@@ -112,13 +116,12 @@ router.get('/:productId', async (req, res, next) => {
 
         await product.determineRole(req.userId);
         product.sellerName = product.seller.firstName + ' ' + product.seller.lastName;
-        if (product.bidderId) {
-            const user = await User.findByPk(product.bidderId);
-            product.bidderName = user.firstName + ' ' + user.lastName;
-        }
         if (product.buyerId) {
             const user = await User.findByPk(product.buyerId);
             product.buyerName = user.firstName + ' ' + user.lastName;
+        } else if (product.bidderId) {
+            const user = await User.findByPk(product.bidderId);
+            product.bidderName = user.firstName + ' ' + user.lastName;
         }
         product.coverPhoto = `https://img.reusevandy.org/${product.coverPhoto.id}`;
 
