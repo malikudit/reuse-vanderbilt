@@ -40,8 +40,8 @@ const keys = new Keygrip(
 );
 
 const corsOptions = {
-  // origin: /(www.)?reusevandy\.org/,
-  origin: 'http://localhost:3000',
+  origin: /(www.)?reusevandy\.org/,
+  // origin: 'http://localhost:3000',
   // origin: 'http://localhost:8080',
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -56,14 +56,14 @@ app.use(
     keys: keys,
 
     maxAge: 24 * 60 * 60 * 1000,
-    // sameSite: 'none',
-    // secure: true,
-    sameSite: true,
-    secure: false,
+    sameSite: 'none',
+    secure: true,
+    // sameSite: true,
+    // secure: false,
     httpOnly: true,
     signed: true,
 
-    // domain: 'api.reusevandy.org'
+    domain: 'api.reusevandy.org'
   })
 );
 
