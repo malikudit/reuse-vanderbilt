@@ -125,6 +125,7 @@ router.get('/:productId', async (req, res, next) => {
         }
 
         await product.determineRole(req.userId);
+        
         product.sellerName = product.seller.firstName + ' ' + product.seller.lastName;
         if (product.buyerId) {
             const user = await User.findByPk(product.buyerId);
