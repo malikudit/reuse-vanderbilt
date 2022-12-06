@@ -4,8 +4,9 @@ const express = require('express');
 const router = express.Router();
 const { Op } = require('sequelize');
 
-const { User, Product, Bid } = require('../models');
+const { User, Product, Bid, Photo } = require('../models');
 const { authenticateUser } = require('./utils/auth');
+const upload = require('./utils/upload');
 
 router.get('/', async (req, res, next) => {
     try {
@@ -23,6 +24,11 @@ router.get('/', async (req, res, next) => {
                 'currentBid',
                 'expirationDate'
             ],
+            include: {
+                model: Photo,
+                as: 'coverPhoto',
+                attributes: ['id']
+            },
             where: { 
                 state: 'Active',
                 expirationDate: {
@@ -32,7 +38,15 @@ router.get('/', async (req, res, next) => {
             order: [['expirationDate', 'ASC']]
         });
 
-        res.send(products);
+        const newProducts = products.map(product => {
+            const tmp = product.toJSON();
+            tmp.coverPhoto = `https://img.reusevandy.org/${tmp.coverPhoto.id}`;
+            return tmp;
+        });
+
+        console.log(newProducts);
+
+        res.send(newProducts);
     } catch (err) {
         next(err);
     }
@@ -40,14 +54,36 @@ router.get('/', async (req, res, next) => {
 
 router.use(authenticateUser);
 
-router.post('/', async (req, res, next) => {
+const requiredFields = [
+    'title',
+    'description',
+    'category',
+    'condition',
+    'listingType',
+    'listingPrice',
+    'openBidPrice',
+    'bidIncrement',
+    'currentBid',
+    'expirationDate',
+    'location'
+];
+
+router.post('/', upload.single('coverImage'), async (req, res, next) => {
     try {
-        const productInfo = _.defaultTo(_.clone(req.body.product), {});
+        console.log(req.body);
+        const productInfo = _.defaultTo(_.pick(req.body, requiredFields), {});
         productInfo.sellerId = req.userId;
         productInfo.state = 'Active';
         productInfo.currentBid = null;
         
         const product = await Product.create(productInfo);
+        const photo = await product.createCoverPhoto({
+            id: req.file.key,
+            photoType: 'Product - Cover',
+            imageType: 'png'
+        });
+        console.log(photo)
+
         res.send(
             product.generateView()
         );
@@ -59,11 +95,18 @@ router.post('/', async (req, res, next) => {
 router.get('/:productId', async (req, res, next) => {
     try {
         const product = await Product.findByPk(req.params.productId, {
-            include: { 
-                model: User,
-                as: 'seller',
-                attributes: ['firstName', 'lastName'] 
-            }
+            include: [
+                { 
+                    model: User,
+                    as: 'seller',
+                    attributes: ['firstName', 'lastName'] 
+                },
+                {
+                    model: Photo,
+                    as: 'coverPhoto',
+                    attributes: ['id']
+                }
+            ]
         });
 
         if (!product) {
@@ -72,8 +115,14 @@ router.get('/:productId', async (req, res, next) => {
 
         await product.determineRole(req.userId);
         product.sellerName = product.seller.firstName + ' ' + product.seller.lastName;
+        if (product.bidderId) {
+            const user = await User.findByPk(product.bidderId);
+            product.bidderName = user.firstName + ' ' + user.lastName;
+        }
+        product.coverPhoto = `https://img.reusevandy.org/${product.coverPhoto.id}`;
+
         res.send(
-            product.generateView(['sellerName', 'state', 'role'])
+            product.generateView(['sellerName', 'bidderId', 'bidderName', 'coverPhoto', 'state', 'role'])
         );
     } catch (err) {
         next(err);

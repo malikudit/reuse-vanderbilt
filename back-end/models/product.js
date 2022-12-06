@@ -36,8 +36,11 @@ class Product extends Model {
 
         if (this.get('sellerId') === userId) {
             this.role = 'Seller';
+            if (this.get('state') !== 'Evaluating Offers')
+                return;
         }
-        else if (this.get('state') === 'Sold' && this.get('buyerId') === userId) {
+
+        if (this.get('state') === 'Sold' && this.get('buyerId') === userId) {
             this.role = 'Buyer';
         }
         else if (this.get('state') === 'Sold') {
@@ -103,6 +106,11 @@ class Product extends Model {
                 if (highestBid[0].bidderId === userId) {
                     return this.role = 'Highest bidder';
                 }
+                else if (this.role === 'Seller') {
+                    return this.bidderId = highestBid[0].bidderId;
+                }
+            } else {
+                return await this.update({ state: 'Inactive' });
             }
 
             const bids = await this.getBids({

@@ -1,5 +1,4 @@
 import { React, useState } from 'react';
-import Axios, { post } from 'axios';
 import {
   Grid,
   InputLabel,
@@ -164,7 +163,7 @@ export default function CreateListings() {
     formData.append('listingType', listingType);
     formData.append('expirationDate', date);
     if (listingType === 'Bid Only') {
-      formData.append('openingBid', openingBid);
+      formData.append('openBidPrice', openingBid);
       formData.append('bidIncrement', bidIncrement);
     } else {
       formData.append('listingPrice', listingPrice);
@@ -196,9 +195,9 @@ export default function CreateListings() {
           method: 'POST',
           mode: 'cors',
           credentials: 'include',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          // headers: {
+          //   'Content-Type': 'multipart/form-data',
+          // },
           redirect: 'follow',
           body: data,
         })
@@ -212,7 +211,7 @@ export default function CreateListings() {
         return response.json();
       }
 
-      postData('http://localhost:8080/product', obj).then((data) => {
+      postData('http://localhost:8080/product', formData).then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
         } else {
@@ -393,12 +392,12 @@ export default function CreateListings() {
                         error={listingTypeError ? true : false}
                         onChange={handleListingType}
                       >
-                        <MenuItem value={'Bid-Only'}>Bid Only</MenuItem>
-                        <MenuItem value={'Listing-Only'}>Buy Now Only</MenuItem>
+                        <MenuItem value={'Bid Only'}>Bid Only</MenuItem>
+                        <MenuItem value={'Listing Price'}>Buy Now Only</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
-                  {listingType === 'Bid-Only' ? (
+                  {listingType === 'Bid Only' ? (
                     <Grid container justifyContent="space-between">
                       <Grid item xs={5.9} marginBottom={2}>
                         <TextField

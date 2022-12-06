@@ -26,26 +26,7 @@ Photo.init({
             }
         }
     },
-    imageType: {
-        type: DataTypes.ENUM('jpeg', 'png'),
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: 'Image type is a required field for all photos'
-            },
-            isIn: {
-                args: [['jpeg', 'png']],
-                msg: 'Image type must be either jpeg or png'
-            }
-        }
-    }
 }, {
-    hooks: {
-        beforeCreate: async (photo) => {
-            const photoId = await nanoid();
-            photo.setDataValue('id', photoId);
-        }
-    },
     indexes: [
         {
             fields: ['photoType', 'parentId']
