@@ -110,7 +110,7 @@ class Product extends Model {
                     return this.bidderId = highestBid[0].bidderId;
                 }
             } else {
-                return await this.update({ state: 'Inactive' });
+                return await this.update({ state: 'Inactive', currentBid: null });
             }
 
             const bids = await this.getBids({
@@ -245,24 +245,19 @@ class Product extends Model {
 
             const listingType = this.get('listingType');
 
-            if (listingType === 'Listing Price') {
-                await sequelize.models.Bid.update({ state: 'Other Bid Accepted' }, {
-                    where: {
-                        productId: this.get('id'),
-                        state: 'Under Evaluation'
-                    }
-                });
-            } else {
-                await sequelize.models.Bid.update({ state: 'Out-bid' }, {
-                    where: {
-                        productId: this.get('id'),
-                        state: 'Under Evaluation'
-                    }
-                });
-            }
+            await sequelize.models.Bid.update({ 
+                state: listingType === 'Listing Price' ? 
+                        'Other Bid Accepted' :
+                        'Out-bid' 
+            }, {
+                where: {
+                    productId: this.get('id'),
+                    state: 'Under Evaluation'
+                }
+            });
         }
         else {
-            await this.update({ state: 'Inactive' });
+            await this.update({ state: 'Inactive', currentBid: null });
             throw new BidError('There are no more bids for your product - it is now inactive');
         }
     }
@@ -284,7 +279,27 @@ class Product extends Model {
             throw new BidError('This product has been sold - all other bids were rejected');
         }
 
+        const highestBid = await this.getBids({
+            where: {
+                state: 'Under Evaluation',
+            },
+            order: [
+                ['amount', 'DESC'],
+                ['createdAt', 'ASC']
+            ],
+            limit: 2
+        });
 
+        if (highestBid.length) {
+            await highestBid[0].update({ state: 'Rejected' });
+        }
+
+        if (highestBid.length < 2) {
+            await this.update({ state: 'Inactive', currentBid: null });
+            throw new BidError('There are no more bids for your product - it is now inactive');
+        } else {
+
+        }
     }
 
     async withdrawBid(bidderId) {
@@ -554,24 +569,31 @@ Product.init({
                 product.setDataValue('listingPrice', null);
             }
         },
-        afterFind: async (product) => {
-            const state = product.get('state');
+        afterFind: (product) => {
+            if (product === null)
+                return;
 
-            if (state === 'Active') {
-                const date = product.get('expirationDate');
-                const duration = dayjs(date + '', 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).diff();
+            const products = Array.isArray(product) ? product : [ product ];
 
-                if (duration <= 0) {
-                    await product.update({ state: 'Evaluating Offers' });
+            products.forEach(async (product) => {
+                const state = product.getDataValue('state');
 
-                    await sequelize.models.Bid.update({ state: 'Under Evaluation' }, {
-                        where: {
-                            productId: product.get('id'),
-                            state: 'Active'
-                        }
-                    });
+                if (state === 'Active') {
+                    const date = product.getDataValue('expirationDate');
+                    const duration = dayjs(date + '', 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).diff();
+    
+                    if (duration <= 0) {
+                        await product.update({ state: 'Evaluating Offers' });
+    
+                        await sequelize.models.Bid.update({ state: 'Under Evaluation' }, {
+                            where: {
+                                productId: product.getDataValue('id'),
+                                state: 'Active'
+                            }
+                        });
+                    }
                 }
-            }
+            });
         }
     },
     indexes: [
