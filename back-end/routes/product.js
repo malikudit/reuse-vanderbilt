@@ -65,7 +65,7 @@ router.get('/:productId', async (req, res, next) => {
         }
 
         await product.determineRole(req.userId);
-        product.set('sellerName', product.seller.get('firstName') + ' ' + product.seller.get('lastName'));
+        product.sellerName = product.seller.firstName + ' ' + product.seller.lastName;
         res.send(
             product.generateView(['sellerName', 'state', 'role'])
         );

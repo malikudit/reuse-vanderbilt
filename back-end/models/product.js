@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes, Model, Op } = require('sequelize');
 const dayjs = require('dayjs');
 const validator = require('validator');
 const { nanoid } = require('nanoid/async');
@@ -41,15 +41,54 @@ class Product extends Model {
             this.role = 'Buyer';
         }
         else if (this.get('state') === 'Sold') {
-            const bids = await this.getBids();
-            console.log(bids);
+            const bids = await this.getBids({
+                where: {
+                    bidderId: userId,
+                    state: {
+                        [Op.in]: [
+                            'Rejected',
+                            'Out-bid',
+                            'Other Bid Accepted'
+                        ]
+                    }
+                }
+            });
+            
+            if (!bids.length)
+                return;
+
+            this.role = bids[0].state;
+            if (bids[0].state === 'Rejected') {
+                this.role = 'Bid Rejected';
+            }
         }
         else if (this.get('state') === 'Active') {
-            
+            const bids = await this.getBids({
+                where: {
+                    bidderId: userId,
+                    state: 'Active'
+                }
+            });
+
+            if (!bids.length)
+                return;
+
+            const listingType = this.get('listingType');
+            const currentBid = this.get('currentBid');
+
+            if (listingType === 'Listing Price') {
+                this.role = 'Already Bid';
+            } 
+            else if (bids[0].get('amount') === currentBid) {
+                this.role = 'Highest bidder';
+            }
+            else {
+                this.role = 'Outbid';
+            }
         }
         else if (this.get('state') === 'Evaluating Offers') {
 
-        }   
+        }
     }
 
     async placeBid(bidderId, amount) {
