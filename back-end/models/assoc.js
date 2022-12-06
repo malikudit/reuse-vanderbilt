@@ -85,6 +85,11 @@ User.hasMany(Review, {
     }
 });
 
+User.hasMany(Review, { as: 'reviewsReceived', foreignKey: {
+    name: 'revieweeId',
+    allowNull: false
+}});
+
 Review.belongsTo(User, { as: 'reviewee' });
 
 User.hasOne(Photo, {

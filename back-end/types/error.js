@@ -12,7 +12,15 @@ class BidError extends Error {
     }
 }
 
+class ReviewError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "BidError";
+    }
+}
+
 module.exports = {
     LoginError,
-    BidError
+    BidError,
+    ReviewError
 }
