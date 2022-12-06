@@ -11,7 +11,7 @@ export default function Form(props) {
   } = useForm();
   const onSubmit = (values) => {
     swal("Success", "Password reset!", "success").then(function () {
-      window.location.href = "/login";
+      window.location.href = "#/login";
     });
     console.log(values);
   };
