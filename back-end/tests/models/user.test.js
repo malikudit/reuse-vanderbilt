@@ -708,26 +708,6 @@ describe('password', () => {
             throw e;
         }
     });
-
-describe('state', () => {
-    beforeEach(async () => {
-        await sequelize.sync({ force: true });
-    });
-
-    test('can be compared to plain-text using bcrypt', async () => {
-        expect.assertions(1);
-        try {
-            const user = _.clone(unverifiedUser);
-            delete user.state;
-
-            const match = await bcrypt.compare(user.password, created.password);
-
-            expect(match).toBe(true);
-        } catch (e) {
-            expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('notNull Violation: User must be in a valid state at all times');
-        }
-    });
 });
 
 describe('state', () => {
@@ -736,6 +716,19 @@ describe('state', () => {
     });
 
     test('is required', async () => {
+        expect.assertions(2);
+        try {
+            const user = _.clone(unverifiedUser);
+            delete user.state;
+
+            await User.create(user);
+        } catch (e) {
+            expect(e).toBeInstanceOf(Sequelize.ValidationError);
+            expect(e.message).toBe('notNull Violation: User must be in a valid state at all times');
+        }
+    });
+
+    test('should not be null', async () => {
         expect.assertions(2);
         try {
             const user = { state: null };
@@ -748,7 +741,7 @@ describe('state', () => {
         }
     });
 
-    test('should not be null', async () => {
+    test('should not be undefined', async () => {
         expect.assertions(2);
         try {
             const user = _.clone(unverifiedUser);
@@ -815,11 +808,11 @@ describe('cash', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('notNull Violation: User must be in a valid state at all times');
+            expect(e.message).toBe('notNull Violation: You must specify whether Cash is a supported payment type');
         }
     });
 
-    test('should not be undefined', async () => {
+    test('should be a well formed boolean', async () => {
         expect.assertions(2);
         try {
             const user = { cash: 'True' };
@@ -828,11 +821,11 @@ describe('cash', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('notNull Violation: User must be in a valid state at all times');
+            expect(e.message).toBe('Validation error: Cash is not a well formed boolean value');
         }
     });
 
-    test('can be unverified', async () => {
+    test('can be true', async () => {
         expect.assertions(1);
         try {
             const user = { cash: true };
@@ -846,7 +839,7 @@ describe('cash', () => {
         }
     });
 
-    test('can be verified', async () => {
+    test('can be false', async () => {
         expect.assertions(1);
         try {
             const user = { cash: false };
@@ -860,7 +853,7 @@ describe('cash', () => {
         }
     });
 
-    test('can be complete', async () => {
+    test('can be 0 or 1', async () => {
         expect.assertions(1);
         try {
             const user = { cash: '1' };
@@ -873,6 +866,7 @@ describe('cash', () => {
             throw e;
         }
     });
+});
 
 describe('venmo', () => {
     beforeEach(async () => {
@@ -888,7 +882,7 @@ describe('venmo', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('notNull Violation: You must specify whether Cash is a supported payment type');
+            expect(e.message).toBe('notNull Violation: You must specify whether Venmo is a supported payment type');
         }
     });
 
@@ -901,7 +895,7 @@ describe('venmo', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Cash is not a well formed boolean value');
+            expect(e.message).toBe('Validation error: Venmo is not a well formed boolean value');
         }
     });
 
@@ -948,7 +942,7 @@ describe('venmo', () => {
     });
 });
 
-describe('venmo', () => {
+describe('zelle', () => {
     beforeEach(async () => {
         await sequelize.sync({ force: true });
     });
@@ -1110,7 +1104,7 @@ describe('modeOfCommunication', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Must specify a preferred mode of communication');
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
@@ -1136,7 +1130,7 @@ describe('modeOfCommunication', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Must specify a preferred mode of communication');
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
@@ -1175,7 +1169,7 @@ describe('modeOfCommunication', () => {
             await User.create(user);
         } catch (e) {
             expect(e).toBeInstanceOf(Sequelize.ValidationError);
-            expect(e.message).toBe('Validation error: Must specify a preferred mode of communication');
+            expect(e.message).toBe('notNull Violation: Must specify a preferred mode of communication');
         }
     });
 
