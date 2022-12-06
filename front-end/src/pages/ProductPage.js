@@ -32,7 +32,9 @@ const theme = createTheme({
 
 export default function ProductPage() {
   const [products, setProducts] = useState({});
-  const id = useLocation().state.id;
+  const url = window.location.href;
+  const array = url.split('/');
+  const id = array[array.length - 1];
 
   async function getData(url = `http://localhost:8080/product/${id}`) {
     const response = await fetch(url, {
@@ -72,7 +74,8 @@ export default function ProductPage() {
   const timeLeft = new Date(products.expirationDate).getTime();
   var state = products.state;
   const role = products.role;
-  state = 'Active';
+  console.log(products);
+  state = 'Evaluating Offers';
 
   if (currentBid === null) {
     currentBid = openingBid;
@@ -152,6 +155,7 @@ export default function ProductPage() {
           condition={condition}
           location={location}
           description={description}
+          role={role}
         />
       </ThemeProvider>
     );

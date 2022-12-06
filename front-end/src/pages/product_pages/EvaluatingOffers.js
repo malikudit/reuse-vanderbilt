@@ -1,22 +1,22 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Grid, Box, Typography, Button } from "@mui/material";
-import BuyerEvaluation from "../../components/BuyerEvaluation";
-import SellerEvaluation from "../../components/SellerEvaluation";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Grid, Box, Typography, Button } from '@mui/material';
+import BuyerEvaluation from '../../components/BuyerEvaluation';
+import SellerEvaluation from '../../components/SellerEvaluation';
 
 export default function EvaluatingOffers(props) {
   return (
     <Grid
-      align={"center"}
+      align={'center'}
       padding={4}
       marginLeft={2}
       marginRight={2}
       sx={{
-        boxShadow: "0 0 5px #ccc",
-        margin: "10vh",
-        width: "90vw",
-        height: "auto",
-        paddingBottom: "7vh",
+        boxShadow: '0 0 5px #ccc',
+        margin: '10vh',
+        width: '90vw',
+        height: 'auto',
+        paddingBottom: '7vh',
       }}
     >
       <form noValidate autoComplete="off">
@@ -25,16 +25,16 @@ export default function EvaluatingOffers(props) {
             <Box
               component="img"
               sx={{
-                width: "100%",
-                height: "100%",
-                maxHeight: "75vh",
-                maxWidth: "75vw",
+                width: '100%',
+                height: '100%',
+                maxHeight: '75vh',
+                maxWidth: '75vw',
               }}
               src={props.coverImage}
             />
           </Grid>
           <Grid item xs={7} direction="column" marginTop={2}>
-            {props.role === "Buyer" ? (
+            {props.role === 'Buyer' ? (
               <BuyerEvaluation sellerName={props.sellerName} />
             ) : (
               <SellerEvaluation />
@@ -43,8 +43,8 @@ export default function EvaluatingOffers(props) {
               <Typography
                 variant="h5"
                 sx={{
-                  textTransform: "uppercase",
-                  letterSpacing: "2px",
+                  textTransform: 'uppercase',
+                  letterSpacing: '2px',
                 }}
               >
                 {props.itemName}
@@ -54,12 +54,12 @@ export default function EvaluatingOffers(props) {
               container
               marginBottom={1}
               sx={{
-                maxWidth: "40vw",
+                maxWidth: '40vw',
               }}
             >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
-                <Typography style={{ color: "#4169E1" }} variant="p">
-                  {"Seller: "}
+                <Typography style={{ color: '#4169E1' }} variant="p">
+                  {'Seller: '}
                   {props.sellerName}
                 </Typography>
               </Grid>
@@ -68,12 +68,12 @@ export default function EvaluatingOffers(props) {
               container
               marginBottom={1}
               sx={{
-                maxWidth: "40vw",
+                maxWidth: '40vw',
               }}
             >
               <Grid item xs={12} marginBottom={1} marginTop={1}>
                 <Typography variant="p">
-                  {"Exchange location: "}
+                  {'Exchange location: '}
                   {props.location}
                 </Typography>
               </Grid>
@@ -82,7 +82,7 @@ export default function EvaluatingOffers(props) {
               container
               marginBottom={1}
               sx={{
-                maxWidth: "40vw",
+                maxWidth: '40vw',
               }}
             >
               <Grid item xs={12} marginBottom={1} marginTop={1}>

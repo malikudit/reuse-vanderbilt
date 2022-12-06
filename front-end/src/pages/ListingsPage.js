@@ -1,6 +1,6 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Box,
   createTheme,
@@ -10,25 +10,25 @@ import {
   Typography,
   ThemeProvider,
   getListSubheaderUtilityClass,
-} from "@mui/material";
-import CreateListings from "../components/CreateListings";
-import { SampleProducts } from "../content/SampleProducts";
-import ProductCards from "../components/ProductCards";
-import DefaultBanner from "../components/DefaultBanner";
-import AddIcon from "@mui/icons-material/Add";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+} from '@mui/material';
+import CreateListings from '../components/CreateListings';
+import { SampleProducts } from '../content/SampleProducts';
+import ProductCards from '../components/ProductCards';
+import DefaultBanner from '../components/DefaultBanner';
+import AddIcon from '@mui/icons-material/Add';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#212121",
+      main: '#212121',
     },
     secondary: {
-      main: "#DAA520",
+      main: '#DAA520',
     },
     neutral: {
-      main: "#ffffff",
+      main: '#ffffff',
     },
   },
 });
@@ -61,7 +61,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tab-panel-${index}`,
+    'aria-controls': `simple-tab-panel-${index}`,
   };
 }
 
@@ -71,31 +71,30 @@ export default function ListingsPage(props) {
 
   async function getProducts(url = `http://localhost:8080/product`) {
     const response = await fetch(url, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
         var d = data;
         setProducts(d);
       });
-
+    console.log(products);
     return response;
   }
 
-  async function getUser(url = "http://localhost:8080/users/me") {
+  async function getUser(url = 'http://localhost:8080/users/me') {
     const response = await fetch(url, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
         var d = data;
         setProfile(d);
       });
-
     return response;
   }
 
@@ -117,13 +116,21 @@ export default function ListingsPage(props) {
 
   var buying = products.sort(compare);
   buying = buying.filter(function (entry) {
-    console.log(entry.sellerID);
-    return entry.sellerID !== "Parwaz";
+    return (
+      entry.role === 'Highest bidder' ||
+      entry.role === 'Already Bid' ||
+      entry.role === 'Out-bid' ||
+      entry.role === 'Bid rejected' ||
+      entry.role === 'Other bidder' ||
+      entry.role === 'Buyer' ||
+      entry.role === 'Other Bid Accepted' ||
+      entry.role === 'Bid Rejected'
+    );
   });
 
   var selling = products.sort(compare);
   selling = selling.filter(function (entry) {
-    return entry.sellerID === "Parwaz";
+    return entry.role === 'Seller';
   });
   const [value, setValue] = React.useState(0);
 
@@ -133,9 +140,9 @@ export default function ListingsPage(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <DefaultBanner banner={"My Listings"} />
-      <Box sx={{ width: "100%", backgroundColor: "#FFFFFF" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <DefaultBanner banner={'My Listings'} />
+      <Box sx={{ width: '100%', backgroundColor: '#FFFFFF' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -165,16 +172,16 @@ export default function ListingsPage(props) {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Grid align={"center"} padding={2}>
+          <Grid align={'center'} padding={2}>
             <CreateListings />
           </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Grid
             container
-            alignContent={"center"}
+            alignContent={'center'}
             display="flex"
-            justifyContent={"space-evenly"}
+            justifyContent={'space-evenly'}
           >
             {buying.map((buyingProduct) => (
               <ProductCards {...buyingProduct} />
@@ -184,9 +191,9 @@ export default function ListingsPage(props) {
         <TabPanel value={value} index={2}>
           <Grid
             container
-            alignContent={"center"}
+            alignContent={'center'}
             display="flex"
-            justifyContent={"space-evenly"}
+            justifyContent={'space-evenly'}
           >
             {selling.map((sellingProduct) => (
               <ProductCards {...sellingProduct} />

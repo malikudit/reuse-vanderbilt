@@ -1,4 +1,5 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect } from 'react';
+import Axios from 'axios';
 import {
   Grid,
   TextField,
@@ -10,34 +11,34 @@ import {
   Select,
   InputLabel,
   FormControl,
-} from "@mui/material";
-import DefaultBanner from "../components/DefaultBanner";
-import "../css/EditProfile.css";
-import { paymentMethods, formsOfContact } from "../content/ProfilePreferences";
-import Bike from "../assets/Bike.jpg";
-import isMobilePhone from "validator/es/lib/isMobilePhone";
-import isURL from "validator/es/lib/isURL";
-import swal from "sweetalert";
+} from '@mui/material';
+import DefaultBanner from '../components/DefaultBanner';
+import '../css/EditProfile.css';
+import { paymentMethods, formsOfContact } from '../content/ProfilePreferences';
+import Bike from '../assets/Bike.jpg';
+import isMobilePhone from 'validator/es/lib/isMobilePhone';
+import isURL from 'validator/es/lib/isURL';
+import swal from 'sweetalert';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#DAA520",
+      main: '#DAA520',
     },
     secondary: {
-      main: "#212121",
+      main: '#212121',
     },
     neutral: {
-      main: "#ffffff",
+      main: '#ffffff',
     },
     info: {
-      main: "#4169E1",
+      main: '#4169E1',
     },
     success: {
-      main: "#228B22",
+      main: '#228B22',
     },
     background: {
-      default: "#696969",
+      default: '#696969',
     },
   },
 });
@@ -45,27 +46,37 @@ const theme = createTheme({
 export default function EditProfile() {
   const [saved, setSaved] = useState(true);
   const [profile, setProfile] = useState([]);
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState('');
   var [firstNameError, setFirstNameError] = useState(false);
-  const [lastName, setLastName] = useState("");
+  const [lastName, setLastName] = useState('');
   var [lastNameError, setLastNameError] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   var [emailError, setEmailError] = useState(false);
   const [preferredPayment, setPreferredPayment] = useState([]);
   const [contact, setContact] = useState([]);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
   var [phoneNumberError, setPhoneNumberError] = useState(false);
-  const [groupMe, setGroupMe] = useState("");
+  const [groupMe, setGroupMe] = useState('');
   var [groupMeError, setGroupMeError] = useState(false);
   var [error, setError] = useState(false);
   let payments = [];
   let contacts = [];
+  const [file, setFile] = useState();
+  const Send = (event) => {
+    const data = new FormData();
+    data.append('file', file);
+    // data.append('name', name);
 
-  async function getData(url = "http://localhost:8080/users/me") {
+    Axios.post('https://httpbin.org/anything', data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  async function getData(url = 'http://localhost:8080/users/me') {
     const response = await fetch(url, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
@@ -75,29 +86,29 @@ export default function EditProfile() {
         setLastName(d.lastName);
         setEmail(d.email);
 
-        if (d.modeOfCommunication === "Phone") {
-          contacts.push("Phone");
+        if (d.modeOfCommunication === 'Phone') {
+          contacts.push('Phone');
           setPhoneNumber(d.phoneNumber);
         }
-        if (d.modeOfCommunication === "GroupMe") {
-          contacts.push("GroupMe");
+        if (d.modeOfCommunication === 'GroupMe') {
+          contacts.push('GroupMe');
           setGroupMe(d.groupMe);
         }
-        if (d.modeOfCommunication === "Any") {
-          contacts.push("Phone");
-          contacts.push("GroupMe");
+        if (d.modeOfCommunication === 'Any') {
+          contacts.push('Phone');
+          contacts.push('GroupMe');
           setPhoneNumber(d.phoneNumber);
           setGroupMe(d.groupMe);
         }
         setContact(contacts);
         if (profile.cash) {
-          payments.push("Cash");
+          payments.push('Cash');
         }
         if (profile.venmo) {
-          payments.push("Venmo");
+          payments.push('Venmo');
         }
         if (profile.zelle) {
-          payments.push("Zelle");
+          payments.push('Zelle');
         }
         setPreferredPayment(payments);
       });
@@ -125,13 +136,13 @@ export default function EditProfile() {
   const checkNameAlpha = (name) => !name.match(regex);
 
   const checkPhoneNumber = (phoneNumber) =>
-    !isMobilePhone(phoneNumber, "en-US");
+    !isMobilePhone(phoneNumber, 'en-US');
 
   const checkGroupMeURL = (groupme) =>
     !isURL(groupme, {
-      protocols: ["https"],
+      protocols: ['https'],
       require_protocol: true,
-      host_whitelist: ["groupme.com", "www.groupme.com"],
+      host_whitelist: ['groupme.com', 'www.groupme.com'],
     });
 
   const handleEdit = () => {
@@ -150,14 +161,14 @@ export default function EditProfile() {
       lastNameError = true;
     }
     if (
-      (contact === "Phone" || contact === "Any") &&
+      (contact === 'Phone' || contact === 'Any') &&
       checkPhoneNumber(phoneNumber)
     ) {
       setPhoneNumberError(true);
       phoneNumberError = true;
     }
     if (
-      (contact === "GroupMe" || contact === "Any") &&
+      (contact === 'GroupMe' || contact === 'Any') &&
       checkGroupMeURL(groupMe)
     ) {
       setGroupMeError(true);
@@ -174,47 +185,47 @@ export default function EditProfile() {
       console.log(obj.firstName);
       obj.lastName = lastName;
 
-      if (contact.includes("Phone") && contact.includes("GroupMe")) {
-        obj.modeOfCommunication = "Any";
-      } else if (contact.includes("Phone")) {
-        obj.modeOfCommunication = "Phone";
-      } else if (contact.includes("GroupMe")) {
-        obj.modeOfCommunication = "GroupMe";
+      if (contact.includes('Phone') && contact.includes('GroupMe')) {
+        obj.modeOfCommunication = 'Any';
+      } else if (contact.includes('Phone')) {
+        obj.modeOfCommunication = 'Phone';
+      } else if (contact.includes('GroupMe')) {
+        obj.modeOfCommunication = 'GroupMe';
       }
 
-      if (preferredPayment.includes("Cash")) {
+      if (preferredPayment.includes('Cash')) {
         obj.cash = true;
       }
-      if (preferredPayment.includes("Venmo")) {
+      if (preferredPayment.includes('Venmo')) {
         obj.venmo = true;
       }
-      if (preferredPayment.includes("Zelle")) {
+      if (preferredPayment.includes('Zelle')) {
         obj.zelle = true;
       }
-      if (preferredPayment.includes("Other Payment Method")) {
+      if (preferredPayment.includes('Other Payment Method')) {
         obj.otherPaymentMethod = true;
       }
 
-      if (phoneNumber !== "") {
+      if (phoneNumber !== '') {
         obj.phoneNumber = phoneNumber;
       }
 
-      if (groupMe !== "") {
+      if (groupMe !== '') {
         obj.groupMe = groupMe;
       }
 
       async function patchData(
-        url = "http://localhost:8080/users/me",
+        url = 'http://localhost:8080/users/me',
         data = obj
       ) {
         const response = await fetch(url, {
-          method: "PUT",
-          mode: "cors",
-          credentials: "include",
+          method: 'PUT',
+          mode: 'cors',
+          credentials: 'include',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          redirect: "follow",
+          redirect: 'follow',
           body: JSON.stringify({
             firstName: obj.firstName,
             lastName: obj.lastName,
@@ -229,16 +240,16 @@ export default function EditProfile() {
         });
         console.log(data);
 
-        return response.json();
+        return response;
       }
 
-      patchData("http://localhost:8080/users/me").then((data) => {
+      patchData('http://localhost:8080/users/me').then((data) => {
         if (data.error) {
-          swal("Oops!", data.error, "error");
+          swal('Oops!', data.error, 'error');
         } else {
           setSaved(true);
-          swal("Success", "Profile updated", "success").then(function () {
-            window.location.href = "#/profile";
+          swal('Success', 'Profile updated', 'success').then(function () {
+            window.location.href = '#/profile';
           });
           console.log(data);
         }
@@ -248,7 +259,7 @@ export default function EditProfile() {
   return (
     <div class="container-edit-profile">
       <ThemeProvider theme={theme}>
-        <DefaultBanner banner={"Edit Profile"} />
+        <DefaultBanner banner={'Edit Profile'} />
         <form autoComplete="off" onSubmit={handleSave}>
           <div class="row edit-profile">
             <Grid xs={3}>
@@ -257,14 +268,33 @@ export default function EditProfile() {
                   <img src={Bike} alt="" />
                 </div>
                 <div class="edit-profile-userbuttons">
-                  <Button>Change Profile Picture</Button>
+                  <div> Change Profile Picture</div>
+                  {saved ? null : (
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{
+                        backgroundColor: 'white',
+                      }}
+                    >
+                      <input
+                        type="file"
+                        accept=".jpeg, .png"
+                        onChange={(event) => {
+                          const file = event.target.files;
+                          setFile(file);
+                          console.log(file);
+                        }}
+                      />
+                    </Button>
+                  )}
                 </div>
                 <div class="edit-profile-usertitle">
                   <div class="edit-profile-usertitle-name">
                     <TextField
                       label="First Name"
                       width="auto"
-                      variant={saved ? "standard" : "standard"}
+                      variant={saved ? 'standard' : 'standard'}
                       disabled={saved}
                       onChange={(event) => {
                         setFirstName(event.target.value);
@@ -278,12 +308,12 @@ export default function EditProfile() {
                       }
                       helperText={
                         saved === true
-                          ? ""
+                          ? ''
                           : checkNameLength(firstName)
-                          ? "First name must be between 2-32 characters"
+                          ? 'First name must be between 2-32 characters'
                           : checkNameAlpha(firstName)
-                          ? "First name must be alphabetical"
-                          : ""
+                          ? 'First name must be alphabetical'
+                          : ''
                       }
                     />
                   </div>
@@ -292,7 +322,7 @@ export default function EditProfile() {
                     <TextField
                       label="Last Name"
                       width="auto"
-                      variant={saved ? "standard" : "standard"}
+                      variant={saved ? 'standard' : 'standard'}
                       disabled={saved}
                       onChange={(event) => {
                         setLastName(event.target.value);
@@ -306,12 +336,12 @@ export default function EditProfile() {
                       }
                       helperText={
                         saved === true
-                          ? ""
+                          ? ''
                           : checkNameLength(lastName)
-                          ? "Last name must be between 2-32 characters"
+                          ? 'Last name must be between 2-32 characters'
                           : checkNameAlpha(lastName)
-                          ? "Last name must be alphabetical"
-                          : ""
+                          ? 'Last name must be alphabetical'
+                          : ''
                       }
                     />
                   </div>
@@ -324,8 +354,8 @@ export default function EditProfile() {
                         handleEdit();
                       }}
                       sx={{
-                        marginTop: "1vh",
-                        marginBottom: "3vh",
+                        marginTop: '1vh',
+                        marginBottom: '3vh',
                       }}
                     >
                       Edit Profile Details
@@ -361,7 +391,7 @@ export default function EditProfile() {
                             disabled
                             value={email}
                             sx={{
-                              marginTop: "1vh",
+                              marginTop: '1vh',
                             }}
                           />
                         </div>
@@ -372,14 +402,14 @@ export default function EditProfile() {
                           <FormControl
                             fullWidth
                             sx={{
-                              marginTop: "1vh",
+                              marginTop: '1vh',
                             }}
                           >
                             <InputLabel
                               id="demo-simple-select-label"
                               sx={{
-                                marginLeft: "-1vw",
-                                marginTop: "1vh",
+                                marginLeft: '-1vw',
+                                marginTop: '1vh',
                               }}
                             >
                               Preferred form of contact
@@ -394,7 +424,7 @@ export default function EditProfile() {
                               onChange={contactHandler}
                               value={contact}
                               sx={{
-                                marginTop: "1vh",
+                                marginTop: '1vh',
                               }}
                             >
                               {formsOfContact.map((option) => (
@@ -407,13 +437,13 @@ export default function EditProfile() {
                               ))}
                             </Select>
                           </FormControl>
-                          {contact.includes("Phone") &&
-                          contact.includes("GroupMe") ? (
+                          {contact.includes('Phone') &&
+                          contact.includes('GroupMe') ? (
                             <Grid>
                               <TextField
                                 fullWidth
                                 label="Phone Number"
-                                variant={saved ? "standard" : "standard"}
+                                variant={saved ? 'standard' : 'standard'}
                                 disabled={saved}
                                 onChange={(event) => {
                                   setPhoneNumber(event.target.value);
@@ -424,20 +454,20 @@ export default function EditProfile() {
                                 }
                                 helperText={
                                   saved === true
-                                    ? ""
+                                    ? ''
                                     : checkPhoneNumber(phoneNumber)
-                                    ? "Enter a valid US phone number"
-                                    : ""
+                                    ? 'Enter a valid US phone number'
+                                    : ''
                                 }
                                 sx={{
-                                  marginTop: "1vh",
+                                  marginTop: '1vh',
                                 }}
                                 value={phoneNumber}
                               />
                               <TextField
                                 fullWidth
                                 label="GroupMe URL"
-                                variant={saved ? "standard" : "standard"}
+                                variant={saved ? 'standard' : 'standard'}
                                 disabled={saved}
                                 onChange={(event) => {
                                   setGroupMe(event.target.value);
@@ -447,22 +477,22 @@ export default function EditProfile() {
                                 }
                                 helperText={
                                   saved === true
-                                    ? ""
+                                    ? ''
                                     : checkGroupMeURL(groupMe)
-                                    ? "The provided URL must be from groupme.com and use https"
-                                    : ""
+                                    ? 'The provided URL must be from groupme.com and use https'
+                                    : ''
                                 }
                                 value={groupMe}
                                 sx={{
-                                  marginTop: "1vh",
+                                  marginTop: '1vh',
                                 }}
                               />
                             </Grid>
-                          ) : contact.includes("Phone") ? (
+                          ) : contact.includes('Phone') ? (
                             <TextField
                               fullWidth
                               label="Phone Number"
-                              variant={saved ? "standard" : "standard"}
+                              variant={saved ? 'standard' : 'standard'}
                               disabled={saved}
                               onChange={(event) => {
                                 setPhoneNumber(event.target.value);
@@ -472,21 +502,21 @@ export default function EditProfile() {
                               }
                               helperText={
                                 saved === true
-                                  ? ""
+                                  ? ''
                                   : checkPhoneNumber(phoneNumber)
-                                  ? "Enter a valid US phone number"
-                                  : ""
+                                  ? 'Enter a valid US phone number'
+                                  : ''
                               }
                               sx={{
-                                marginTop: "1vh",
+                                marginTop: '1vh',
                               }}
                               value={phoneNumber}
                             />
-                          ) : contact.includes("GroupMe") ? (
+                          ) : contact.includes('GroupMe') ? (
                             <TextField
                               fullWidth
                               label="GroupMe URL"
-                              variant={saved ? "standard" : "standard"}
+                              variant={saved ? 'standard' : 'standard'}
                               disabled={saved}
                               onChange={(event) => {
                                 setGroupMe(event.target.value);
@@ -496,13 +526,13 @@ export default function EditProfile() {
                               }
                               helperText={
                                 saved === true
-                                  ? ""
+                                  ? ''
                                   : checkGroupMeURL(groupMe)
-                                  ? "The provided URL must be from groupme.com and use https"
-                                  : ""
+                                  ? 'The provided URL must be from groupme.com and use https'
+                                  : ''
                               }
                               sx={{
-                                marginTop: "1vh",
+                                marginTop: '1vh',
                               }}
                               value={groupMe}
                             />
@@ -515,14 +545,14 @@ export default function EditProfile() {
                           <FormControl
                             fullWidth
                             sx={{
-                              marginTop: "1vh",
+                              marginTop: '1vh',
                             }}
                           >
                             <InputLabel
                               id="demo-simple-select-label"
                               sx={{
-                                marginLeft: "-1vw",
-                                marginTop: "1vh",
+                                marginLeft: '-1vw',
+                                marginTop: '1vh',
                               }}
                             >
                               Preferred form(s) of payment
@@ -537,7 +567,7 @@ export default function EditProfile() {
                               onChange={preferredPaymentHandler}
                               value={preferredPayment}
                               sx={{
-                                marginTop: "1vh",
+                                marginTop: '1vh',
                               }}
                             >
                               {paymentMethods.map((option) => (

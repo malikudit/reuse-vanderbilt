@@ -1,4 +1,5 @@
-import { React, useState } from "react";
+import { React, useState } from 'react';
+import Axios, { post } from 'axios';
 import {
   Grid,
   InputLabel,
@@ -9,59 +10,61 @@ import {
   TextField,
   createTheme,
   ThemeProvider,
-} from "@mui/material";
-import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import swal from "sweetalert";
+  Typography,
+} from '@mui/material';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import swal from 'sweetalert';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#DAA520",
+      main: '#DAA520',
     },
     secondary: {
-      main: "#212121",
+      main: '#212121',
     },
     neutral: {
-      main: "#ffffff",
+      main: '#ffffff',
     },
     info: {
-      main: "#4169E1",
+      main: '#4169E1',
     },
     success: {
-      main: "#228B22",
+      main: '#228B22',
     },
     background: {
-      default: "#696969",
+      default: '#696969',
     },
   },
 });
 
 export default function CreateListings() {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState(false);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [descriptionError, setDescriptionError] = useState(false);
-  const [condition, setCondition] = useState("");
-  const [conditionError, setConditionError] = useState("");
-  const [location, setLocation] = useState("");
-  const [locationError, setLocationError] = useState("");
-  const [date, setDate] = useState(dayjs(""));
+  const [condition, setCondition] = useState('');
+  const [conditionError, setConditionError] = useState('');
+  const [location, setLocation] = useState('');
+  const [locationError, setLocationError] = useState('');
+  const [date, setDate] = useState(dayjs(''));
   const [dateError, setDateError] = useState(false);
-  const [category, setCategory] = useState("");
-  const [categoryError, setCategoryError] = useState("");
-  const [listingType, setListingType] = useState("");
-  const [listingTypeError, setListingTypeError] = useState("");
-  const [openingBid, setOpeningBid] = useState("");
-  const [openingBidError, setOpeningBidError] = useState("");
-  const [bidIncrement, setBidIncrement] = useState("");
+  const [category, setCategory] = useState('');
+  const [categoryError, setCategoryError] = useState('');
+  const [listingType, setListingType] = useState('');
+  const [listingTypeError, setListingTypeError] = useState('');
+  const [openingBid, setOpeningBid] = useState('');
+  const [openingBidError, setOpeningBidError] = useState('');
+  const [bidIncrement, setBidIncrement] = useState('');
   const [bidIncrementError, setBidIncrementError] = useState(false);
-  const [listingPrice, setListingPrice] = useState("");
+  const [listingPrice, setListingPrice] = useState('');
   const [listingPriceError, setListingPriceError] = useState(false);
   const [error, setError] = useState(false);
-  const [printErr, setPrintErr] = useState("");
+  const [printErr, setPrintErr] = useState('');
+  const [coverImage, setCoverImage] = useState();
 
   const handleCondition = (event) => {
     setCondition(event.target.value);
@@ -91,9 +94,14 @@ export default function CreateListings() {
     setLocation(event.target.value);
   };
 
+  // const SendCover = (event) => {
+  //   Axios.post('https://httpbin.org/anything', data)
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err));
+  // };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setTitleError(false);
     setDescriptionError(false);
     setConditionError(false);
@@ -104,57 +112,71 @@ export default function CreateListings() {
     setLocationError(false);
     setError(false);
 
-    if (title === "") {
+    if (title === '') {
       setTitleError(true);
       setError(true);
     }
-    if (description === "") {
+    if (description === '') {
       setDescriptionError(true);
       setError(true);
     }
-    if (condition === "") {
+    if (condition === '') {
       setConditionError(true);
       setError(true);
     }
-    if (location === "") {
+    if (location === '') {
       setLocationError(true);
       setError(true);
     }
-    if (date === "") {
+    if (date === '') {
       setDateError(true);
       setError(true);
     }
-    if (category === "") {
+    if (category === '') {
       setCategoryError(true);
       setError(true);
     }
-    if (listingType === "") {
+    if (listingType === '') {
       setListingTypeError(true);
       setError(true);
     }
-    if (listingType === "Bid Only") {
-      if (openingBid === "") {
+    if (listingType === 'Bid Only') {
+      if (openingBid === '') {
         setOpeningBidError(true);
         setError(true);
       }
-      if (bidIncrement === "") {
+      if (bidIncrement === '') {
         setBidIncrementError(true);
         setError(true);
       }
     } else {
-      if (listingPrice === "") {
+      if (listingPrice === '') {
         setListingPriceError(true);
         setError(true);
       }
     }
-
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('condition', condition);
+    formData.append('location', location);
+    formData.append('category', category);
+    formData.append('listingType', listingType);
+    formData.append('expirationDate', date);
+    if (listingType === 'Bid Only') {
+      formData.append('openingBid', openingBid);
+      formData.append('bidIncrement', bidIncrement);
+    } else {
+      formData.append('listingPrice', listingPrice);
+    }
+    formData.append('coverImage', coverImage);
     const obj = {};
     obj.title = title;
     obj.description = description;
     obj.category = category;
     obj.condition = condition;
     obj.listingType = listingType;
-    if (listingType === "Bid Only") {
+    if (listingType === 'Bid Only') {
       obj.openingBid = openingBid;
       obj.bidIncrement = bidIncrement;
     } else {
@@ -163,32 +185,39 @@ export default function CreateListings() {
     obj.expirationDate = date;
     obj.location = location;
 
+    obj.image = coverImage;
+
     if (!error) {
       async function postData(
-        url = "http://localhost:8080/product",
-        data = obj
+        url = 'http://localhost:8080/product',
+        data = formData
       ) {
         const response = await fetch(url, {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
+          method: 'POST',
+          mode: 'cors',
+          credentials: 'include',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'multipart/form-data',
           },
-          redirect: "follow",
-          body: JSON.stringify({
-            product: data,
-          }),
-        });
+          redirect: 'follow',
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+
+        console.log(data);
+
         return response.json();
       }
 
-      postData("http://localhost:8080/product", obj).then((data) => {
+      postData('http://localhost:8080/product', obj).then((data) => {
         if (data.error) {
-          swal("Oops!", data.error, "error");
+          swal('Oops!', data.error, 'error');
         } else {
-          swal("Success", "Product listed", "success").then(function () {
-            window.location.href = "/";
+          swal('Success', 'Product listed', 'success').then(function () {
+            window.location.href = '/';
           });
         }
       });
@@ -201,34 +230,31 @@ export default function CreateListings() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={6} container flex>
-                <TextField
-                  label="Upload Between 1-3 Photos of Your Product"
-                  variant="outlined"
-                  required
-                  style={{ width: "90%" }}
-                  multiline
-                  rows={18}
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        variant="contained"
-                        color="info"
-                        component="label"
-                        size="large"
-                        sx={{
-                          width: 150,
-                          height: 60,
-                        }}
-                      >
-                        Upload
-                        <input hidden accept="image/*" multiple type="file" />
-                      </Button>
-                    ),
-                  }}
-                />
+              <Grid xs={4} container flex>
+                <Grid item xs={12} marginTop={1}>
+                  <Typography variant="h6">
+                    Upload cover image (required){' '}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{
+                      backgroundColor: 'white',
+                    }}
+                  >
+                    <input
+                      required
+                      type="file"
+                      accept=".jpeg, .png"
+                      onChange={(event) => {
+                        const file = event.target.files[0];
+                        setCoverImage(file);
+                      }}
+                    />
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid xs={6} direction="column" marginTop={2}>
+              <Grid xs={8} direction="column" marginTop={2}>
                 <Grid item xs={2} marginBottom={2}>
                   <TextField
                     onChange={(e) => setTitle(e.target.value)}
@@ -265,12 +291,12 @@ export default function CreateListings() {
                         error={conditionError ? true : false}
                         onChange={handleCondition}
                       >
-                        <MenuItem value={"New"}>New</MenuItem>
-                        <MenuItem value={"Like New"}>Like New</MenuItem>
-                        <MenuItem value={"Slightly Used"}>
+                        <MenuItem value={'New'}>New</MenuItem>
+                        <MenuItem value={'Like New'}>Like New</MenuItem>
+                        <MenuItem value={'Slightly Used'}>
                           Slightly Used
                         </MenuItem>
-                        <MenuItem value={"Used"}>Used</MenuItem>
+                        <MenuItem value={'Used'}>Used</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -288,13 +314,13 @@ export default function CreateListings() {
                         label="Location"
                         onChange={handleLocation}
                       >
-                        <MenuItem value={"Seller Delivers to Buyer"}>
+                        <MenuItem value={'Seller Delivers to Buyer'}>
                           Seller Will Deliver to Buyer
                         </MenuItem>
-                        <MenuItem value={"Buyer Comes to Seller"}>
+                        <MenuItem value={'Buyer Comes to Seller'}>
                           Buyer Will Come to Seller
                         </MenuItem>
-                        <MenuItem value={"Exchange at Common Point"}>
+                        <MenuItem value={'Exchange at Common Point'}>
                           Buyer and Seller Meet at Common Point
                         </MenuItem>
                       </Select>
@@ -316,10 +342,10 @@ export default function CreateListings() {
                           error={dateError ? true : false}
                           helperText={
                             dateError
-                              ? "Listings must be at least 3 hours in the future and can be no longer than 14 days ahead"
-                              : ""
+                              ? 'Listings must be at least 3 hours in the future and can be no longer than 14 days ahead'
+                              : ''
                           }
-                          sx={{ width: "100%" }}
+                          sx={{ width: '100%' }}
                         />
                       )}
                     />
@@ -338,21 +364,21 @@ export default function CreateListings() {
                         label="Category"
                         onChange={handleCategory}
                       >
-                        <MenuItem value={"Books"}>Books</MenuItem>
-                        <MenuItem value={"Clothing"}>Clothing</MenuItem>
-                        <MenuItem value={"Electronics"}>Electronics</MenuItem>
-                        <MenuItem value={"Furniture"}>Furniture</MenuItem>
-                        <MenuItem value={"Kitchen"}>Kitchen</MenuItem>
-                        <MenuItem value={"Tickets"}>Tickets</MenuItem>
-                        <MenuItem value={"Transportation"}>
+                        <MenuItem value={'Books'}>Books</MenuItem>
+                        <MenuItem value={'Clothing'}>Clothing</MenuItem>
+                        <MenuItem value={'Electronics'}>Electronics</MenuItem>
+                        <MenuItem value={'Furniture'}>Furniture</MenuItem>
+                        <MenuItem value={'Kitchen'}>Kitchen</MenuItem>
+                        <MenuItem value={'Tickets'}>Tickets</MenuItem>
+                        <MenuItem value={'Transportation'}>
                           Transportation
                         </MenuItem>
-                        <MenuItem value={"Other"}>Other</MenuItem>
+                        <MenuItem value={'Other'}>Other</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
                 </Grid>
-                <Grid container justifyContent={"space-between"}>
+                <Grid container justifyContent={'space-between'}>
                   <Grid item xs={5.9} marginBottom={2}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
@@ -367,12 +393,12 @@ export default function CreateListings() {
                         error={listingTypeError ? true : false}
                         onChange={handleListingType}
                       >
-                        <MenuItem value={"Bid-Only"}>Bid Only</MenuItem>
-                        <MenuItem value={"Listing-Only"}>Buy Now Only</MenuItem>
+                        <MenuItem value={'Bid-Only'}>Bid Only</MenuItem>
+                        <MenuItem value={'Listing-Only'}>Buy Now Only</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
-                  {listingType === "Bid-Only" ? (
+                  {listingType === 'Bid-Only' ? (
                     <Grid container justifyContent="space-between">
                       <Grid item xs={5.9} marginBottom={2}>
                         <TextField
@@ -414,7 +440,7 @@ export default function CreateListings() {
                     </Grid>
                   )}
                 </Grid>
-                <Grid container justifyContent={"space-around"}>
+                <Grid container justifyContent={'space-around'}>
                   <Button
                     variant="contained"
                     required

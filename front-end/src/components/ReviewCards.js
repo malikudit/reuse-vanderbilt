@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -11,7 +11,7 @@ import {
   CardActions,
   Rating,
   Grid,
-} from "@mui/material";
+} from '@mui/material';
 
 export default function ReviewCards(props) {
   return (
@@ -30,27 +30,21 @@ export default function ReviewCards(props) {
         location: props.location,
         salePrice: props.salePrice,
       }}
-      style={{ textDecoration: "none" }}
+      style={{ textDecoration: 'none' }}
     >
       <Box padding={2} marginLeft={3}>
-        <Grid container alignItems="center" justifyContent={"center"}>
+        <Grid container alignItems="center" justifyContent={'center'}>
           <Card
             variant="outlined"
             sx={{
-              width: "100%",
+              width: '100%',
               height: 250,
-              borderRadius: "16px",
+              borderRadius: '16px',
             }}
           >
-            <Grid container alignItems={"center"} justifyContent={"center"}>
+            <Grid container alignItems={'center'} justifyContent={'center'}>
               <CardContent>
-                <Typography variant="h6">{props.reviewTitle}</Typography>
-                <Box sx={{ borderBottom: 3 }}></Box>
-              </CardContent>
-            </Grid>
-            <Grid container alignItems={"center"} justifyContent={"center"}>
-              <CardContent>
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                   {props.reviewTitle}
                 </Typography>
                 <Box sx={{ borderBottom: 3 }}></Box>
@@ -66,45 +60,26 @@ export default function ReviewCards(props) {
                 />
               </CardActions>
             </Grid>
-            <CardActionArea>
-              {/*<Grid container alignItems={"center"} justifyContent={"center"}>
-              <CardMedia
-                component="img"
-                height="140"
-                coverImage={props.coverImage}
-                alt={props.alt}
-                sx = {{
-                  borderRadius: "50% 50% 50% 50%",
-                  backgroundSize: "100% 100%",
-                  backgroundPosition: "center",
-                  height: 120,
-                  width: 120,  
-                  border: "6px solid white",
-                  filter: "drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.1))",
-                }}
-              />
-              </Grid> */}
-            </CardActionArea>
-            <Grid container alignItems={"center"} justifyContent={"center"}>
+            <Grid container alignItems={'center'} justifyContent={'center'}>
               <CardContent>
                 <Typography variant="h7">{props.reviewBody}</Typography>
               </CardContent>
             </Grid>
-            <Grid container alignItems={"center"} justifyContent={"center"}>
+            <Grid container alignItems={'center'} justifyContent={'center'}>
               <CardActions>
                 <Button
                   size="small"
                   color="info"
                   sx={{
-                    background: "#333",
-                    color: "white",
-                    outline: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: "10px 25px",
+                    background: '#333',
+                    color: 'white',
+                    outline: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '10px 25px',
                   }}
                 >
-                  View orginal listing
+                  View original listing
                 </Button>
               </CardActions>
             </Grid>
