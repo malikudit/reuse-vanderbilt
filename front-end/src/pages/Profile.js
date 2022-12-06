@@ -35,7 +35,7 @@ export default function Profile() {
   var [reviews, setReviews] = useState([]);
   let preferredPayment = [];
 
-  async function getData(url = 'http://localhost:8080/users/me') {
+  async function getData(url = 'https://api.reusevandy.org/users/me') {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -54,7 +54,7 @@ export default function Profile() {
   }
 
   async function getReviews(
-    url = `http://localhost:8080/review/${profile.id}`
+    url = `https://api.reusevandy.org/review/${profile.id}`
   ) {
     const response = await fetch(url, {
       method: 'GET',
