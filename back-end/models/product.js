@@ -569,13 +569,13 @@ Product.init({
                 product.setDataValue('listingPrice', null);
             }
         },
-        afterFind: (product) => {
+        afterFind: async (product) => {
             if (product === null)
                 return;
 
             const products = Array.isArray(product) ? product : [ product ];
 
-            products.forEach(async (product) => {
+            await Promise.all(products.map(async (product) => {
                 const state = product.getDataValue('state');
 
                 if (state === 'Active') {
@@ -593,7 +593,7 @@ Product.init({
                         });
                     }
                 }
-            });
+            }));
         }
     },
     indexes: [
