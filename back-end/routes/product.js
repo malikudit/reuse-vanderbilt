@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const { Op } = require('sequelize');
 
-const { User, Product, Bid, Photo } = require('../models');
+const { User, Product, Bid, Photo, Review } = require('../models');
 const { authenticateUser } = require('./utils/auth');
 const upload = require('./utils/upload');
 
@@ -106,6 +106,16 @@ router.get('/:productId', async (req, res, next) => {
                     model: Photo,
                     as: 'coverPhoto',
                     attributes: ['id']
+                },
+                {
+                    model: Review,
+                    as: 'buyerReview',
+                    attributes: ['id']
+                },
+                {
+                    model: Review,
+                    as: 'sellerReview',
+                    attributes: ['id']
                 }
             ]
         });
@@ -123,11 +133,18 @@ router.get('/:productId', async (req, res, next) => {
             const user = await User.findByPk(product.bidderId);
             product.bidderName = user.firstName + ' ' + user.lastName;
         }
+
+        product.buyerReview = product.buyerReview ? true : false;
+        product.sellerReview = product.sellerReview ? true : false;
         product.coverPhoto = `https://img.reusevandy.org/${product.coverPhoto.id}`;
 
-        if (product.role !== 'Seller') {
+        if (product.role === 'Buyer') {
+            res.send(product.generateView(['sellerName', 'coverPhoto', 'buyerReview', 'sellerReview', 'role']));
+        }
+        else if (product.role !== 'Seller') {
             res.send(product.generateView(['sellerName', 'coverPhoto', 'role']));
-        } else {
+        }
+        else {
             res.send(product.generateView([
                 'sellerName',
                 'bidderId',
@@ -135,6 +152,8 @@ router.get('/:productId', async (req, res, next) => {
                 'buyerId',
                 'buyerName',
                 'coverPhoto',
+                'buyerReview',
+                'sellerReview',
                 'role'
             ]));
         }
