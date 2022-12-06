@@ -77,12 +77,12 @@ export default function CreateListings() {
     setDate();
     setDateError(false);
     var now = new Date().getTime();
-    // if (date - now > 12096e5 || date - now < 1.08e7) {
-    //   setDateError(true);
-    // } else {
-    date = dayjs(date).toISOString();
-    setDate(date);
-    // }
+    if (date - now > 12096e5 || date - now < 1.08e7) {
+      setDateError(true);
+    } else {
+      date = dayjs(date).toISOString();
+      setDate(date);
+    }
   };
 
   const handleListingType = (event) => {
