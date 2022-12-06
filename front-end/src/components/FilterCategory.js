@@ -7,7 +7,7 @@ import '../css/ProductCards.css';
 export default function FilterCategory(props) {
   const [products, setProducts] = useState([]);
 
-  async function getData(url = 'http://localhost:8080/product') {
+  async function getData(url = 'https://api.reusevandy.org/product') {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',

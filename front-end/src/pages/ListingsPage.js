@@ -70,7 +70,7 @@ export default function ListingsPage(props) {
   var [sellingProducts, setSellingProducts] = useState([]);
   const [profile, setProfile] = useState();
 
-  async function getBuying(url = 'http://localhost:8080/users/buying') {
+  async function getBuying(url = 'https://api.reusevandy.org/users/buying') {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -85,7 +85,7 @@ export default function ListingsPage(props) {
     return response;
   }
 
-  async function getSelling(url = `http://localhost:8080/users/selling`) {
+  async function getSelling(url = `https://api.reusevandy.org/users/selling`) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -100,7 +100,7 @@ export default function ListingsPage(props) {
     return response;
   }
 
-  async function getUser(url = 'http://localhost:8080/users/me') {
+  async function getUser(url = 'https://api.reusevandy.org/users/me') {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',

@@ -32,7 +32,9 @@ export default function NewReviewPage(props) {
     salePrice = products.listingPrice;
   }
 
-  async function getData(url = `http://localhost:8080/product/${productID}`) {
+  async function getData(
+    url = `https://api.reusevandy.org/product/${productID}`
+  ) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -84,7 +86,7 @@ export default function NewReviewPage(props) {
     if (!error) {
       console.log('Object is ' + obj);
       async function postData(
-        url = `http://localhost:8080/review/${products.id}`,
+        url = `https://api.reusevandy.org/review/${products.id}`,
         data = obj
       ) {
         const response = await fetch(url, {
@@ -102,7 +104,7 @@ export default function NewReviewPage(props) {
         return response.json();
       }
 
-      postData(`http://localhost:8080/review/${products.id}`, obj).then(
+      postData(`https://api.reusevandy.org/review/${products.id}`, obj).then(
         (data) => {
           if (data.error) {
             setPrintErr(data.error);

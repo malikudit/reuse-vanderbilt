@@ -5,7 +5,9 @@ import swal from 'sweetalert';
 
 export default function SellerEvaluation(props) {
   const [products, setProducts] = useState([]);
-  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+  async function getData(
+    url = `https://api.reusevandy.org/product/${props.id}`
+  ) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -38,7 +40,7 @@ export default function SellerEvaluation(props) {
       }
     });
     async function acceptBid(
-      url = `http://localhost:8080/bid/${props.id}/accept`
+      url = `https://api.reusevandy.org/bid/${props.id}/accept`
     ) {
       const response = await fetch(url, {
         method: 'POST',
@@ -65,7 +67,7 @@ export default function SellerEvaluation(props) {
       }
     });
     async function rejectBid(
-      url = `http://localhost:8080/bid/${props.id}/reject`
+      url = `https://api.reusevandy.org/bid/${props.id}/reject`
     ) {
       const response = await fetch(url, {
         method: 'POST',

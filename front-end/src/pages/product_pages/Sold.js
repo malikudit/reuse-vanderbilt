@@ -9,7 +9,9 @@ export default function Sold(props) {
   var exchangePartner;
   var opRole;
 
-  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+  async function getData(
+    url = `https://api.reusevandy.org/product/${props.id}`
+  ) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',

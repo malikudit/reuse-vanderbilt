@@ -167,7 +167,7 @@ export default function CreateListings() {
     formData.append('coverImage', coverImage);
 
     if (!error) {
-      postData('http://localhost:8080/product', formData).then((data) => {
+      postData('https://api.reusevandy.org/product', formData).then((data) => {
         // if (data.error) {
         //   swal('Oops!', data.error, 'error');
         // } else {
@@ -178,7 +178,7 @@ export default function CreateListings() {
       });
 
       async function postData(
-        url = 'http://localhost:8080/product',
+        url = 'https://api.reusevandy.org/product',
         data = formData
       ) {
         const response = await fetch(url, {

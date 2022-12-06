@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import "../css/Form.css";
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
-import swal from "sweetalert";
-import emailjs from "emailjs-com";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import '../css/Form.css';
+import { Button, Container, Grid, TextField, Typography } from '@mui/material';
+import swal from 'sweetalert';
+import emailjs from 'emailjs-com';
 
 export default function Form(props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [printErr, setPrintErr] = useState(false);
@@ -17,11 +17,11 @@ export default function Form(props) {
   } = useForm();
 
   const checkEmail = (name) =>
-    !name.match("^[A-Za-z0-9._%+-]+@vanderbilt.edu$");
+    !name.match('^[A-Za-z0-9._%+-]+@vanderbilt.edu$');
 
   const checkPassword = (name) =>
     !name.match(
-      "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,32}$"
+      '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,32}$'
     );
 
   const handleSubmit = (e) => {
@@ -38,15 +38,15 @@ export default function Form(props) {
       obj.password = password;
 
       async function postData(
-        url = "http://localhost:8080/users/login",
+        url = 'https://api.reusevandy.org/users/login',
         data = obj
       ) {
         const response = await fetch(url, {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
+          method: 'POST',
+          mode: 'cors',
+          credentials: 'include',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             email: data.email,
@@ -57,12 +57,12 @@ export default function Form(props) {
         return response.json();
       }
 
-      postData("http://localhost:8080/users/login").then((data) => {
+      postData('https://api.reusevandy.org/users/login').then((data) => {
         if (data.error) {
           setPrintErr(data.error);
           console.log(data.error);
         } else {
-          window.location.href = "/";
+          window.location.href = '/';
         }
       });
     }
@@ -71,38 +71,38 @@ export default function Form(props) {
   const forgotPassword = () => {
     swal({
       title: "Let's help you reset your password! What's your email?",
-      content: "input",
+      content: 'input',
       button: {
-        text: "Send",
+        text: 'Send',
         closeModal: false,
       },
     })
       .then((email) => {
         if (!email) {
-          swal("Error", "Please enter an email!", "error");
+          swal('Error', 'Please enter an email!', 'error');
           return;
         }
         emailjs
           .send(
-            "service_8m4c5ua",
-            "template_bixak1k",
+            'service_8m4c5ua',
+            'template_bixak1k',
             { email: email },
-            "Ig2_KfIjR0_6K51qq"
+            'Ig2_KfIjR0_6K51qq'
           )
           .then(
             (result) => {
               console.log(result.text);
-              swal("Success", "Password reset link sent!", "success");
+              swal('Success', 'Password reset link sent!', 'success');
             },
             (error) => {
               console.log(error.text);
-              swal("Error", error.text, "error");
+              swal('Error', error.text, 'error');
             }
           );
       })
       .catch((err) => {
         if (err) {
-          swal("Error", "Email not sent", "error");
+          swal('Error', 'Email not sent', 'error');
         } else {
           swal.stopLoading();
           swal.close();
@@ -132,8 +132,8 @@ export default function Form(props) {
               error={emailError}
               helperText={
                 emailError
-                  ? "Please use a vanderbilt.edu email address to sign up"
-                  : ""
+                  ? 'Please use a vanderbilt.edu email address to sign up'
+                  : ''
               }
             />
             <TextField
@@ -141,7 +141,7 @@ export default function Form(props) {
               fullWidth
               label="Password"
               size="small"
-              type={"password"}
+              type={'password'}
               onChange={(event) => {
                 setPassword(event.target.value);
                 // checkPassword(event.target.value)
@@ -152,38 +152,38 @@ export default function Form(props) {
               // error={passwordError}
               // helperText={passwordError ? "Error with password" : ""}
             />
-            <Button 
-            type="submit" 
-            sx = {{
-              color: 'white',
-              fontWeight: 'bold',
-              background: '#000000',
-              letterSpacing: '1px',
-              outline: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              textTransform: 'none',
-              padding: '10px 25px',
-              '&:hover': {
-                background: '#daa520',
-                color: 'black',
-              },
-            }}
+            <Button
+              type="submit"
+              sx={{
+                color: 'white',
+                fontWeight: 'bold',
+                background: '#000000',
+                letterSpacing: '1px',
+                outline: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                textTransform: 'none',
+                padding: '10px 25px',
+                '&:hover': {
+                  background: '#daa520',
+                  color: 'black',
+                },
+              }}
             >
               Login
             </Button>
             {printErr ? <small className="errorPara">{printErr}</small> : null}
             <small>
-              Forgot Password?{" "}
+              Forgot Password?{' '}
               <Typography
                 variant="h8"
                 noWrap
                 component="Typography"
                 onClick={forgotPassword}
-                sx={{ 
-                  color: "#daa520" ,
-                  fontWeight: "bold",
-                  cursor: "pointer",
+                sx={{
+                  color: '#daa520',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
                 }}
               >
                 Click Here
@@ -191,25 +191,25 @@ export default function Form(props) {
               .
             </small>
             <small>
-              Don't have an account?{" "}
+              Don't have an account?{' '}
               <Typography
                 variant="h8"
                 noWrap
                 component={Link}
                 to="/register"
                 underline="none"
-                sx={{ 
-                  color: "#daa520",
-                  fontWeight: "bold",
-                  textDecoration: "none",
+                sx={{
+                  color: '#daa520',
+                  fontWeight: 'bold',
+                  textDecoration: 'none',
                   // no underline
-                  "&:hover": {
-                    textDecoration: "none",
+                  '&:hover': {
+                    textDecoration: 'none',
                   },
                 }}
               >
                 Register
-              </Typography>{" "}
+              </Typography>{' '}
               here.
             </small>
           </form>

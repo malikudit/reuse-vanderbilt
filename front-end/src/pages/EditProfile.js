@@ -67,7 +67,7 @@ export default function EditProfile() {
     // data.append('name', name);
   };
 
-  async function getData(url = 'http://localhost:8080/users/me') {
+  async function getData(url = 'https://api.reusevandy.org/users/me') {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -210,7 +210,7 @@ export default function EditProfile() {
       }
 
       async function patchData(
-        url = 'http://localhost:8080/users/me',
+        url = 'https://api.reusevandy.org/users/me',
         data = obj
       ) {
         const response = await fetch(url, {
@@ -238,7 +238,7 @@ export default function EditProfile() {
         return response;
       }
 
-      patchData('http://localhost:8080/users/me').then((data) => {
+      patchData('https://api.reusevandy.org/users/me').then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
         } else {

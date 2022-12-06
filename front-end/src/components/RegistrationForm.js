@@ -1,12 +1,12 @@
-import React from "react";
-import Logo from "../assets/VanderbiltLogo.jpg";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import "../css/Form.css";
-import swal from "sweetalert";
-import isMobilePhone from "validator/es/lib/isMobilePhone";
-import isURL from "validator/es/lib/isURL";
+import React from 'react';
+import Logo from '../assets/VanderbiltLogo.jpg';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import '../css/Form.css';
+import swal from 'sweetalert';
+import isMobilePhone from 'validator/es/lib/isMobilePhone';
+import isURL from 'validator/es/lib/isURL';
 import {
   Grid,
   TextField,
@@ -17,65 +17,65 @@ import {
   FormControl,
   FormHelperText,
   Typography,
-} from "@mui/material";
-import { paymentMethods, formsOfContact } from "../content/ProfilePreferences";
-import { Container } from "@mui/system";
+} from '@mui/material';
+import { paymentMethods, formsOfContact } from '../content/ProfilePreferences';
+import { Container } from '@mui/system';
 
 export default function Form(props) {
   const {
     formState: {},
   } = useForm();
 
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState('');
   const [firstNameError, setFirstNameError] = useState(false);
-  const [lastName, setLastName] = useState("");
+  const [lastName, setLastName] = useState('');
   const [lastNameError, setLastNameError] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [preferredPayment, setPreferredPayment] = useState([]);
   const [preferredPaymentError, setPreferredPaymentError] = useState(false);
-  const [preferredCommunication, setPreferredCommunication] = useState("");
+  const [preferredCommunication, setPreferredCommunication] = useState('');
   const [preferredCommunicationError, setPreferredCommunicationError] =
     useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState(false);
-  const [groupMe, setGroupMe] = useState("");
+  const [groupMe, setGroupMe] = useState('');
   const [groupMeError, setGroupMeError] = useState(false);
   const [error, setError] = useState(false);
 
-  const checkFirstName = (name) => !name.match("^[A-Za-z]{2,32}$");
+  const checkFirstName = (name) => !name.match('^[A-Za-z]{2,32}$');
 
-  const checkLastName = (name) => !name.match("^[A-Za-z]{2,32}$");
+  const checkLastName = (name) => !name.match('^[A-Za-z]{2,32}$');
 
   const checkEmail = (name) =>
-    !name.match("^[A-Za-z0-9._%+-]+@vanderbilt.edu$");
+    !name.match('^[A-Za-z0-9._%+-]+@vanderbilt.edu$');
 
   const checkPassword = (name) =>
     !name.match(
-      "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,32}$"
+      '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,32}$'
     );
 
   const checkConfirmPassword = (name) => name !== password;
 
   const checkPreferredPayment = (name) => name.length === 0;
 
-  const checkPreferredContact = (name) => name === "";
+  const checkPreferredContact = (name) => name === '';
 
   const checkPhoneNumber = (phoneNumber) =>
-    (preferredCommunication === "Phone" || preferredCommunication === "Any") &&
-    !isMobilePhone(phoneNumber, "en-US");
+    (preferredCommunication === 'Phone' || preferredCommunication === 'Any') &&
+    !isMobilePhone(phoneNumber, 'en-US');
 
   const checkGroupMeURL = (groupme) =>
-    (preferredCommunication === "GroupMe" ||
-      preferredCommunication === "Any") &&
+    (preferredCommunication === 'GroupMe' ||
+      preferredCommunication === 'Any') &&
     !isURL(groupme, {
-      protocols: ["https"],
+      protocols: ['https'],
       require_protocol: true,
-      host_whitelist: ["groupme.com", "www.groupme.com"],
+      host_whitelist: ['groupme.com', 'www.groupme.com'],
     });
 
   const handleSubmit = (e) => {
@@ -110,16 +110,16 @@ export default function Form(props) {
       return;
     }
     if (
-      (preferredCommunication === "Phone" ||
-        preferredCommunication === "Any") &&
+      (preferredCommunication === 'Phone' ||
+        preferredCommunication === 'Any') &&
       checkPhoneNumber(phoneNumber)
     ) {
       setPhoneNumberError(true);
       return;
     }
     if (
-      (preferredCommunication === "GroupMe" ||
-        preferredCommunication === "Any") &&
+      (preferredCommunication === 'GroupMe' ||
+        preferredCommunication === 'Any') &&
       checkGroupMeURL(groupMe)
     ) {
       setGroupMeError(true);
@@ -145,38 +145,41 @@ export default function Form(props) {
       obj.lastName = lastName;
       obj.email = email;
       obj.password = password;
-      if (preferredPayment.includes("Cash")) {
+      if (preferredPayment.includes('Cash')) {
         obj.cash = true;
       }
-      if (preferredPayment.includes("Venmo")) {
+      if (preferredPayment.includes('Venmo')) {
         obj.venmo = true;
       }
-      if (preferredPayment.includes("Zelle")) {
+      if (preferredPayment.includes('Zelle')) {
         obj.zelle = true;
       }
-      if (preferredPayment.includes("Other Payment Method")) {
+      if (preferredPayment.includes('Other Payment Method')) {
         obj.otherPaymentMethod = true;
       }
 
       obj.modeOfCommunication = preferredCommunication;
 
-      if (phoneNumber !== "") {
+      if (phoneNumber !== '') {
         obj.phoneNumber = phoneNumber;
       }
 
-      if (groupMe !== "") {
+      if (groupMe !== '') {
         obj.groupMe = groupMe;
       }
 
-      async function postData(url = "http://localhost:8080/users", data = obj) {
+      async function postData(
+        url = 'https://api.reusevandy.org/users',
+        data = obj
+      ) {
         const response = await fetch(url, {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
+          method: 'POST',
+          mode: 'cors',
+          credentials: 'include',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          redirect: "follow",
+          redirect: 'follow',
           body: JSON.stringify({
             user: data,
           }),
@@ -184,12 +187,12 @@ export default function Form(props) {
         return response.json(); // parses JSON response into native JavaScript objects
       }
 
-      postData("http://localhost:8080/users", obj).then((data) => {
+      postData('https://api.reusevandy.org/users', obj).then((data) => {
         if (data.error) {
-          swal("Oops!", data.error, "error");
+          swal('Oops!', data.error, 'error');
         } else {
-          swal("Success", "Account created", "success").then(function () {
-            window.location.href = "/login";
+          swal('Success', 'Account created', 'success').then(function () {
+            window.location.href = '/login';
           });
         }
       });
@@ -222,8 +225,8 @@ export default function Form(props) {
                     error={firstNameError}
                     helperText={
                       firstNameError
-                        ? "First Name should be 2-32 characters and should be alphabetical"
-                        : ""
+                        ? 'First Name should be 2-32 characters and should be alphabetical'
+                        : ''
                     }
                   />
                 </Grid>
@@ -247,8 +250,8 @@ export default function Form(props) {
                     error={lastNameError}
                     helperText={
                       lastNameError
-                        ? "Last Name should be 2-32 characters and should be alphabetical"
-                        : ""
+                        ? 'Last Name should be 2-32 characters and should be alphabetical'
+                        : ''
                     }
                   />
                 </Grid>
@@ -272,8 +275,8 @@ export default function Form(props) {
                     error={emailError}
                     helperText={
                       emailError
-                        ? "Please use a vanderbilt.edu email address to sign up"
-                        : ""
+                        ? 'Please use a vanderbilt.edu email address to sign up'
+                        : ''
                     }
                   />
                 </Grid>
@@ -298,8 +301,8 @@ export default function Form(props) {
                     error={passwordError}
                     helperText={
                       passwordError
-                        ? "Password must must be between 8 to 32 characters long and include at least one uppercase, one lowercase, one number and a special character"
-                        : ""
+                        ? 'Password must must be between 8 to 32 characters long and include at least one uppercase, one lowercase, one number and a special character'
+                        : ''
                     }
                   />
                 </Grid>
@@ -323,7 +326,7 @@ export default function Form(props) {
                     value={confirmPassword}
                     error={confirmPasswordError}
                     helperText={
-                      confirmPasswordError ? "Password must match" : ""
+                      confirmPasswordError ? 'Password must match' : ''
                     }
                   />
                 </Grid>
@@ -364,8 +367,8 @@ export default function Form(props) {
                     </Select>
                     <FormHelperText>
                       {preferredPaymentError
-                        ? "Please select a preferred form of payment"
-                        : ""}{" "}
+                        ? 'Please select a preferred form of payment'
+                        : ''}{' '}
                     </FormHelperText>
                   </FormControl>
                 </Grid>
@@ -390,8 +393,8 @@ export default function Form(props) {
                     error={preferredCommunicationError}
                     helperText={
                       preferredCommunicationError
-                        ? "Please select a preferred form of contact"
-                        : ""
+                        ? 'Please select a preferred form of contact'
+                        : ''
                     }
                   >
                     {formsOfContact.map((option) => (
@@ -408,8 +411,8 @@ export default function Form(props) {
                 <Grid item xs={6} margin={1.25}>
                   <TextField
                     required={
-                      preferredCommunication === "Phone" ||
-                      preferredCommunication === "Any"
+                      preferredCommunication === 'Phone' ||
+                      preferredCommunication === 'Any'
                     }
                     fullWidth
                     label="Phone Number"
@@ -424,8 +427,8 @@ export default function Form(props) {
                     error={phoneNumberError}
                     helperText={
                       phoneNumberError
-                        ? "A valid US phone number is required"
-                        : ""
+                        ? 'A valid US phone number is required'
+                        : ''
                     }
                   />
                 </Grid>
@@ -436,8 +439,8 @@ export default function Form(props) {
                 <Grid item xs={6} margin={1.25}>
                   <TextField
                     required={
-                      preferredCommunication === "GroupMe" ||
-                      preferredCommunication === "Any"
+                      preferredCommunication === 'GroupMe' ||
+                      preferredCommunication === 'Any'
                     }
                     fullWidth
                     label="GroupMe"
@@ -452,19 +455,19 @@ export default function Form(props) {
                     error={groupMeError}
                     helperText={
                       groupMeError
-                        ? "The provided URL must be from groupme.com and use https"
-                        : ""
+                        ? 'The provided URL must be from groupme.com and use https'
+                        : ''
                     }
                   />
                 </Grid>
                 <Grid item xs={3.25} />
               </Grid>
               <Grid item xs={12} margin={1.25}>
-                <Button 
-                  className="btn" 
-                  type="submit" 
+                <Button
+                  className="btn"
+                  type="submit"
                   variant="contained"
-                  sx = {{
+                  sx={{
                     color: 'white',
                     fontWeight: 'bold',
                     background: '#000000',
@@ -476,38 +479,43 @@ export default function Form(props) {
                     '&:hover': {
                       background: '#daa520',
                       color: 'black',
-                  }}}
+                    },
+                  }}
                 >
                   Create Account
                 </Button>
               </Grid>
               <small>
-                Already have an account?{" "}
+                Already have an account?{' '}
                 <Typography
                   variant="h8"
                   noWrap
                   component={Link}
                   to="/login"
                   underline="none"
-                  sx={{ 
-                    color: "#daa520" ,
-                    textDecoration: "none",
-                    "&:hover": { textDecoration: "none" },
+                  sx={{
+                    color: '#daa520',
+                    textDecoration: 'none',
+                    '&:hover': { textDecoration: 'none' },
                   }}
                 >
                   Login
-                </Typography>{" "}
+                </Typography>{' '}
                 here.
               </small>
             </div>
           </form>
         </Grid>
         <Grid item xs={6}>
-          <img src={Logo} alt="" style={{ 
-            width: "100%", 
-            height: "80%",
-            paddingTop: "8vh",
-            }} />
+          <img
+            src={Logo}
+            alt=""
+            style={{
+              width: '100%',
+              height: '80%',
+              paddingTop: '8vh',
+            }}
+          />
         </Grid>
       </Grid>
     </Container>

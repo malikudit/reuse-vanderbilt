@@ -11,7 +11,9 @@ export default function Active(props) {
   var madeBid = false;
   var message;
 
-  async function getData(url = `http://localhost:8080/product/${props.id}`) {
+  async function getData(
+    url = `https://api.reusevandy.org/product/${props.id}`
+  ) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -78,7 +80,7 @@ export default function Active(props) {
       }
     });
     async function putBidorOffer(
-      url = `http://localhost:8080/bid/${props.id}`
+      url = `https://api.reusevandy.org/bid/${props.id}`
     ) {
       const response = await fetch(url, {
         method: 'PUT',
@@ -110,7 +112,7 @@ export default function Active(props) {
       }
     });
     async function deleteWithdrawBid(
-      url = `http://localhost:8080/bid/${props.id}`
+      url = `https://api.reusevandy.org/bid/${props.id}`
     ) {
       const response = await fetch(url, {
         method: 'DELETE',
@@ -132,7 +134,7 @@ export default function Active(props) {
       }
     });
     async function deleteListing(
-      url = `http://localhost:8080/product/${props.id}`
+      url = `https://api.reusevandy.org/product/${props.id}`
     ) {
       const response = await fetch(url, {
         method: 'DELETE',

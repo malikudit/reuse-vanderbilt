@@ -37,7 +37,7 @@ export default function OtherProfile() {
   const array = url.split('/');
   const userID = array[array.length - 1];
 
-  async function getData(url = `http://localhost:8080/users/${userID}`) {
+  async function getData(url = `https://api.reusevandy.org/users/${userID}`) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -56,7 +56,9 @@ export default function OtherProfile() {
     return response.json();
   }
 
-  async function getReviews(url = `http://localhost:8080/review/${userID}`) {
+  async function getReviews(
+    url = `https://api.reusevandy.org/review/${userID}`
+  ) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',

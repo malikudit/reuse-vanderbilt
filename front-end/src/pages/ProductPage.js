@@ -36,7 +36,7 @@ export default function ProductPage() {
   const array = url.split('/');
   const id = array[array.length - 1];
 
-  async function getData(url = `http://localhost:8080/product/${id}`) {
+  async function getData(url = `https://api.reusevandy.org/product/${id}`) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
