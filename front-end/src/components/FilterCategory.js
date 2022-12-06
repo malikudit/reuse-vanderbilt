@@ -18,7 +18,6 @@ export default function FilterCategory(props) {
         var d = data;
         setProducts(d);
       });
-    console.log(products);
     return response;
   }
 

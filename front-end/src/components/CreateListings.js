@@ -167,15 +167,14 @@ export default function CreateListings() {
     formData.append('coverImage', coverImage);
 
     if (!error) {
-      console.log('No errors');
       postData('http://localhost:8080/product', formData).then((data) => {
-        if (data.error) {
-          swal('Oops!', data.error, 'error');
-        } else {
-          swal('Success', 'Product listed', 'success').then(function () {
-            window.location.href = '/';
-          });
-        }
+        // if (data.error) {
+        //   swal('Oops!', data.error, 'error');
+        // } else {
+        swal('Success', 'Product listed', 'success').then(function () {
+          window.location.href = '/';
+        });
+        // }
       });
 
       async function postData(

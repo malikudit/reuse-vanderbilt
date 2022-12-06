@@ -28,14 +28,14 @@ export default function Sold(props) {
   }, []);
 
   if (products.role === 'Seller') {
-    userID = products.sellerId;
+    userID = products.buyerId;
     exchangePartner = products.buyerName;
     if (products.sellerReview) {
       leftReview = true;
     }
     opRole = 'Buyer';
   } else {
-    userID = products.buyerId;
+    userID = products.sellerId;
     exchangePartner = products.sellerName;
     if (products.buyerReview) {
       leftReview = true;
@@ -77,6 +77,7 @@ export default function Sold(props) {
               }}
               src={products.coverPhoto}
             />
+            {console.log(products)}
           </Grid>
           <Grid item xs={7} direction="column" marginTop={2}>
             {products.role === 'Buyer' || products.role === 'Seller' ? (

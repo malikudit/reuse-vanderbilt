@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Grid, Button, ThemeProvider, createTheme } from '@mui/material';
 import DefaultBanner from '../components/DefaultBanner';
 import ReviewCards from '../components/ReviewCards';
-import { SampleReviews } from '../content/SampleReviews';
 import '../css/Profile.css';
 import Anonymous from '../assets/Anonymous.png';
 
@@ -30,8 +29,9 @@ const theme = createTheme({
   },
 });
 
-export default function OtherProfile(props) {
-  const [profile, setProfile] = useState([]);
+export default function OtherProfile() {
+  var [profile, setProfile] = useState([]);
+  var [reviews, setReviews] = useState([]);
   let preferredPayment = [];
   const url = window.location.href;
   const array = url.split('/');
@@ -47,14 +47,37 @@ export default function OtherProfile(props) {
       .then((data) => {
         var d = data;
         setProfile(d);
+        profile = d;
+      })
+      .then(() => {
+        getReviews();
       });
 
+    return response.json();
+  }
+
+  async function getReviews(url = `http://localhost:8080/review/${userID}`) {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setReviews(d);
+        reviews = d;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     return response;
   }
 
   useEffect(() => {
     getData();
   }, []);
+
   if (profile.cash) {
     preferredPayment.push('Cash');
   }
@@ -134,7 +157,7 @@ export default function OtherProfile(props) {
                   Reviews for {profile.firstName} {profile.lastName}
                 </h3>
                 <span class="profile-desc-text">
-                  {SampleReviews.map((review) => (
+                  {reviews.map((review) => (
                     <ReviewCards {...review} key={review.id} />
                   ))}
                 </span>
