@@ -31,8 +31,8 @@ const theme = createTheme({
 });
 
 export default function Profile() {
-  const [profile, setProfile] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  var [profile, setProfile] = useState([]);
+  var [reviews, setReviews] = useState([]);
   let preferredPayment = [];
 
   async function getData(url = 'http://localhost:8080/users/me') {
@@ -45,12 +45,17 @@ export default function Profile() {
       .then((data) => {
         var d = data;
         setProfile(d);
+        profile = d;
+      })
+      .then(() => {
+        getReviews();
       });
-
-    return response;
+    return response.json();
   }
 
-  async function getReviews(url = 'http://localhost:8080/reviews/me') {
+  async function getReviews(
+    url = `http://localhost:8080/review/${profile.id}`
+  ) {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -60,14 +65,16 @@ export default function Profile() {
       .then((data) => {
         var d = data;
         setReviews(d);
+        reviews = d;
+      })
+      .catch((error) => {
+        console.log(error);
       });
-
     return response;
   }
 
   useEffect(() => {
     getData();
-    getReviews();
   }, []);
 
   if (profile.cash) {
@@ -137,8 +144,10 @@ export default function Profile() {
                       </div>
                     ) : null}
 
-                    <Button component={Link} to="/edit_profile"
-                    sx = {{
+                    <Button
+                      component={Link}
+                      to="/edit_profile"
+                      sx={{
                         color: '#daa520',
                         outline: 'none',
                         border: 'none',
@@ -148,7 +157,8 @@ export default function Profile() {
                           background: '#daa520',
                           color: 'black',
                         },
-                    }}>
+                      }}
+                    >
                       Edit Profile/View Preferences
                     </Button>
                   </div>
@@ -164,7 +174,7 @@ export default function Profile() {
                   Reviews for {profile.firstName} {profile.lastName}
                 </h3>
                 <span class="profile-desc-text">
-                  {SampleReviews.map((review) => (
+                  {reviews.map((review) => (
                     <ReviewCards {...review} key={review.id} />
                   ))}
                 </span>

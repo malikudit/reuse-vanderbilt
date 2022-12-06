@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import DefaultBanner from '../components/DefaultBanner';
@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 
 export default function NewReviewPage(props) {
+  const [products, setProducts] = useState([]);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewStars, setReviewStars] = useState(undefined);
   const [reviewBody, setReviewBody] = useState('');
@@ -21,15 +22,33 @@ export default function NewReviewPage(props) {
   const [error, setError] = useState(false);
   const [printErr, setPrintErr] = useState('');
 
-  const itemName = useLocation().state.itemName;
-  const coverImage = useLocation().state.coverImage;
-  const sellerID = useLocation().state.sellerID;
-  const sellerName = useLocation().state.sellerName;
-  const category = useLocation().state.category;
-  const condition = useLocation().state.condition;
-  const location = useLocation().state.location;
-  const salePrice = useLocation().state.salePrice;
-  console.log(reviewStars);
+  const url = window.location.href;
+  const array = url.split('/');
+  const productID = array[array.length - 1];
+  var salePrice;
+  if (products.listingType === 'Bid Only') {
+    salePrice = products.bidPrice;
+  } else {
+    salePrice = products.listingPrice;
+  }
+
+  async function getData(url = `http://localhost:8080/product/${productID}`) {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        var d = data;
+        setProducts(d);
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,14 +75,16 @@ export default function NewReviewPage(props) {
     }
 
     const obj = {};
-    obj.reviewTitle = reviewTitle;
-    obj.reviewStars = reviewStars;
-    obj.reviewBody = reviewBody;
+    obj.title = reviewTitle;
+    obj.stars = reviewStars;
+    obj.stars = parseFloat(obj.stars, 10);
+    console.log(obj.stars);
+    obj.body = reviewBody;
 
     if (!error) {
       console.log('Object is ' + obj);
       async function postData(
-        url = 'http://localhost:8080/reviews/me',
+        url = `http://localhost:8080/review/${products.id}`,
         data = obj
       ) {
         const response = await fetch(url, {
@@ -75,21 +96,23 @@ export default function NewReviewPage(props) {
           },
           redirect: 'follow',
           body: JSON.stringify({
-            product: data,
+            ...data,
           }),
         });
         return response.json();
       }
 
-      postData('http://localhost:8080/reviews/me').then((data) => {
-        if (data.error) {
-          setPrintErr(data.error);
-          console.log(printErr);
-        } else {
-          alert('Review Added Successfully!');
-          window.location.href = '/';
+      postData(`http://localhost:8080/review/${products.id}`, obj).then(
+        (data) => {
+          if (data.error) {
+            setPrintErr(data.error);
+            console.log(printErr);
+          } else {
+            alert('Review Added Successfully!');
+            window.location.href = '/';
+          }
         }
-      });
+      );
     }
   };
 
@@ -108,7 +131,7 @@ export default function NewReviewPage(props) {
                   maxHeight: '75vh',
                   maxWidth: '75vw',
                 }}
-                src={coverImage}
+                src={products.coverPhoto}
               />
             </Grid>
             <Grid xs={7} direction="column" marginTop={2}>
@@ -120,18 +143,18 @@ export default function NewReviewPage(props) {
                     letterSpacing: '2px',
                   }}
                 >
-                  {itemName}
+                  {products.title}
                 </Typography>
               </Grid>
               <Grid container justifyContent={'space-between'}>
                 <Grid item xs={12} marginBottom={2}>
                   <Typography
                     component={Link}
-                    to={`/profile/${sellerID}`}
+                    to={`/profile/${products.sellerId}`}
                     style={{ color: '#4169E1' }}
                   >
                     {'Seller: '}
-                    {sellerName}
+                    {products.sellerName}
                   </Typography>
                 </Grid>
               </Grid>
@@ -185,7 +208,11 @@ export default function NewReviewPage(props) {
                 </Grid>
               </Grid>
               <Grid container justifyContent={'space-around'} marginTop={4}>
-                <Button variant="contained" color="success" type="submit">
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleSubmit}
+                >
                   Save Review
                 </Button>
               </Grid>

@@ -17,18 +17,7 @@ export default function ReviewCards(props) {
   return (
     <Link
       to={{
-        pathname: `/product_listing/${props.id}`,
-      }}
-      state={{
-        coverImage: props.coverImage,
-        reviewTitle: props.reviewTitle,
-        reviewBody: props.reviewBody,
-        seller: props.seller,
-        rating: props.rating,
-        category: props.category,
-        condition: props.condition,
-        location: props.location,
-        salePrice: props.salePrice,
+        pathname: `/product_listing/${props.productId}`,
       }}
       style={{ textDecoration: 'none' }}
     >
@@ -45,7 +34,7 @@ export default function ReviewCards(props) {
             <Grid container alignItems={'center'} justifyContent={'center'}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                  {props.reviewTitle}
+                  {props.title}
                 </Typography>
                 <Box sx={{ borderBottom: 3 }}></Box>
               </CardContent>
@@ -53,7 +42,7 @@ export default function ReviewCards(props) {
                 <Rating
                   name="read-only"
                   size="large"
-                  value={props.rating}
+                  value={props.stars}
                   precision={0.5}
                   readOnly
                   align="center"
@@ -62,7 +51,7 @@ export default function ReviewCards(props) {
             </Grid>
             <Grid container alignItems={'center'} justifyContent={'center'}>
               <CardContent>
-                <Typography variant="h7">{props.reviewBody}</Typography>
+                <Typography variant="h7">{props.body}</Typography>
               </CardContent>
             </Grid>
             <Grid container alignItems={'center'} justifyContent={'center'}>

@@ -6,7 +6,6 @@ import ListingsPage from './pages/ListingsPage.js';
 import Profile from './pages/Profile.js';
 import CreateListings from './components/CreateListings.js';
 import ProductPage from './pages/ProductPage.js';
-import ReviewPage from './pages/ReviewPage.js';
 import RegisterPage from './pages/Register.js';
 import LoginPage from './pages/LoginPage.js';
 import ResetPasswordPage from './pages/ResetPassword.js';
@@ -118,7 +117,6 @@ export default function MainRoutes(props) {
         }
       />
       <Route path="/product_listing/:id" element={<ProductPage />} />
-      <Route path="/product_review/:id" element={<ReviewPage />} />
       <Route path="/listings" element={<ListingsPage />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route

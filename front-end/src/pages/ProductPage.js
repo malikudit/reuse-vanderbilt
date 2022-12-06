@@ -74,7 +74,7 @@ export default function ProductPage() {
   const timeLeft = new Date(products.expirationDate).getTime();
   var state = products.state;
   const role = products.role;
-  //   state = 'Evaluating Offers';
+  //   state = 'Sold';
 
   if (currentBid === null) {
     currentBid = openingBid;

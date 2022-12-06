@@ -567,26 +567,3 @@ export default function EditProfile() {
     </div>
   );
 }
-
-// <div class="edit-profile-userbuttons">
-//   <div> Change Profile Picture</div>
-//   {saved ? null : (
-//     <Button
-//       variant="contained"
-//       component="label"
-//       sx={{
-//         backgroundColor: 'white',
-//       }}
-//     >
-//       <input
-//         type="file"
-//         accept=".jpeg, .png"
-//         onChange={(event) => {
-//           const file = event.target.files;
-//           setFile(file);
-//           console.log(file);
-//         }}
-//       />
-//     </Button>
-//   )}
-// </div>;

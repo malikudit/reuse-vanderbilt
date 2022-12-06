@@ -4,9 +4,10 @@ import { Grid, Box, Typography, Button } from '@mui/material';
 
 export default function Sold(props) {
   const [products, setProducts] = useState([]);
-  // Edit this
-  const leftReview = false;
+  var leftReview = false;
+  var userID;
   var exchangePartner;
+  var opRole;
 
   async function getData(url = `http://localhost:8080/product/${props.id}`) {
     const response = await fetch(url, {
@@ -26,13 +27,20 @@ export default function Sold(props) {
     getData();
   }, []);
 
-  var userID;
   if (products.role === 'Seller') {
-    userID = products.buyerId;
-    exchangePartner = products.buyerName;
-  } else {
     userID = products.sellerId;
+    exchangePartner = products.buyerName;
+    if (products.sellerReview) {
+      leftReview = true;
+    }
+    opRole = 'Buyer';
+  } else {
+    userID = products.buyerId;
     exchangePartner = products.sellerName;
+    if (products.buyerReview) {
+      leftReview = true;
+    }
+    opRole = 'Seller';
   }
 
   var salePrice;
@@ -71,76 +79,81 @@ export default function Sold(props) {
             />
           </Grid>
           <Grid item xs={7} direction="column" marginTop={2}>
-            <Grid item xs={12} marginBottom={2} marginTop={2}>
-              <Typography
-                variant="h6"
-                style={{ color: '#228B22', fontWeight: 'bold' }}
-              >
-                Sale completed!
+            {products.role === 'Buyer' || products.role === 'Seller' ? (
+              <div>
+                <Grid item xs={12} marginBottom={2} marginTop={2}>
+                  <Typography
+                    variant="h6"
+                    style={{ color: '#228B22', fontWeight: 'bold' }}
+                  >
+                    Sale completed!
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    style={{ color: '#228B22', fontWeight: 'bold' }}
+                  >
+                    Contact the individual you are exchanging with at the
+                    following:
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} marginBottom={2} marginTop={2}>
+                  <Typography
+                    component={Link}
+                    to={`/profile/${userID}`}
+                    variant="h6"
+                  >
+                    Person exchanging with:
+                    {' ' + exchangePartner}
+                  </Typography>
+
+                  <Typography variant="h6" style={{ color: '#228B22' }}>
+                    Sale price: ${salePrice}
+                  </Typography>
+                </Grid>
+              </div>
+            ) : (
+              <Typography variant="h6" style={{ color: '#228B22' }}>
+                This product has been sold.
               </Typography>
-              <Typography
-                variant="h6"
-                style={{ color: '#228B22', fontWeight: 'bold' }}
-              >
-                Contact the individual you are exchanging with at the following:
-              </Typography>
-            </Grid>
-            <Grid item xs={12} marginBottom={2} marginTop={2}>
-              <Typography
-                component={Link}
-                to={`/profile/${userID}`}
-                variant="h6"
-              >
-                Person exchanging with:
-                {' ' + exchangePartner}
-              </Typography>
-              {products.role === 'Buyer' || products.role === 'Seller' ? (
-                <Typography variant="h6" style={{ color: '#4169E1' }}>
-                  Sale price: ${salePrice}
-                </Typography>
-              ) : null}
-            </Grid>
+            )}
             <Grid container justifyContent={'center'}>
               <Grid marginBottom={2}>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  sx={{
-                    background: 'white',
-                    text: 'black',
-                    outline: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: '10px 25px',
-                  }}
-                >
-                  {leftReview ? (
-                    <Link
-                      to={{ pathname: `/profile/${products.sellerId}` }}
-                      style={{ textDecoration: 'none' }}
-                    >
-                      View Profile of {products.role}
-                    </Link>
-                  ) : (
-                    <Link
-                      to={{ pathname: `/new_review/${products.id}` }}
-                      state={{
-                        itemName: products.title,
-                        coverImage: products.coverImage,
-                        sellerID: products.sellerId,
-                        sellerName: products.sellerName,
-                        category: products.category,
-                        condition: products.condition,
-                        location: products.location,
-                        currentPrice: products.salePrice,
-                        id: products.id,
+                {products.role === 'Buyer' || products.role === 'Seller' ? (
+                  <div>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      sx={{
+                        background: 'white',
+                        text: 'black',
+                        outline: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '10px 25px',
                       }}
-                      style={{ textDecoration: 'none' }}
                     >
-                      Leave a Review
-                    </Link>
-                  )}
-                </Button>
+                      {leftReview ? (
+                        <Link
+                          to={{ pathname: `/profile/${products.sellerId}` }}
+                          style={{ textDecoration: 'none' }}
+                        >
+                          View Profile of {opRole}
+                        </Link>
+                      ) : (
+                        <Link
+                          to={{ pathname: `/new_review/${products.id}` }}
+                          state={{
+                            sellerID: products.sellerId,
+                            id: products.id,
+                          }}
+                          style={{ textDecoration: 'none' }}
+                        >
+                          Leave a Review
+                        </Link>
+                      )}
+                    </Button>
+                  </div>
+                ) : null}
               </Grid>
             </Grid>
             <Grid item xs={2} marginTop={2} marginBottom={2}>
