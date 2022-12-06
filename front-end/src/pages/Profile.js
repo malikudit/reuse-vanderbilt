@@ -137,8 +137,19 @@ export default function Profile() {
                       </div>
                     ) : null}
 
-                    <Button component={Link} to="/edit_profile">
-                      Edit Profile / View Profile Preferences
+                    <Button component={Link} to="/edit_profile"
+                    sx = {{
+                        color: '#daa520',
+                        outline: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '10px 25px',
+                        '&:hover': {
+                          background: '#daa520',
+                          color: 'black',
+                        },
+                    }}>
+                      Edit Profile/View Preferences
                     </Button>
                   </div>
                 </div>
