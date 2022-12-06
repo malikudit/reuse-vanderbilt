@@ -210,6 +210,83 @@ class Product extends Model {
         }
     }
 
+    async acceptBid(userId) {
+        if (this.get('sellerId') !== userId) {
+            throw new BidError('You cannot modify bids if you are not the seller');
+        }
+
+        if (this.get('state') === 'Active') {
+            throw new BidError('You must wait for the product listing to expire before accepting bids');
+        }
+
+        if (this.get('state') === 'Inactive') {
+            throw new BidError('You cannot accept bids on an inactive product listing');
+        }
+
+        if (this.get('state') === 'Sold') {
+            throw new BidError('This product has been sold - you already accepted a bid');
+        }
+
+        const highestBid = await this.getBids({
+            where: {
+                state: 'Under Evaluation',
+            },
+            order: [
+                ['amount', 'DESC'],
+                ['createdAt', 'ASC']
+            ],
+            limit: 1
+        });
+
+        if (highestBid.length) {
+            const bidderId = highestBid[0].bidderId;
+            await highestBid[0].update({ state: 'Accepted' });
+            await this.update({ state: 'Sold', buyerId: bidderId });
+
+            const listingType = this.get('listingType');
+
+            if (listingType === 'Listing Price') {
+                await sequelize.models.Bid.update({ state: 'Other Bid Accepted' }, {
+                    where: {
+                        productId: this.get('id'),
+                        state: 'Under Evaluation'
+                    }
+                });
+            } else {
+                await sequelize.models.Bid.update({ state: 'Out-bid' }, {
+                    where: {
+                        productId: this.get('id'),
+                        state: 'Under Evaluation'
+                    }
+                });
+            }
+        }
+        else {
+            await this.update({ state: 'Inactive' });
+            throw new BidError('There are no more bids for your product - it is now inactive');
+        }
+    }
+
+    async rejectBid(userId) {
+        if (this.get('sellerId') !== userId) {
+            throw new BidError('You cannot modify bids if you are not the seller');
+        }
+
+        if (this.get('state') === 'Active') {
+            throw new BidError('You must wait for the product listing to expire before rejecting bids');
+        }
+
+        if (this.get('state') === 'Inactive') {
+            throw new BidError('You cannot reject bids on an inactive product listing');
+        }
+
+        if (this.get('state') === 'Sold') {
+            throw new BidError('This product has been sold - all other bids were rejected');
+        }
+
+
+    }
+
     async withdrawBid(bidderId) {
         if (this.get('sellerId') === bidderId) {
             throw new BidError('You cannot withdraw bids on your own product listing');
@@ -460,22 +537,6 @@ Product.init({
                 args: [['Active', 'Inactive', 'Evaluating Offers', 'Sold']],
                 msg: 'State of the product must be either Active, Inactive, Evaluating Offers or Sold'
             }
-        },
-        // The get method checks if the time has run out on an active listing and
-        // changes the state as a side-effect to avoid scheduling changes
-        get() {
-            const state = this.getDataValue('state');
-            if (state === 'Active') {
-                const date = this.getDataValue('expirationDate');
-                const duration = dayjs(date + '', 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).diff();
-
-                if (duration <= 0) {
-                    this.update({ state: 'Evaluating Offers' });
-                    return 'Evaluating Offers';
-                }
-            }
-
-            return state;    
         }
     }
 }, {
@@ -491,6 +552,25 @@ Product.init({
                 product.setDataValue('currentBid', null);
             } else {
                 product.setDataValue('listingPrice', null);
+            }
+        },
+        afterFind: async (product) => {
+            const state = product.get('state');
+
+            if (state === 'Active') {
+                const date = product.get('expirationDate');
+                const duration = dayjs(date + '', 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).diff();
+
+                if (duration <= 0) {
+                    await product.update({ state: 'Evaluating Offers' });
+
+                    await sequelize.models.Bid.update({ state: 'Under Evaluation' }, {
+                        where: {
+                            productId: product.get('id'),
+                            state: 'Active'
+                        }
+                    });
+                }
             }
         }
     },

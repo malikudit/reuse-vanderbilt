@@ -44,8 +44,6 @@ router.get('/', async (req, res, next) => {
             return tmp;
         });
 
-        console.log(newProducts);
-
         res.send(newProducts);
     } catch (err) {
         next(err);
@@ -70,7 +68,6 @@ const requiredFields = [
 
 router.post('/', upload.single('coverImage'), async (req, res, next) => {
     try {
-        console.log(req.body);
         const productInfo = _.defaultTo(_.pick(req.body, requiredFields), {});
         productInfo.sellerId = req.userId;
         productInfo.state = 'Active';

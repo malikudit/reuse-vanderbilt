@@ -41,7 +41,7 @@ Bid.init({
         }
     },
     state: {
-        type: DataTypes.ENUM('Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted'),
+        type: DataTypes.ENUM('Active', 'Increased Bid', 'Withdrawn', 'Product Delisted', 'Under Evaluation', 'Rejected', 'Out-bid', 'Other Bid Accepted','Accepted'),
         allowNull: false,
         validate: {
             notNull: {
