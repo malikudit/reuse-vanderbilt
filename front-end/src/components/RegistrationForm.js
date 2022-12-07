@@ -192,7 +192,7 @@ export default function Form(props) {
           swal('Oops!', data.error, 'error');
         } else {
           swal('Success', 'Account created', 'success').then(function () {
-            window.location.href = '/login';
+            window.location.href = '#/login';
           });
         }
       });
