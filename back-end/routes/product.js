@@ -86,7 +86,9 @@ router.post('/', upload.single('coverImage'), async (req, res, next) => {
             );
         }
         else {
-            res.sendStatus(400); 
+            res.status(400).send({
+                error: 'You must add a cover photo to the product listing'
+            });
         }
     } catch (err) {
         next(err);
@@ -121,7 +123,9 @@ router.get('/:productId', async (req, res, next) => {
         });
 
         if (!product) {
-            return res.sendStatus(404);
+            return res.status(404).send({
+                error: 'The product you are requesting does not exist'
+            });
         }
 
         await product.determineRole(req.userId);
@@ -175,11 +179,15 @@ router.delete('/:productId', async (req, res, next) => {
         });
 
         if (!product) {
-            return res.sendStatus(404);
+            return res.status(404).send({
+                error: 'The product you are trying to delete does not exist'
+            });
         }
 
         if (product.get('sellerId') !== req.userId) {
-            return res.sendStatus(403);
+            return res.status(403).send({
+                error: 'You cannot delete this product as you are not the seller'
+            });
         }
 
         const state = product.get('state');
@@ -190,9 +198,13 @@ router.delete('/:productId', async (req, res, next) => {
         if (state === 'Active' && duration >= oneDay) {
             await product.update({ state: 'Inactive' });
             await Bid.productInactive(req.params.productId);
-            res.sendStatus(200);
+            res.send({
+                msg: 'You have successfully made this product listing inactive'
+            });
         } else {
-            res.sendStatus(410);
+            res.status(410).send({
+                error: 'You cannot make this product listing inactive anymore'
+            });
         }
     } catch (err) {
         next(err);

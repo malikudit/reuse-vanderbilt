@@ -368,6 +368,18 @@ class Product extends Model {
       );
     }
 
+    if (sellerId === userId && this.sellerReview) {
+      throw new ReviewError(
+        'You have already left a review on this buyer'
+      );
+    }
+
+    if (buyerId === userId && this.buyerReview) {
+      throw new ReviewError(
+        'You have already left a review on this product listing'
+      );
+    }
+
     if (sellerId === userId) {
       await this.createSellerReview({
         ...reviewInfo,
