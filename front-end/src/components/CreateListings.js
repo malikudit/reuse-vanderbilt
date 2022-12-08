@@ -195,6 +195,7 @@ export default function CreateListings() {
           .then((data) => {
             if (data.error) {
               swal('Oops!', data.error, 'error');
+              window.location.href = '#/profile';
             }
           });
         return response;

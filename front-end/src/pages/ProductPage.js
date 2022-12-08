@@ -47,6 +47,7 @@ export default function ProductPage() {
       .then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
+          window.location.reload(false);
         } else {
           var d = data;
           setProducts(d);

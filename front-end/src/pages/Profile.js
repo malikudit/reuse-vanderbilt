@@ -46,6 +46,7 @@ export default function Profile() {
       .then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
+          window.location.reload(false);
         } else {
           var d = data;
           setProfile(d);
@@ -68,12 +69,16 @@ export default function Profile() {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+          window.location.reload(false);
+        }
         var d = data;
         setReviews(d);
         reviews = d;
       })
       .catch((error) => {
-        console.log(error);
+        window.location.reload(false);
       });
     return response;
   }

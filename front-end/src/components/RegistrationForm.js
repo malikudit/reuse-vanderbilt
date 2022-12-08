@@ -190,6 +190,7 @@ export default function Form(props) {
       postData('https://api.reusevandy.org/users', obj).then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
+          window.location.href = '#/register';
         } else {
           swal('Success', 'Account created', 'success').then(function () {
             window.location.href = '#/login';

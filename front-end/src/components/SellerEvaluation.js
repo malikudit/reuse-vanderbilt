@@ -60,6 +60,7 @@ export default function SellerEvaluation(props) {
     rejectBid().then((data) => {
       if (data.error) {
         swal('Oops!', data.error, 'error');
+        window.location.reload(false);
       } else {
         if (products.listingPrice === 'Bid Only') {
           var message = 'You have rejected the bid!';

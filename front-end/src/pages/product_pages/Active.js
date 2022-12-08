@@ -72,6 +72,7 @@ export default function Active(props) {
     putBidorOffer().then((data) => {
       if (data.error) {
         swal('Oops!', data.error, 'error');
+        window.location.reload(false);
       } else {
         if (products.listingPrice === 'Bid Only') {
           var message = 'Your bid has been placed!';
@@ -105,6 +106,7 @@ export default function Active(props) {
     deleteWithdrawBid().then((data) => {
       if (data.error) {
         swal('Oops!', data.error, 'error');
+        window.location.reload(false);
       } else {
         swal(
           'Success!',
@@ -130,7 +132,7 @@ export default function Active(props) {
     deleteListing().then((data) => {
       if (data.error) {
         swal('Oops!', data.error, 'error');
-        console.log('error');
+        window.location.reload(false);
       } else {
         swal('Success!', 'You have deleted your listing!', 'success');
         window.location.href = '/';

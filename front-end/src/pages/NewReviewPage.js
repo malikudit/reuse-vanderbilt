@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import swal from 'sweetalert';
 
 export default function NewReviewPage(props) {
   const [products, setProducts] = useState([]);
@@ -108,7 +109,8 @@ export default function NewReviewPage(props) {
         (data) => {
           if (data.error) {
             setPrintErr(data.error);
-            console.log(printErr);
+            swal('Error', data.error, 'error');
+            window.location.reload(false);
           } else {
             alert('Review Added Successfully!');
             window.location.href = '/';

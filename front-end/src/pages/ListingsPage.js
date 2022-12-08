@@ -96,6 +96,7 @@ export default function ListingsPage(props) {
       .then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
+          window.location.href = '/';
         } else {
           var d = data;
           setSellingProducts(d);

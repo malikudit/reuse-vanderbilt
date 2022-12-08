@@ -60,6 +60,7 @@ export default function Form(props) {
       postData('https://api.reusevandy.org/users/login').then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
+          window.location.href = '/';
         } else {
           window.location.href = '/';
         }

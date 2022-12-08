@@ -241,6 +241,7 @@ export default function EditProfile() {
       patchData('https://api.reusevandy.org/users/me').then((data) => {
         if (data.error) {
           swal('Oops!', data.error, 'error');
+          window.location.href = '#/edit_profile';
         } else {
           setSaved(true);
           swal('Success', 'Profile updated', 'success').then(function () {
