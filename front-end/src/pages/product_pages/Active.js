@@ -7,7 +7,6 @@ import swal from 'sweetalert';
 export default function Active(props) {
   const [products, setProducts] = useState([]);
   var [bid, setBid] = useState();
-  const role = 'Buyer';
   var madeBid = false;
   var message;
 
@@ -21,8 +20,12 @@ export default function Active(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        var d = data;
-        setProducts(d);
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          var d = data;
+          setProducts(d);
+        }
       });
     return response;
   }
@@ -37,7 +40,7 @@ export default function Active(props) {
   } else if (products.role === 'Highest bidder') {
     madeBid = true;
     message = 'You are currently the highest bidder on this product!';
-  } else if (products.role === 'Outbid') {
+  } else if (products.role === 'Out-bid') {
     madeBid = true;
     message =
       'You have been outbid on this product! Press bid to make a new offer.';
@@ -332,7 +335,8 @@ export default function Active(props) {
                   justifyContent={'space-evenly'}
                   marginBottom={2}
                 >
-                  {products.listingType === 'Bid Only' ? (
+                  {products.listingType === 'Bid Only' &&
+                  products.role !== 'Already Bid' ? (
                     <div>
                       <Button
                         variant="contained"
@@ -351,21 +355,24 @@ export default function Active(props) {
                       </Button>
                     </div>
                   ) : (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      sx={{
-                        background: '#333',
-                        color: 'white',
-                        outline: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: '10px 25px',
-                      }}
-                      onClick={handleBidorOffer}
-                    >
-                      Make Offer
-                    </Button>
+                    products.role !==
+                    'Already Bid'(
+                      <Button
+                        variant="contained"
+                        color="success"
+                        sx={{
+                          background: '#333',
+                          color: 'white',
+                          outline: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          padding: '10px 25px',
+                        }}
+                        onClick={handleBidorOffer}
+                      >
+                        Make Offer
+                      </Button>
+                    )
                   )}
                   {madeBid ? (
                     <Button

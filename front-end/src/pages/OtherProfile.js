@@ -53,7 +53,7 @@ export default function OtherProfile() {
         getReviews();
       });
 
-    return response.json();
+    return response;
   }
 
   async function getReviews(

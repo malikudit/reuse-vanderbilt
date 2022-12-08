@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Box, Typography, Button } from '@mui/material';
+import swal from 'sweetalert';
 
 export default function Sold(props) {
   const [products, setProducts] = useState([]);
@@ -8,6 +9,7 @@ export default function Sold(props) {
   var userID;
   var exchangePartner;
   var opRole;
+  var message = '';
 
   async function getData(
     url = `https://api.reusevandy.org/product/${props.id}`
@@ -19,8 +21,12 @@ export default function Sold(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        var d = data;
-        setProducts(d);
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          var d = data;
+          setProducts(d);
+        }
       });
     return response;
   }
@@ -36,13 +42,18 @@ export default function Sold(props) {
       leftReview = true;
     }
     opRole = 'Buyer';
-  } else {
+  } else if (products.role === 'Buyer') {
     userID = products.sellerId;
     exchangePartner = products.sellerName;
     if (products.buyerReview) {
       leftReview = true;
     }
     opRole = 'Seller';
+  } else if (
+    products.role === 'Bid Rejected' ||
+    products.role === 'Other Bid Accepted'
+  ) {
+    message = 'Your bid was unfortunately not accepted.';
   }
 
   var salePrice;
@@ -114,6 +125,10 @@ export default function Sold(props) {
                   </Typography>
                 </Grid>
               </div>
+            ) : message !== '' ? (
+              <Typography variant="h6" style={{ color: '#228B22' }}>
+                {message}
+              </Typography>
             ) : (
               <Typography variant="h6" style={{ color: '#228B22' }}>
                 This product has been sold.

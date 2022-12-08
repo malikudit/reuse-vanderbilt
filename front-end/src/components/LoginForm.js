@@ -54,13 +54,12 @@ export default function Form(props) {
           }),
         });
 
-        return response.json();
+        return response;
       }
 
       postData('https://api.reusevandy.org/users/login').then((data) => {
         if (data.error) {
-          setPrintErr(data.error);
-          console.log(data.error);
+          swal('Oops!', data.error, 'error');
         } else {
           window.location.href = '/';
         }

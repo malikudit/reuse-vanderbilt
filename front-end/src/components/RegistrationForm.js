@@ -184,7 +184,7 @@ export default function Form(props) {
             user: data,
           }),
         });
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response;
       }
 
       postData('https://api.reusevandy.org/users', obj).then((data) => {

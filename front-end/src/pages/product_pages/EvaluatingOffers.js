@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Box, Typography, Button } from '@mui/material';
 import BuyerEvaluation from '../../components/BuyerEvaluation';
 import SellerEvaluation from '../../components/SellerEvaluation';
+import swal from 'sweetalert';
 
 export default function EvaluatingOffers(props) {
   const [products, setProducts] = useState([]);
@@ -17,8 +18,12 @@ export default function EvaluatingOffers(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        var d = data;
-        setProducts(d);
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          var d = data;
+          setProducts(d);
+        }
       });
     return response;
   }

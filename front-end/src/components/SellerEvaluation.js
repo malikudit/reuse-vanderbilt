@@ -15,8 +15,12 @@ export default function SellerEvaluation(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        var d = data;
-        setProducts(d);
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          var d = data;
+          setProducts(d);
+        }
       });
     return response;
   }
@@ -36,7 +40,7 @@ export default function SellerEvaluation(props) {
           var message = 'Your have accepted the offer!';
         }
         swal('Success!', message, 'success');
-        // window.location.reload(false);
+        window.location.reload(false);
       }
     });
     async function acceptBid(
@@ -63,7 +67,7 @@ export default function SellerEvaluation(props) {
           var message = 'Your have rejected the offer!';
         }
         swal('Success!', message, 'success');
-        // window.location.reload(false);
+        window.location.reload(false);
       }
     });
     async function rejectBid(
