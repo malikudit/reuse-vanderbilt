@@ -55,7 +55,7 @@ export default function Footer() {
       </Typography>
 
       <Button
-        href={`mailto:test@example.com`}
+        href={`mailto:udit4880@gmail.com`}
         sx={{
           fontSize: '0.8rem',
           fontWeight: 'bold',
