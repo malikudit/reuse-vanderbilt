@@ -22,7 +22,6 @@ function App() {
           />
         </Helmet>
       </div>
-      );
       <NavBar />
       <MainRoutes
         searchProduct={searchProduct}
