@@ -77,12 +77,12 @@ export default function CreateListings() {
     setDate();
     setDateError(false);
     var now = new Date().getTime();
-    if (date - now > 12096e5 || date - now < 1.08e7) {
-      setDateError(true);
-    } else {
-      date = dayjs(date).toISOString();
-      setDate(date);
-    }
+    // if (date - now > 12096e5 || date - now < 1.08e7) {
+    // setDateError(true);
+    // } else {
+    date = dayjs(date).toISOString();
+    setDate(date);
+    // }
   };
 
   const handleListingType = (event) => {
@@ -168,13 +168,14 @@ export default function CreateListings() {
 
     if (!error) {
       postData('https://api.reusevandy.org/product', formData).then((data) => {
-        // if (data.error) {
-        //   swal('Oops!', data.error, 'error');
-        // } else {
-        swal('Success', 'Product listed', 'success').then(function () {
-          window.location.href = '/';
-        });
-        // }
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+          window.location.reload(false);
+        } else {
+          swal('Success', 'Product listed', 'success').then(function () {
+            window.location.href = '/';
+          });
+        }
       });
 
       async function postData(
