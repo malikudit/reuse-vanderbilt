@@ -6,6 +6,7 @@ import Active from './product_pages/Active';
 import Inactive from './product_pages/Inactive';
 import EvaluatingOffers from './product_pages/EvaluatingOffers';
 import Sold from './product_pages/Sold';
+import swal from 'sweetalert';
 
 const theme = createTheme({
   palette: {
@@ -44,8 +45,12 @@ export default function ProductPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        var d = data;
-        setProducts(d);
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          var d = data;
+          setProducts(d);
+        }
       });
     return response;
   }

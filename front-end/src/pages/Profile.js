@@ -6,6 +6,7 @@ import ReviewCards from '../components/ReviewCards';
 import { SampleReviews } from '../content/SampleReviews';
 import '../css/Profile.css';
 import Anonymous from '../assets/Anonymous.png';
+import swal from 'sweetalert';
 
 const theme = createTheme({
   palette: {
@@ -43,14 +44,18 @@ export default function Profile() {
     })
       .then((res) => res.json())
       .then((data) => {
-        var d = data;
-        setProfile(d);
-        profile = d;
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          var d = data;
+          setProfile(d);
+          profile = d;
+        }
       })
       .then(() => {
         getReviews();
       });
-    return response.json();
+    return response;
   }
 
   async function getReviews(

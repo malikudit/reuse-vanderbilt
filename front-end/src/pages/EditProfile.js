@@ -214,7 +214,7 @@ export default function EditProfile() {
         data = obj
       ) {
         const response = await fetch(url, {
-          method: 'PUT',
+          method: 'PATCH',
           mode: 'cors',
           credentials: 'include',
           headers: {

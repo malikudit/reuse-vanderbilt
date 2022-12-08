@@ -18,6 +18,7 @@ import DefaultBanner from '../components/DefaultBanner';
 import AddIcon from '@mui/icons-material/Add';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import swal from 'sweetalert';
 
 const theme = createTheme({
   palette: {
@@ -93,9 +94,13 @@ export default function ListingsPage(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        var d = data;
-        setSellingProducts(d);
-        sellingProducts = d;
+        if (data.error) {
+          swal('Oops!', data.error, 'error');
+        } else {
+          var d = data;
+          setSellingProducts(d);
+          sellingProducts = d;
+        }
       });
     return response;
   }

@@ -101,7 +101,7 @@ export default function NewReviewPage(props) {
             ...data,
           }),
         });
-        return response.json();
+        return response;
       }
 
       postData(`https://api.reusevandy.org/review/${products.id}`, obj).then(
