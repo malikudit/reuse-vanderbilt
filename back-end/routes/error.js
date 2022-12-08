@@ -44,12 +44,15 @@ const review = function (err, _req, res, next) {
 
 const serverError = function (err, _req, res, _next) {
   console.log(err);
-  res.sendStatus(500);
+  res.status(500).send({
+    error: 'Internal Server Error'
+  });
 };
 
 const clientError = function (_req, res, _next) {
-  console.log('error');
-  res.sendStatus(404);
+  res.status(404).send({
+    error: 'Not Found'
+  });
 };
 
 module.exports = [validation, login, bidding, review, serverError, clientError];

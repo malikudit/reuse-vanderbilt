@@ -64,12 +64,16 @@ router.post('/:productId',  async (req, res, next) => {
         });
 
         if (!product) {
-            return res.sendStatus(404);
+            return res.status(404).send({
+                error: 'The product you want to leave a review on was not found'
+            });
         }
 
         const reviewInfo = _.defaultTo(_.pick(req.body, [ 'title', 'stars', 'body' ]), {});
         await product.createReview(req.userId, reviewInfo);
-        res.sendStatus(200);
+        res.status(200).send({
+            msg: 'You have successfully create a review for this product'
+        });
     } catch (err) {
         next(err);
     }

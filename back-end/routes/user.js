@@ -78,7 +78,9 @@ router.post('/reset-password', async (_req, _res, _next) => {
 
 router.post('/logout', async (req, res, _next) => {
     req.session = null;
-    res.sendStatus(200);
+    res.status(200).send({
+        msg: 'You have successfully logged out'
+    });
 });
 
 router.use(authenticateUser);
@@ -122,6 +124,7 @@ router.get('/buying', async (req, res, next) => {
                     as: 'coverPhoto',
                     attributes: ['id']
                 },
+                // Change this order
                 order: [
                     sequelize.fn('field', sequelize.col('state'), 'Evaluating Offers', 'Active', 'Sold', 'Inactive'),
                     ['expirationDate', 'DESC']
@@ -212,7 +215,9 @@ router.patch('/me', async (req, res, next) => {
 
     // Send bad request if no edits need to be made
     if (!Object.keys(edits).length) {
-        return res.sendStatus(400);
+        return res.status(400).send({
+            error: 'No editable fields have been changed'
+        });
     }
     
     try {
@@ -232,7 +237,9 @@ router.get('/:userId', async (req, res, next) => {
         const user = await User.findByPk(req.params.userId);
 
         if (!user) {
-            res.sendStatus(404);
+            res.status(404).send({
+                error: 'User not found'
+            });
         } else {
             res.send(
                 user.generateView()

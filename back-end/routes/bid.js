@@ -11,11 +11,15 @@ router.put('/:productId', async (req, res, next) => {
         const product = await Product.findByPk(req.params.productId);
 
         if (!product) {
-            return res.sendStatus(404);
+            return res.status(404).send({
+                error: 'The product you want to place a bid on does not exist'
+            });
         }
 
         await product.placeBid(req.userId, req.body.bidAmount);
-        res.sendStatus(200);
+        res.status(200).send({
+            msg: 'Your bid was placed successfully'
+        });
     } catch (err) {
         next(err);
     }
@@ -26,11 +30,15 @@ router.post('/:productId/accept', async (req, res, next) => {
         const product = await Product.findByPk(req.params.productId);
 
         if (!product) {
-            return res.sendStatus(404);
+            return res.status(404).send({
+                error: 'The product you want to accept a bid on does not exist'
+            });
         }
         
         await product.acceptBid(req.userId);
-        res.sendStatus(200);
+        res.send({
+            msg: 'You have successfully accepted a bid on your product'
+        });
     } catch (err) {
         next(err);
     }
@@ -41,11 +49,15 @@ router.post('/:productId/reject', async (req, res, next) => {
         const product = await Product.findByPk(req.params.productId);
 
         if (!product) {
-            return res.sendStatus(404);
+            return res.status(404).send({
+                error: 'The product you want to reject a bid on does not exist'
+            });
         }
         
         await product.rejectBid(req.userId);
-        res.sendStatus(200);
+        res.send({
+            msg: 'You have successfully rejected the highest bid on your product'
+        });
     } catch (err) {
         next(err);
     }
@@ -56,11 +68,15 @@ router.delete('/:productId', async (req, res, next) => {
         const product = await Product.findByPk(req.params.productId);
 
         if (!product) {
-            return res.sendStatus(404);
+            return res.status(404).send({
+                error: 'The product you want to withdraw a bid from does not exist'
+            });
         }
 
         await product.withdrawBid(req.userId);
-        res.sendStatus(200);
+        res.send({
+            msg: 'You have successfully withdraw your bid from this product'
+        });
     } catch (err) {
         next(err);
     }
