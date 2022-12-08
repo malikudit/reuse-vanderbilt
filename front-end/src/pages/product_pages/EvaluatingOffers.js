@@ -61,12 +61,28 @@ export default function EvaluatingOffers(props) {
                 sellerName={products.sellerName}
                 sellerId={products.sellerId}
               />
-            ) : (
+            ) : products.role === 'Seller' ? (
               <SellerEvaluation
                 id={props.id}
                 buyerName={products.buyerName}
                 buyerId={products.buyerId}
               />
+            ) : products.role === 'Other Bidder' ? (
+              <Typography variant="h5">
+                You aren't the highest bidder, but should the higher bids be
+                rejected, you will become the highest bidder.
+              </Typography>
+            ) : products.role === 'Bid Rejected' ? (
+              <Typography variant="h5">
+                Your bid was rejected by the seller.
+              </Typography>
+            ) : (
+              products.role ===
+              'Other'(
+                <Typography variant="h5">
+                  This product is no longer accepting offers.
+                </Typography>
+              )
             )}
             <Grid item xs={2} marginTop={2} marginBottom={2}>
               <Typography
