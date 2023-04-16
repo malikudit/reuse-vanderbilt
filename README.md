@@ -1,4 +1,4 @@
-# cs4278-project
+# Reuse Vandy: Project for CS 4278 @ Vanderbilt Universty
 
 What is the repo/project about?
 - Our project is a web application for Reuse Vandy that seeks to streamline the way purchases are made while minimizing extraneous information
@@ -20,6 +20,3 @@ Project Framework:
 - Database - MySQL
 - Object relational mapping (ORM) - Sequelize
 - Deployment - AWS EC2, AWS RDS, S3 Object Storage
-- Documentation - Notion
-- Cloud based repo/DevOps - GitHub
-- Team communication - iMessage, two weekly stand-ups + class meeting
