@@ -1,7 +1,9 @@
-# cs4278-project
+# Reuse Vanderbilt: Project for CS 4278
+
+### Developers: Udit Malik, Ritvik Singh, Parwaz Gill, Mason Range
 
 What is the repo/project about?
-- Our project is a web application for Reuse Vandy that seeks to streamline the way purchases are made while minimizing extraneous information
+- Our project is a web application for Reuse Vanderbilt, that seeks to streamline the way purchases are made while minimizing extraneous information.
 - Desired features:
   - Landing page that displays recent listings
   - Search functionality to identify specific items
@@ -10,16 +12,14 @@ What is the repo/project about?
   - Review functionality where users can provide their experiences with buyers and sellers
   - Profiles for buyers and sellers that displays their buying/selling history + reviews
   - Notifications where users can select items their interested in and receive notifications to their specified frequency
+  
 - Repo organization:
-  - Divided into front end and back end
+  - Divided into frontend and backend
 
 Project Framework:
-- Front end - ReactJS
-- Back end - Node.js
+- Frontend - ReactJS
+- Backend - Node.js
 - Web server framework - Express
 - Database - MySQL
 - Object relational mapping (ORM) - Sequelize
-- Deployment - AWS EC2, AWS RDS, S3 Object Storage
-- Documentation - Notion
-- Cloud based repo/DevOps - GitHub
-- Team communication - iMessage, two weekly stand-ups + class meeting
+- Deployment - AWS EC2, AWS RDS, S3 object storage
